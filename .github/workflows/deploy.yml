@@ -1,13 +1,12 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - master # Change this to your main branch name
-      - workflow-build
+      - main # Change this to your main branch name
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,8 +24,16 @@ jobs:
       - name: Build
         run: npm run build
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages # Change this to your desired branch name
-          folder: build # Change this to the build folder of your React app
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build # Change this to the build folder of your React app
+          publish_branch: gh-pages # Change this to your desired branch name
