@@ -1,0 +1,107 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  scrollbar-width: 0;
+}
+
+/* Hide scrollbar for Webkit (Chrome, Safari, Edge) */
+body::-webkit-scrollbar {
+  width: 0;
+  display: none; /* Safari and Chrome */
+}
+
+/* App.css */
+
+.navbar {
+  margin: 0 auto;
+  background-color: #333;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+}
+
+.navbar-toggle {
+  cursor: pointer;
+  display: none; /* Hide by default */
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 5px 0;
+  transition: transform 0.3s ease;
+}
+
+.bar.open:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.bar.open:nth-child(2) {
+  opacity: 0;
+}
+
+.bar.open:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.navbar-nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  /* outline: 1px solid yellow; */
+}
+
+.nav-item {
+  margin-right: 10px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #555;
+}
+
+@media (max-width: 768px) {
+  .navbar{
+    padding: 10px 20px;
+    justify-content: end;
+  }
+  .navbar-nav {
+    
+    flex-direction: column;
+    position: absolute;
+    top: 50px; /* Adjust as needed */
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    display: none; /* Hide by default */
+    align-items: center;
+  }
+
+  .navbar-nav.open {
+    display: flex;
+  }
+
+  .nav-item {
+    margin: 5px 0;
+  }
+
+  .navbar-toggle {
+    display: block; /* Show hamburger icon */
+  }
+}
