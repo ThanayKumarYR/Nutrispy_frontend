@@ -33,8 +33,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build # Change this to the build folder of your React app
-          publish_branch: gh-pages # Change this to your desired branch name
+          folder: ./build # Change this to the build folder of your React app
+          branch: gh-pages # Change this to your desired branch name
