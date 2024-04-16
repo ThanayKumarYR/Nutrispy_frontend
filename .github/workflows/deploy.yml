@@ -24,6 +24,13 @@ jobs:
 
       - name: Build
         run: npm run build
+        
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: ./build
+
 
   deploy:
     runs-on: ubuntu-latest
