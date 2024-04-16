@@ -7,9 +7,8 @@ on:
       - workflow-build
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -24,3 +23,13 @@ jobs:
 
       - name: Build
         run: npm run build
+  
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: gh-pages -d build
+
+
+
+      
