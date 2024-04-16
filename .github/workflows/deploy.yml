@@ -32,9 +32,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./build
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          folder: ./build # Change this to the build folder of your React app
           branch: gh-pages # Change this to your desired branch name
+          folder: ./build # Change this to the build folder of your React app
