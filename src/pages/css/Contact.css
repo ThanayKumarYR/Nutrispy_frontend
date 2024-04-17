@@ -1,0 +1,89 @@
+
+
+  .container {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+
+  .message
+  {
+    padding: 20px;
+  }
+  
+  .message form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    min-height: max-content;
+  }
+
+  .message form div{
+    margin: 15px;
+  }
+  
+  .message form div label {
+    font-weight: bold;
+    display: block;
+  }
+
+  .message form div input{
+    min-width: 200px;
+  }
+  
+  .message form div input, .message form div  textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  .message form div:has(textarea){
+    width: 100%;
+  }
+  
+  .message form div textarea {
+    resize: vertical;
+    width: 100%;
+    min-width: 200px;
+  }
+  
+  .message form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 15px;
+  }
+
+  .info{
+    width: 100%;
+    background-color:var(--secondary-color);
+    color: white;
+    padding: 20px;
+    min-width: min-content;
+  }
+  
+  .info ul {
+    list-style: none;
+    padding: 0;
+    padding-top: 20px;
+    padding-bottom: 46px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+  
+  .info li {
+    margin: 10px;
+    min-width: max-content;
+  }
+  
+  .info i {
+    margin-right: 10px;
+    color: #4CAF50;
+  }
+  
+  
