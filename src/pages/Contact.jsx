@@ -3,7 +3,7 @@ import "./css/Contact.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { TfiEmail } from "react-icons/tfi";
 import { FaPhoneAlt } from "react-icons/fa";
-const axios = require('axios');
+import { axios } from '../utilities';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -21,11 +21,9 @@ const Contact = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
       // Replace with your Flask app URL and endpoint
-      const url = 'http://localhost:5000/contact';
-
-      const response = await axios.post(url, formData);
+      const url = '/contact';
+      const response = axios.posting(url,formData)
       console.log('Form submission response:', response);
 
       // Clear form after successful submission (optional)
@@ -36,9 +34,6 @@ const Contact = () => {
         company: '',
         message: '',
       });
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
   };
 
   return (
