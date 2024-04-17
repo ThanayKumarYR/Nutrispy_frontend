@@ -13,4 +13,6 @@ async function posting(subUrl,formData)
       }
 }
 
-export default {posting}
+const axiosObj = {posting}
+
+export default axiosObj
