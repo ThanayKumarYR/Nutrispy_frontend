@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <main className='home'>
       <div className='banner'>
-        <img src={Banner} />
+        <img src={Banner} alt='Banner'/>
       </div>
       <p>
         <b>NutriSpy</b> is a groundbreaking solution at the forefront of the health revolution. It's not just an app; it's your personal gateway to optimal well-being. Imagine having a virtual health assistant right in your pocket, ready to guide you towards your health goals with precision and ease. That's exactly what NutriSpy offers.
