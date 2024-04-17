@@ -23,8 +23,7 @@ const Contact = () => {
 
       // Replace with your Flask app URL and endpoint
       const url = '/contact';
-      const response = axios.posting(url,formData)
-      console.log('Form submission response:', response);
+      axios.posting(url,formData).then((Response) => console.log(Response.data)).catch(e => console.log(e))
 
       // Clear form after successful submission (optional)
       setFormData({
@@ -72,6 +71,7 @@ const Contact = () => {
             type="tel"
             id="number"
             name="number"
+            required
             value={formData.number}
             onChange={handleChange}
           />
