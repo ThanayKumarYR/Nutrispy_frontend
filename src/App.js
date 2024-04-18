@@ -47,10 +47,10 @@ function App() {
         </ul>
       </nav>
       <Routes>
-        <Route path="/about" exact element={<About />} />
-        <Route path="/services" exact element={<Services />} />
-        <Route path="/products" exact element={<Products />} />
-        <Route path="/contact" exact element={<Contact />} />
+        <Route path="about" exact element={<About />} />
+        <Route path="services" exact element={<Services />} />
+        <Route path="products" exact element={<Products />} />
+        <Route path="contact" exact element={<Contact />} />
         <Route path="/" exact element={<Home />} />
       </Routes>
       <ScrollUpButton />
