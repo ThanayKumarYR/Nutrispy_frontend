@@ -1,6 +1,6 @@
 import axios from 'axios'
 const customFetch = axios.create({
-    baseURL: 'http://localhost:30000/api/v1',
+    baseURL: 'https://nutrispyserver.onrender.com/api/v1/',
   });
 
 async function posting(url,formData)
