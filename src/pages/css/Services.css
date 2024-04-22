@@ -1,0 +1,79 @@
+.services {
+    padding: 5px clamp(20px, 10%, 100px);
+    font-family: 'Anek Tamil';
+    font-size: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.services h1.title {
+    font-family: 'Anek Tamil';
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.services .service-cards {}
+
+.services .service-cards .service-each-card {
+    display: grid;
+    align-items: center;
+    border-radius: 10px;
+    border: 5px solid var(--pri);
+    padding: 10px 0;
+    max-width: 900px;
+    margin: 10px;
+}
+
+.services .service-cards .service-each-card p {
+    text-align: center;
+    font-size: 26px;
+}
+
+.services .service-cards .service-each-card :first-child {}
+
+.services .service-cards .service-each-card img {
+    object-fit: cover;
+    margin: 0 auto
+}
+
+.services .service-cards .service-each-card:nth-of-type(2n-1) {
+    grid-template-columns: 1fr 200px;
+}
+
+.services .service-cards .service-each-card:nth-of-type(2n) {
+    grid-template-columns: 200px 1fr;
+    margin-left: auto;
+}
+
+.services .service-cards .service-each-card:nth-of-type(2n-1) :first-child {
+    order: 2;
+}
+
+@media (width<500px) {
+    .services {
+        padding: 5px;
+    }
+
+    .services .service-cards {
+        display: flex;
+        overflow: auto;
+    }
+
+    .services .service-cards .service-each-card {
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+        min-width: 300px;
+    }
+
+    .services .service-cards .service-each-card:nth-of-type(2n-1) :first-child {
+        order: inherit;
+    }
+
+    .services .service-cards .service-each-card p {
+        font-size: 20px;
+    }
+}

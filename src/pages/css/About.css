@@ -1,0 +1,72 @@
+.about {
+    padding: 5px clamp(20px, 10%, 100px);
+}
+
+.about h1.title {
+    font-family: 'Anek Tamil';
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 24px;
+}
+
+.about .about-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto 30px;
+}
+
+.about .about-cards .each-card {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: var(--tri);
+    display: grid;
+    place-items: center;
+    transition: 0.3s;
+}
+
+.about .about-cards:has(.each-card:hover) .each-card:not(:hover) {
+    transform: scale(0.98);
+    padding: 8px 18px;
+}
+
+.about .about-cards .each-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px 0px grey;
+}
+
+.about .about-cards .each-card:hover .links a:last-child {
+    color: #126bc4;
+}
+
+.about .about-cards .each-card img {
+    width: 150px;
+    height: 150px;
+}
+
+.about .about-cards .each-card p,
+.about .about-cards .each-card a {
+    font-size: 20px;
+    font-family: 'Anek Tamil';
+    font-weight: 600;
+}
+
+.about .about-cards .each-card div.links {
+    margin-top: 5px;
+}
+
+.about .about-cards .each-card .links a {
+    padding: 5px 10px;
+    color: var(--sec);
+}
+
+
+@media (width<500px) {
+
+    .about {
+        padding: 5px;
+    }
+}

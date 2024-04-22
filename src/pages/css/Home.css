@@ -1,13 +1,6 @@
-:root {
-    --pri: #f0cf90;
-    --sec: #000000;
-    --secondary-color: #333;
-}
-
 main.home {
     margin: 0 auto;
     min-height: 100vh;
-    background-color: #fff0d0;
 }
 
 main.home div.banner img {
@@ -40,7 +33,7 @@ main.home p {
 @media (width<500px) {
 
     main.home {
-        padding: 0;
+        padding: 5px;
     }
 
     main.home p {

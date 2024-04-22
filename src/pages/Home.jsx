@@ -1,12 +1,11 @@
 import React from 'react'
 import "./css/Home.css"
-import Banner from '../images/banner.png'
 
 const Home = () => {
   return (
     <main className='home'>
       <div className='banner'>
-        <img src={Banner} alt='NutriSpy Banner'/>
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/001/820/662/small_2x/business-banner-template-simple-geometric-style-vector.jpg" alt="NutriSpy Banner" />
       </div>
       <p>
         <b>NutriSpy</b> is a groundbreaking solution at the forefront of the health revolution. It's not just an app; it's your personal gateway to optimal well-being. Imagine having a virtual health assistant right in your pocket, ready to guide you towards your health goals with precision and ease. That's exactly what NutriSpy offers.
