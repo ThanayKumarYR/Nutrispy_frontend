@@ -3,74 +3,111 @@ import { axios } from '../utilities';
 import "./css/Contact.css";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '', email: '', number: '', company: '', message: '',
-  });
+	const [formData, setFormData] = useState({
+		name: '', email: '', number: '', company: '', message: '',
+	});
 
-  const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.id]: event.target.value });
-  };
+	const [mess, setMess] = useState({
+		status: "",
+		message: ""
+	});
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+	const handleChange = (e) => {
+		if (e.target.name === "number") {
+			setFormData({
+				...formData,
+				"number": e.target.value.substring(0, 10)
+			})
+			return
+		}
 
-    const url = '/contact';
-    axios.posting(url, formData).then((Response) => console.log(Response.data)).catch(e => console.log(e))
+		setFormData({
+			...formData, [e.target.name]: e.target.value
+		});
 
-    setFormData({
-      name: '', email: '', number: '', company: '', message: '',
-    });
-  };
+	};
 
-  return (
-    <section className="container contact">
-      <h1 className='title'>Send us a message</h1>
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input type="text" id="name" name="name" required value={formData.name} onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Phone:</label>
-          <input type="tel" id="number" name="number" inputMode='numeric' required value={formData.number} onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Company (optional):</label>
-          <input type="text" id="company" name="company" value={formData.company} onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Message:</label>
-          <textarea
-            id="message" name="message" rows="5" required value={formData.message} onChange={handleChange}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
-      {/* <section id="info" className="info">
-        <h2>Contact Information</h2>
-        <ul>
-          <li>
-            <FaLocationDot /> Location: Your Location Here
-          </li>
-          <li>
-            <TfiEmail /> Email: youremail@example.com
-          </li>
-          <li>
-            <FaPhoneAlt /> Phone: (555) 555-5555
-          </li>
-        </ul>
-      </section> */}
-    </section>
-  );
+		const url = '/contact';
+		axios.posting(url, formData)
+			.then((response) => {
+				console.log(response.data)
+				if (response.data.response === "success") {
+					setMess(() => ({
+						message: 'Thanks for contacting. We will catch you soon!',
+						status: "ok"
+					})
+					)
+					setFormData({
+						name: '', email: '', number: '', company: '', message: '',
+					});
+				}
+				else {
+					setMess(() => ({
+						message: 'Oops! Something went wrong',
+						status: "bad"
+					})
+					)
+				}
+			})
+			.catch(e => {
+				console.log(e);
+				setMess(() => ({
+					message: 'Oops! Something went wrong',
+					status: "bad"
+				})
+				)
+			})
+
+		setTimeout(() => {
+			setMess({
+				status: "",
+				message: ""
+			})
+		}, 5000);
+	};
+
+	return (
+		<section className="container contact">
+			<h1 className='title'>Send us a message</h1>
+			<form className="contact-form" onSubmit={handleSubmit}>
+				<div>
+					<label>Name:</label>
+					<input autoComplete='off' type="text" name="name" required value={formData.name} onChange={handleChange}
+					/>
+				</div>
+				<div>
+					<label>Email:</label>
+					<input autoComplete='off' type="email" pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' name="email" required value={formData.email} onChange={handleChange}
+					/>
+				</div>
+				<div>
+					<label>Phone:</label>
+					<input autoComplete='off' type="number" pattern="[6,7,8,9]{1}\d{9}" name="number" inputMode='numeric' required value={formData.number} onChange={handleChange}
+					/>
+				</div>
+				<div>
+					<label>Company (optional):</label>
+					<input autoComplete='off' type="text" name="company" value={formData.company} onChange={handleChange}
+					/>
+				</div>
+				<div>
+					<label>Message:</label>
+					<textarea
+						autoComplete='off' name="message" rows="3" required value={formData.message} onChange={handleChange}
+					/>
+				</div>
+				{mess.message ?
+					<div className={`mess ${mess.status === "ok" ? "success" : "failure"}`}>
+						{mess.message}
+					</div>
+					: ''}
+				<button type="submit" disabled={mess.message ? true : false}>{mess.message ? "Submitting" : "Submit"}</button>
+			</form>
+		</section>
+	);
 };
 
 export default Contact;

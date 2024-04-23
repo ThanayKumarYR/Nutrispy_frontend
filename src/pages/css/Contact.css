@@ -1,114 +1,121 @@
 .contact {
-  padding: 5px clamp(20px, 10%, 100px);
-  font-family: 'Anek Tamil';
-  font-size: 20px;
-  margin: 0 auto;
+	padding: 5px clamp(20px, 10%, 100px);
+	font-family: 'Anek Tamil';
+	font-size: 20px;
+	margin: 0 auto;
 }
 
 .contact h1.title {
-  font-family: 'Anek Tamil';
-  font-weight: 700;
-  text-align: center;
-  letter-spacing: 1px;
-  font-size: 24px;
-  margin-bottom: 10px;
+	font-family: 'Anek Tamil';
+	font-weight: 700;
+	text-align: center;
+	letter-spacing: 1px;
+	font-size: 24px;
+	margin-bottom: 10px;
 }
 
 .contact {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 
 .contact form {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px 0;
+	max-width: 500px;
+	margin: 0 auto;
+	padding-bottom: 20px;
 }
 
 .contact form label {
-  font-size: 20px;
+	font-size: 20px;
+}
+
+.contact form textarea {
+	height: 150px;
+	width: 100%;
+	overflow: auto;
+	resize: none;
 }
 
 .contact form textarea,
 .contact form input {
-  width: 100%;
-  font-size: 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  padding: 10px;
+	width: 100%;
+	font-size: 20px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding: 10px;
+}
+
+.contact form input[type=number]::-webkit-inner-spin-button,
+.contact form input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	margin: 0;
 }
 
 .contact form div {
-  margin: 10px 0;
+	margin: 10px 0;
 }
 
 .contact form button {
-  background: #4CAF50;
-  color: white;
-  border: 1px solid transparent;
-  display: block;
-  outline: none;
-  padding: 10px 20px;
-  width: 100px;
-  margin: 0 auto;
-  font-size: 18px;
-  font-family: 'Anek Tamil';
-  cursor: pointer;
-  transition: .3s;
+	background: #4CAF50;
+	color: white;
+	border: 1px solid transparent;
+	display: block;
+	outline: none;
+	padding: 10px 20px;
+	min-width: 100px;
+	margin: 0 auto;
+	font-size: 18px;
+	font-family: 'Anek Tamil';
+	cursor: pointer;
+	transition: .3s;
 }
 
 .contact form button {
-  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+	box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.contact form button:disabled {
+	background: #ccc;
+	cursor: not-allowed;
+	box-shadow: 0 0 0 0;
 }
 
 .contact form button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 10px 20px 2px rgba(0, 0, 0, 0.25);
+	transform: translateY(-5px);
+	box-shadow: 0px 10px 20px 2px rgba(0, 0, 0, 0.25);
 }
 
 .contact form button:active,
 .contact form button:focus {
-  box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+	box-shadow: inset 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 .contact form button:hover {
-  transform: translateY(5px);
-  box-shadow: inset 0px 10px 20px 2px rgba(0, 0, 0, 0.25);
+	transform: translateY(5px);
+	box-shadow: inset 0px 10px 20px 2px rgba(0, 0, 0, 0.25);
 }
 
 .contact form button:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .contact form div:has(textarea:required) label:after,
 .contact form div:has(input:required) label:after {
-  content: "*";
-  color: red;
+	content: "*";
+	color: red;
 }
 
-.info {
-  width: 100%;
-  background-color: var(--secondary-color);
-  color: white;
-  padding: 20px;
-  min-width: min-content;
+.contact form .mess {
+	padding: 15px 10px;
+	text-align: center;
+	color: white;
 }
 
-.info ul {
-  list-style: none;
-  padding: 0;
-  padding-top: 20px;
-  padding-bottom: 46px;
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+.contact form .mess.success {
+	background: #4CAF50;
 }
 
-.info li {
-  margin: 10px;
-  min-width: max-content;
-}
-
-.info i {
-  margin-right: 10px;
-  color: #4CAF50;
+.contact form .mess.failure {
+	background: red;
 }
