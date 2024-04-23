@@ -15,7 +15,9 @@
     margin-bottom: 10px;
 }
 
-.services .service-cards {}
+.services .service-cards {
+    /* border: 1px solid #000; */
+}
 
 .services .service-cards .service-each-card {
     display: grid;
@@ -24,7 +26,7 @@
     border: 5px solid var(--pri);
     padding: 10px 0;
     max-width: 900px;
-    margin: 10px;
+    margin-block: 10px;
 }
 
 .services .service-cards .service-each-card p {

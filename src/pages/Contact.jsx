@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import "./css/Contact.css";
-import { FaLocationDot } from "react-icons/fa6";
-import { TfiEmail } from "react-icons/tfi";
-import { FaPhoneAlt } from "react-icons/fa";
 import { axios } from '../utilities';
+import "./css/Contact.css";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -29,32 +26,36 @@ const Contact = () => {
     <section className="container contact">
       <h1 className='title'>Send us a message</h1>
       <form className="contact-form" onSubmit={handleSubmit}>
-        <label>Name:
+        <div>
+          <label>Name:</label>
           <input type="text" id="name" name="name" required value={formData.name} onChange={handleChange}
           />
-        </label>
-        <label>Email:
+        </div>
+        <div>
+          <label>Email:</label>
           <input type="email" id="email" name="email" required value={formData.email} onChange={handleChange}
           />
-        </label>
-        <label>Phone:
+        </div>
+        <div>
+          <label>Phone:</label>
           <input type="tel" id="number" name="number" inputMode='numeric' required value={formData.number} onChange={handleChange}
           />
-        </label>
-        <label>Company (optional):
+        </div>
+        <div>
+          <label>Company (optional):</label>
           <input type="text" id="company" name="company" value={formData.company} onChange={handleChange}
           />
-        </label>
-        <label>Message:
+        </div>
+        <div>
+          <label>Message:</label>
           <textarea
-            id="message" name="message" row
-            s="5" required value={formData.message} onChange={handleChange}
+            id="message" name="message" rows="5" required value={formData.message} onChange={handleChange}
           />
-        </label>
+        </div>
         <button type="submit">Submit</button>
       </form>
 
-      <section id="info" className="info">
+      {/* <section id="info" className="info">
         <h2>Contact Information</h2>
         <ul>
           <li>
@@ -67,7 +68,7 @@ const Contact = () => {
             <FaPhoneAlt /> Phone: (555) 555-5555
           </li>
         </ul>
-      </section>
+      </section> */}
     </section>
   );
 };
