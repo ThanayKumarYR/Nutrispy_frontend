@@ -6,7 +6,8 @@ nav.app-nav {
 }
 
 nav.app-nav section {
-    /* background: #bbb; */
+    background: #eee;
+    border-radius: 20px 20px 0px 0px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
@@ -17,16 +18,38 @@ nav.app-nav section {
 }
 
 nav.app-nav section a {
+    -webkit-tap-highlight-color: transparent;
     display: grid;
     gap: 5px;
     padding-block: 10px;
     place-items: center;
     color: black;
+    padding-block: 15px;
 }
+
 nav.app-nav section a.active-nav {
     color: red;
+    font-weight: bold;
 }
 
-nav.app-nav section a span{
+nav.app-nav section a:nth-of-type(1).active-nav {
+    color: #00A86B;
+}
 
+nav.app-nav section a:nth-of-type(2).active-nav {
+    color: #006699;
+}
+
+nav.app-nav section a:nth-of-type(3).active-nav {
+    color: #FF8C00;
+}
+
+nav.app-nav section a svg {
+    font-size: 25px;
+}
+
+nav.app-nav section a span {
+    font-family: 'Anek Tamil';
+    border-radius: 30px;
+    font-size: 1rem;
 }

@@ -1,34 +1,39 @@
-.app {
+.food-app {
     max-width: 600px;
-    margin: 0 auto 40px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 0 20px 100px 20px;
     position: relative;
-    min-height: calc(100vh - 100px);
-    /* background: red; */
+    min-height: calc(100svh - 60px);
+    background: #f1f1f1;
+    border-radius: 10px;
 }
 
-.app h2.heading {
+.food-app h2.heading {
     text-align: center;
+    font-family: 'Anek Tamil';
+    font-size: 30px;
+    padding: 10px;
 }
 
-.app>section {}
+.food-app>section {
+}
 
-.app section div.select-image-div {
+.food-app section div.select-image-div {
     background: rgb(219, 219, 219);
     aspect-ratio: 5/3;
     width: 100%;
     max-width: 500px;
-    margin: 15px auto;
+    margin: 0 auto;
     display: grid;
     place-items: center;
     position: relative;
 }
 
-.app section div.select-image-div:hover {
+.food-app section div.select-image-div:hover {
     background: rgb(151, 151, 151);
 }
 
-.app section div.select-image-div input {
+.food-app section div.select-image-div input {
     -webkit-tap-highlight-color: transparent;
     opacity: 0;
     cursor: pointer;
@@ -37,20 +42,20 @@
     height: 100%;
 }
 
-.app section div.select-image-div img {
+.food-app section div.select-image-div img {
     opacity: 0;
     position: absolute;
 }
 
-.app section div.select-image-div button.del-btn svg {
+.food-app section div.select-image-div button.del-btn svg {
     width: 20px;
 }
 
-.app section div.select-image-div button.del-btn:hover svg {
+.food-app section div.select-image-div button.del-btn:hover svg {
     animation: shake .8s forwards infinite;
 }
 
-.app section div.select-image-div button.del-btn {
+.food-app section div.select-image-div button.del-btn {
     display: none;
     font-size: 10px;
     position: absolute;
@@ -64,16 +69,16 @@
     cursor: pointer;
 }
 
-.app section div.select-image-div svg {
+.food-app section div.select-image-div svg {
     width: 40px;
 }
 
-.app section.food-list {
+.food-app section.food-list {
     margin: 20px auto;
     padding: 5px;
 }
 
-.app section.food-list .each-food {
+.food-app section.food-list .each-food {
     padding: 5px;
     display: grid;
     grid-template-columns: 1fr 80px;
@@ -81,12 +86,12 @@
     /* border: 1px solid #000; */
 }
 
-.app section.food-list .each-food div {
+.food-app section.food-list .each-food div {
     /* border: 1px solid #000; */
 }
 
-.app section.food-list .each-food div input,
-.app section.food-list .each-food div input:disabled {
+.food-app section.food-list .each-food div input,
+.food-app section.food-list .each-food div input:disabled {
     width: 100%;
     color: #000;
     font-size: 20px;
@@ -97,12 +102,12 @@
     /* border: 1px solid #000; */
 }
 
-.app section.food-list .each-food span {
+.food-app section.food-list .each-food span {
     color: rgb(119, 119, 119);
     font-size: 14px;
 }
 
-.app section.food-list .each-food .each-food-btns {
+.food-app section.food-list .each-food .each-food-btns {
     /* margin-left: auto; */
     display: flex;
     /* border: 1px solid #000; */
@@ -112,7 +117,7 @@
     gap: 0 20px;
 }
 
-.app section.food-list .each-food .each-food-btns button {
+.food-app section.food-list .each-food .each-food-btns button {
     width: 30px;
     height: 30px;
     outline: transparent;
@@ -121,17 +126,17 @@
     cursor: pointer;
 }
 
-.app section.food-list .each-food .each-food-btns button:hover svg {
+.food-app section.food-list .each-food .each-food-btns button:hover svg {
     filter: contrast(1);
 }
 
-.app section.food-list .each-food .each-food-btns button svg {
+.food-app section.food-list .each-food .each-food-btns button svg {
     width: 100%;
     height: 100%;
     filter: contrast(.8);
 }
 
-.app section.add-food-item-btn-div {
+.food-app section.add-food-item-btn-div {
     /* background: #000; */
     display: flex;
     gap: 0 15px;
@@ -144,7 +149,7 @@
     max-width: 500px;
 }
 
-.app section.add-food-item-btn-div button.submit-btn {
+.food-app section.add-food-item-btn-div button.submit-btn {
     padding: 10px 15px;
     /* border-radius: 5px; */
     width: 85%;
@@ -155,7 +160,7 @@
     border: 1px solid rgb(0, 85, 255);
 }
 
-.app section.add-food-item-btn-div button.add-food-item-btn {
+.food-app section.add-food-item-btn-div button.add-food-item-btn {
     padding: 5px;
     cursor: pointer;
     width: 50px;
@@ -169,7 +174,7 @@
     margin-left: auto;
 }
 
-.app section.add-food-item-btn-div button.add-food-item-btn svg {
+.food-app section.add-food-item-btn-div button.add-food-item-btn svg {
     width: 100%;
     height: 100%;
 }
@@ -219,7 +224,7 @@
     }
 }
 
-.app section.pop-up-window {
+.food-app section.pop-up-window {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -232,7 +237,7 @@
     display: none;
 }
 
-.app section.pop-up-window span.outer-span {
+.food-app section.pop-up-window span.outer-span {
     position: absolute;
     background: #717171d8;
     width: 100%;
@@ -240,7 +245,7 @@
     z-index: 1;
 }
 
-.app section.pop-up-window form {
+.food-app section.pop-up-window form {
     z-index: 2;
     width: 400px;
     background: rgb(43, 255, 181);
@@ -249,12 +254,12 @@
     border-radius: 10px;
 }
 
-.app section.pop-up-window form>input {
+.food-app section.pop-up-window form>input {
     width: 100%;
 }
 
-.app section.pop-up-window form>input,
-.app section.pop-up-window form label input {
+.food-app section.pop-up-window form>input,
+.food-app section.pop-up-window form label input {
     margin: 10px 0;
     font-size: 20px;
     padding: 10px;
@@ -263,30 +268,31 @@
     background: white;
 }
 
-.app section.pop-up-window form label {
+.food-app section.pop-up-window form label {
     display: block;
 }
 
-.app section.pop-up-window form label input[type="number"]::-webkit-outer-spin-button,
-.app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
+.food-app section.pop-up-window form label input[type="number"]::-webkit-outer-spin-button,
+.food-app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-.app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
+.food-app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 
-.app section.pop-up-window form label input {
+.food-app section.pop-up-window form label input {
     width: 30%;
 }
 
-.app section.pop-up-window form label select {
+.food-app section.pop-up-window form label select {
     font-size: 20px;
     padding: 10px;
 }
 
-.app section.pop-up-window form div.bottom-btns-div {
+.food-app section.pop-up-window form div.bottom-btns-div {
     margin-top: 15px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -295,8 +301,8 @@
     justify-content: space-around;
 }
 
-.app section.pop-up-window form div.bottom-btns-div button,
-.app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
+.food-app section.pop-up-window form div.bottom-btns-div button,
+.food-app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
     background: #e8e8e8;
     padding: 10px 20px;
     outline: transparent;
@@ -306,12 +312,12 @@
     border-radius: 5px;
 }
 
-.app section.pop-up-window form div.bottom-btns-div button {
+.food-app section.pop-up-window form div.bottom-btns-div button {
     background: red;
     cursor: pointer;
 }
 
-.app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
+.food-app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
     background: green;
     cursor: pointer;
 }

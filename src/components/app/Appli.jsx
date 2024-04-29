@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from './Navbar'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Dashborard from './Dashborard'
 import Food from './Food'
 import Exercise from './Exercise'
@@ -11,7 +11,8 @@ export default function Appli() {
             <Routes>
                 <Route path="/food" element={<Food />} />
                 <Route path="/exercise" element={<Exercise />} />
-                <Route path="/" element={<Dashborard />} />
+                <Route path="/dashboard" element={<Dashborard />} />
+                <Route path="/" element={<Navigate to="/app/dashboard" />} />
             </Routes>
             <Navbar />
         </main>

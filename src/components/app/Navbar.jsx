@@ -1,25 +1,27 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom';
+
+import '../css/Navbar.css'
+
 import { IoFastFood } from "react-icons/io5"; 
 import { GiBiceps } from "react-icons/gi";
 import { FaChartPie } from "react-icons/fa";
 
-import '../css/Navbar.css'
-import { NavLink } from 'react-router-dom';
 
 
 export default function Navbar() {
     return (
         <nav className='app-nav'>
             <section>
-                <NavLink to="/app/food" activeClassName="active-nav">
+                <NavLink to="/app/food" className={({isActive}) => (isActive ? "active-nav" : "")}>
                     <IoFastFood />
                     <span>Food</span>
                 </NavLink>
-                <NavLink to="/app/exercise" activeClassName="active-nav">
+                <NavLink to="/app/exercise" className={({isActive}) => (isActive ? "active-nav" : "")}>
                     <GiBiceps />
                     <span>Exercise</span>
                 </NavLink>
-                <NavLink to="/app" activeClassName="active-nav">
+                <NavLink to="/app/dashboard" className={({isActive}) => (isActive ? "active-nav" : "")}>
                     <FaChartPie />
                     <span>Dashboard</span>
                 </NavLink>
