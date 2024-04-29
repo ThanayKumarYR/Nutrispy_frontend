@@ -1,0 +1,32 @@
+nav.app-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 0px auto;
+}
+
+nav.app-nav section {
+    /* background: #bbb; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 0 #000, 0 0 #000, 0 0 #000, 0 10px 15px -3px rgb(0 0 0 / .03),
+        0 4px 6px -4px rgb(0 0 0 / .03);
+}
+
+nav.app-nav section a {
+    display: grid;
+    gap: 5px;
+    padding-block: 10px;
+    place-items: center;
+    color: black;
+}
+nav.app-nav section a.active-nav {
+    color: red;
+}
+
+nav.app-nav section a span{
+
+}

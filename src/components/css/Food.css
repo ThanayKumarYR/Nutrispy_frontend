@@ -1,0 +1,317 @@
+.app {
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    padding: 0 20px;
+    position: relative;
+    min-height: calc(100vh - 100px);
+    /* background: red; */
+}
+
+.app h2.heading {
+    text-align: center;
+}
+
+.app>section {}
+
+.app section div.select-image-div {
+    background: rgb(219, 219, 219);
+    aspect-ratio: 5/3;
+    width: 100%;
+    max-width: 500px;
+    margin: 15px auto;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.app section div.select-image-div:hover {
+    background: rgb(151, 151, 151);
+}
+
+.app section div.select-image-div input {
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.app section div.select-image-div img {
+    opacity: 0;
+    position: absolute;
+}
+
+.app section div.select-image-div button.del-btn svg {
+    width: 20px;
+}
+
+.app section div.select-image-div button.del-btn:hover svg {
+    animation: shake .8s forwards infinite;
+}
+
+.app section div.select-image-div button.del-btn {
+    display: none;
+    font-size: 10px;
+    position: absolute;
+    outline: none;
+    border: none;
+    background: transparent;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    /* opacity: 0; */
+    cursor: pointer;
+}
+
+.app section div.select-image-div svg {
+    width: 40px;
+}
+
+.app section.food-list {
+    margin: 20px auto;
+    padding: 5px;
+}
+
+.app section.food-list .each-food {
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    margin: 5px auto;
+    /* border: 1px solid #000; */
+}
+
+.app section.food-list .each-food div {
+    /* border: 1px solid #000; */
+}
+
+.app section.food-list .each-food div input,
+.app section.food-list .each-food div input:disabled {
+    width: 100%;
+    color: #000;
+    font-size: 20px;
+    font-weight: 500;
+    border: transparent;
+    outline: transparent;
+    background: transparent;
+    /* border: 1px solid #000; */
+}
+
+.app section.food-list .each-food span {
+    color: rgb(119, 119, 119);
+    font-size: 14px;
+}
+
+.app section.food-list .each-food .each-food-btns {
+    /* margin-left: auto; */
+    display: flex;
+    /* border: 1px solid #000; */
+    /* place-items: center; */
+    align-items: center;
+    justify-content: center;
+    gap: 0 20px;
+}
+
+.app section.food-list .each-food .each-food-btns button {
+    width: 30px;
+    height: 30px;
+    outline: transparent;
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+.app section.food-list .each-food .each-food-btns button:hover svg {
+    filter: contrast(1);
+}
+
+.app section.food-list .each-food .each-food-btns button svg {
+    width: 100%;
+    height: 100%;
+    filter: contrast(.8);
+}
+
+.app section.add-food-item-btn-div {
+    /* background: #000; */
+    display: flex;
+    gap: 0 15px;
+    /* justify-content: end; */
+    /* padding: 0 10px; */
+    position: sticky;
+    bottom: 0;
+    margin: 0 auto;
+    /* border: 1px solid #000; */
+    max-width: 500px;
+}
+
+.app section.add-food-item-btn-div button.submit-btn {
+    padding: 10px 15px;
+    /* border-radius: 5px; */
+    width: 85%;
+    font-size: 18px;
+    background: blue;
+    color: white;
+    outline: transparent;
+    border: 1px solid rgb(0, 85, 255);
+}
+
+.app section.add-food-item-btn-div button.add-food-item-btn {
+    padding: 5px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: blue;
+    border: transparent;
+    outline: transparent;
+    /* box-shadow: 0px 0px 5px 1px black,
+    inset 0px 0px 10px 0px rgb(170, 191, 255); */
+    margin-left: auto;
+}
+
+.app section.add-food-item-btn-div button.add-food-item-btn svg {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+@keyframes shake {
+    0% {
+        transform: rotate(0) scale(1.1);
+    }
+
+    12% {
+        transform: rotate(-70deg) scale(1.1);
+    }
+
+    25% {
+        transform: rotate(0) scale(1.1);
+    }
+
+    38% {
+        transform: rotate(70deg) scale(1.1);
+    }
+
+    50% {
+        transform: rotate(0deg) scale(1.1);
+    }
+
+    60% {
+        transform: rotate(-30deg) scale(1.1);
+    }
+
+    75% {
+        transform: rotate(30deg) scale(1.1);
+    }
+
+    85% {
+        transform: rotate(-10deg) scale(1.1);
+    }
+
+    95% {
+        transform: rotate(10deg) scale(1.1);
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1.1);
+    }
+}
+
+.app section.pop-up-window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: calc(100% - 25px);
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    display: none;
+}
+
+.app section.pop-up-window span.outer-span {
+    position: absolute;
+    background: #717171d8;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.app section.pop-up-window form {
+    z-index: 2;
+    width: 400px;
+    background: rgb(43, 255, 181);
+    padding: 20px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.app section.pop-up-window form>input {
+    width: 100%;
+}
+
+.app section.pop-up-window form>input,
+.app section.pop-up-window form label input {
+    margin: 10px 0;
+    font-size: 20px;
+    padding: 10px;
+    outline: transparent;
+    border: transparent;
+    background: white;
+}
+
+.app section.pop-up-window form label {
+    display: block;
+}
+
+.app section.pop-up-window form label input[type="number"]::-webkit-outer-spin-button,
+.app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
+    -moz-appearance: textfield;
+}
+
+.app section.pop-up-window form label input {
+    width: 30%;
+}
+
+.app section.pop-up-window form label select {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.app section.pop-up-window form div.bottom-btns-div {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+    /* background: #000; */
+    justify-content: space-around;
+}
+
+.app section.pop-up-window form div.bottom-btns-div button,
+.app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
+    background: #e8e8e8;
+    padding: 10px 20px;
+    outline: transparent;
+    border: transparent;
+    display: inline;
+    font-size: 20px;
+    border-radius: 5px;
+}
+
+.app section.pop-up-window form div.bottom-btns-div button {
+    background: red;
+    cursor: pointer;
+}
+
+.app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
+    background: green;
+    cursor: pointer;
+}
