@@ -3,10 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import Appli from "./components/app/Appli";
-import Food from "./components/app/Food";
-import Exercise from "./components/app/Exercise";
-import Dashborard from "./components/app/Dashborard";
-import Navbar from "./components/app/Navbar";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
