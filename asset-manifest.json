@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Nutrispy_frontend/static/css/main.5b608fbf.css",
-    "main.js": "/Nutrispy_frontend/static/js/main.a8e7ffb9.js",
+    "main.css": "/Nutrispy_frontend/static/css/main.ead461e3.css",
+    "main.js": "/Nutrispy_frontend/static/js/main.0bba5770.js",
     "index.html": "/Nutrispy_frontend/index.html",
-    "main.5b608fbf.css.map": "/Nutrispy_frontend/static/css/main.5b608fbf.css.map",
-    "main.a8e7ffb9.js.map": "/Nutrispy_frontend/static/js/main.a8e7ffb9.js.map"
+    "main.ead461e3.css.map": "/Nutrispy_frontend/static/css/main.ead461e3.css.map",
+    "main.0bba5770.js.map": "/Nutrispy_frontend/static/js/main.0bba5770.js.map"
   },
   "entrypoints": [
-    "static/css/main.5b608fbf.css",
-    "static/js/main.a8e7ffb9.js"
+    "static/css/main.ead461e3.css",
+    "static/js/main.0bba5770.js"
   ]
 }
