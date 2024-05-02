@@ -7,23 +7,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
-
 export default function FormDialog(props) {
 
-    function handleChange(e) {
-        const { value, name } = e.target
-        props.setData(prevData => ({
-            ...prevData,
-            [name]: value
-        })
-        )
-    }
+    console.log(props.data);
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={props.handleClickOpen}>
-                Open form dialog
-            </Button>
             <Dialog
                 open={props.open}
                 onClose={props.handleClose}
@@ -33,37 +22,57 @@ export default function FormDialog(props) {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
-                        const email = formJson.email;
-                        console.log(email);
+                        console.log(formJson);
+                        if (props.isNew) {
+                            console.log(props.foodList);
+                            let tempList = props.foodList;
+                            tempList.push({ "index": props.foodList.length > 0 ? props.foodList[props.foodList.length - 1]["index"] + 1 : 0, ...props.data });
+                            props.setIsNew(false)
+                            console.log("is new and pushed");
+                        }
+                        else {
+                            console.log("not new and updated");
+                            console.log(props.foodList);
+                            props.setFoodList(
+                                props.foodList.map(
+                                    e => e.index === props.data['index'] ? { "index": props.data['index'], ...formJson } : e)
+                            )
+                        }
+                        props.setData({})
                         props.handleClose();
                     },
                 }}
             >
                 <DialogTitle>Add Food</DialogTitle>
-                {JSON.stringify(props.data)}
                 <DialogContent>
                     <TextField
                         autoFocus
                         required
-                        margin="dense"
-                        id="name"
                         name="name"
-                        label={props.data["name"] ? "Food Name" : ""}
+                        label="Food Name"
                         type="text"
                         fullWidth
                         variant="standard"
-                        value={props.data["name"]}
-                        onChange={handleChange}
+                        value={props.data.name || ""}
+                        onChange={(e) => {
+                            props.setData(prevData => ({
+                                ...prevData,
+                                [e.target.name]: e.target.value
+                            }))
+                        }}
                     />
                     <Box
-                        sx={{ mt: 1 }}>
+                        sx={{ mt: 2 }}>
                         <FormControl sx={{ mr: 2, minWidth: 115 }} required>
-                            <InputLabel id="demo-simple-select-autowidth-label">Quantity</InputLabel>
+                            <InputLabel>Quantity</InputLabel>
                             <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                id="demo-simple-select-autowidth"
-                                value={props.data["quantity"]}
-                                onChange={handleChange}
+                                value={props.data.quantity || ""}
+                                onChange={(e) => {
+                                    props.setData(prevData => ({
+                                        ...prevData,
+                                        [e.target.name]: e.target.value
+                                    }))
+                                }}
                                 autoWidth
                                 label="Quantity"
                                 name="quantity"
@@ -82,12 +91,15 @@ export default function FormDialog(props) {
                             </Select>
                         </FormControl>
                         <FormControl sx={{ minWidth: 150 }} required>
-                            <InputLabel id="demo-simple-select-autowidth-label">Measurement</InputLabel>
+                            <InputLabel>Measurement</InputLabel>
                             <Select
-                                labelId="demo-simple-select-autowidth-label"
-                                id="demo-simple-select-autowidth"
-                                value={props.data["measurement"]}
-                                onChange={handleChange}
+                                value={props.data.measurement || ""}
+                                onChange={(e) => {
+                                    props.setData(prevData => ({
+                                        ...prevData,
+                                        [e.target.name]: e.target.value
+                                    }))
+                                }}
                                 autoWidth
                                 label="Measurement"
                                 name="measurement"
@@ -96,6 +108,8 @@ export default function FormDialog(props) {
                                 <MenuItem sx={{ mx: 1 }} value={"gm"}>gm</MenuItem>
                                 <MenuItem sx={{ mx: 1 }} value={"spoon"}>spoon</MenuItem>
                                 <MenuItem sx={{ mx: 1 }} value={"plate"}>plate</MenuItem>
+                                <MenuItem sx={{ mx: 1 }} value={"pieces"}>pieces</MenuItem>
+                                <MenuItem sx={{ mx: 1 }} value={"glass"}>glass</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -103,17 +117,22 @@ export default function FormDialog(props) {
                         sx={{ display: "flex", placeItems: "end" }}>
                         <TextField
                             sx={{ width: 80, mr: 1 }}
+                            InputProps={{ inputProps: { min: 1 } }}
                             autoFocus
                             required
                             margin="dense"
-                            id="calories"
                             name="calories"
-                            label={props.data["calories"] ? "Calories" : ""}
+                            label="Calories"
                             type="number"
                             variant="standard"
                             placeholder='100'
-                            value={props.data["calories"]}
-                            onChange={handleChange}
+                            value={props.data.calories || ""}
+                            onChange={(e) => {
+                                props.setData(prevData => ({
+                                    ...prevData,
+                                    [e.target.name]: e.target.value
+                                }))
+                            }}
                         />
                         <Typography variant="body1" display="inline" gutterBottom>
                             Cal

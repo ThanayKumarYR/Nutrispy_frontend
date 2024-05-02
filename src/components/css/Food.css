@@ -3,9 +3,10 @@
     margin: 0 auto;
     padding: 0 20px 100px 20px;
     position: relative;
-    min-height: calc(100svh - 60px);
+    min-height: calc(100dvh - 60px);
     background: #f1f1f1;
     border-radius: 10px;
+    font-family: 'Anek Tamil';
 }
 
 .food-app h2.heading {
@@ -15,8 +16,7 @@
     padding: 10px;
 }
 
-.food-app>section {
-}
+.food-app>section {}
 
 .food-app section div.select-image-div {
     background: rgb(219, 219, 219);
@@ -74,32 +74,47 @@
 }
 
 .food-app section.food-list {
-    margin: 20px auto;
+    margin-block: 10px 35px;
+    margin-inline: auto;
     padding: 5px;
+    overflow: auto;
+    height: min-content;
+}
+.food-app section.food-list > h3{
+    text-align: center;
 }
 
 .food-app section.food-list .each-food {
     padding: 5px;
-    display: grid;
-    grid-template-columns: 1fr 80px;
     margin: 5px auto;
-    /* border: 1px solid #000; */
+    display: grid;
+    max-width: 500px;
+    grid-template-columns: 1fr 80px;
+}
+
+.food-app section.food-list .each-food:hover {
+    background: #ddd;
+    border-radius: 5px;
 }
 
 .food-app section.food-list .each-food div {
     /* border: 1px solid #000; */
 }
 
-.food-app section.food-list .each-food div input,
-.food-app section.food-list .each-food div input:disabled {
+.food-app section.food-list .each-food div h3 {
     width: 100%;
     color: #000;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.food-app section.food-list .each-food span:nth-of-type(1) {
+    font-size: 17px;
+}
+
+.food-app section.food-list .each-food span:nth-of-type(2) {
+    font-weight: 900;
     font-size: 20px;
-    font-weight: 500;
-    border: transparent;
-    outline: transparent;
-    background: transparent;
-    /* border: 1px solid #000; */
 }
 
 .food-app section.food-list .each-food span {
@@ -108,10 +123,7 @@
 }
 
 .food-app section.food-list .each-food .each-food-btns {
-    /* margin-left: auto; */
     display: flex;
-    /* border: 1px solid #000; */
-    /* place-items: center; */
     align-items: center;
     justify-content: center;
     gap: 0 20px;
@@ -137,30 +149,32 @@
 }
 
 .food-app section.add-food-item-btn-div {
-    /* background: #000; */
+    padding: 5px 0;
     display: flex;
-    gap: 0 15px;
-    /* justify-content: end; */
-    /* padding: 0 10px; */
-    position: sticky;
-    bottom: 0;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 82px;
+    background: #f1f1f1;
     margin: 0 auto;
-    /* border: 1px solid #000; */
     max-width: 500px;
+    left: 0;
+    right: 0;
 }
 
 .food-app section.add-food-item-btn-div button.submit-btn {
-    padding: 10px 15px;
-    /* border-radius: 5px; */
-    width: 85%;
+    padding: 10px;
+    max-width: 300px;
     font-size: 18px;
     background: blue;
     color: white;
     outline: transparent;
     border: 1px solid rgb(0, 85, 255);
+    margin-left: auto;
+    width: 100%;
 }
 
 .food-app section.add-food-item-btn-div button.add-food-item-btn {
+    margin-right: auto;
     padding: 5px;
     cursor: pointer;
     width: 50px;
@@ -169,8 +183,6 @@
     background: blue;
     border: transparent;
     outline: transparent;
-    /* box-shadow: 0px 0px 5px 1px black,
-    inset 0px 0px 10px 0px rgb(170, 191, 255); */
     margin-left: auto;
 }
 
@@ -222,103 +234,4 @@
     100% {
         transform: rotate(0deg) scale(1.1);
     }
-}
-
-.food-app section.pop-up-window {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: calc(100% - 0px);
-    z-index: 4;
-    display: grid;
-    place-items: center;
-    display: none;
-}
-
-.food-app section.pop-up-window span.outer-span {
-    position: absolute;
-    background: #0000002f;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.food-app section.pop-up-window form {
-    z-index: 2;
-    width: 400px;
-    background: rgb(43, 255, 181);
-    padding: 20px;
-    height: 300px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 18px #222;
-}
-
-.food-app section.pop-up-window form>input {
-    width: 100%;
-}
-
-.food-app section.pop-up-window form>input,
-.food-app section.pop-up-window form label input {
-    margin: 10px 0;
-    font-size: 20px;
-    padding: 10px;
-    outline: transparent;
-    border: transparent;
-    background: white;
-}
-
-.food-app section.pop-up-window form label {
-    display: block;
-}
-
-.food-app section.pop-up-window form label input[type="number"]::-webkit-outer-spin-button,
-.food-app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.food-app section.pop-up-window form label input[type="number"]::-webkit-inner-spin-button {
-    appearance: textfield;
-    -moz-appearance: textfield;
-}
-
-.food-app section.pop-up-window form label input {
-    width: 30%;
-}
-
-.food-app section.pop-up-window form label select {
-    font-size: 20px;
-    padding: 10px;
-}
-
-.food-app section.pop-up-window form div.bottom-btns-div {
-    margin-top: 15px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 20px;
-    /* background: #000; */
-    justify-content: space-around;
-}
-
-.food-app section.pop-up-window form div.bottom-btns-div button,
-.food-app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
-    background: #e8e8e8;
-    padding: 10px 20px;
-    outline: transparent;
-    border: transparent;
-    display: inline;
-    font-size: 20px;
-    border-radius: 5px;
-}
-
-.food-app section.pop-up-window form div.bottom-btns-div button {
-    background: red;
-    cursor: pointer;
-}
-
-.food-app section.pop-up-window form div.bottom-btns-div input[type="submit"] {
-    background: green;
-    cursor: pointer;
 }
