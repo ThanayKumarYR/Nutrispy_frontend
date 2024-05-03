@@ -3,12 +3,23 @@ import React, { useRef, useState } from 'react'
 import '../css/Food.css'
 import FormDialog from './FormDialog';
 
+import Loading from '../../images/loading.gif'
+import axios from 'axios';
+
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+import InfoIcon from '@mui/icons-material/Info';
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+
 export default function Food() {
 
     document.title = "NutriSpy - Food"
 
     const [open, setOpen] = React.useState(false);
+    const [infoOpen, setInfoOpen] = React.useState(false);
+    const [foodInfo, setFoodInfo] = React.useState({});
     const [isNew, setIsNew] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState({});
 
     const handleClickOpen = () => {
@@ -17,6 +28,12 @@ export default function Food() {
 
     const handleClose = () => {
         setOpen(false);
+    };
+    const handleInfoOpen = () => {
+        setInfoOpen(true);
+    };
+    const handleInfoClose = () => {
+        setInfoOpen(false);
     };
 
     const imagePreview = useRef()
@@ -27,6 +44,8 @@ export default function Food() {
 
     async function handleImage(e) {
         e.preventDefault()
+        setLoading(true)
+        setFoodList([])
         const imagePreviewElement = imagePreview['current']
         let file = e.target.files[0]
         if (!file) return
@@ -39,50 +58,62 @@ export default function Food() {
         const url = URL.createObjectURL(file)
         console.log(url);
 
+        try {
+            const response = await axios.get("https://baconipsum.com/api/?callback=?", {
+                'type': 'meat-and-filler', 'start-with-lorem': '1', 'paras': '3'
+            })
+            console.log(response)
+            setFoodList([{
+                "index": 1,
+                "name": "Chapthi",
+                "quantity": 1,
+                "measurement": "pieces",
+                "calories": 300
+            },
+            {
+                "index": 2,
+                "name": "Rice",
+                "quantity": 1,
+                "measurement": "bowl",
+                "calories": 400
+            },
+            {
+                "index": 3,
+                "name": "Panner Butter Masala",
+                "quantity": 1,
+                "measurement": "bowl",
+                "calories": 900
+            },
+            {
+                "index": 4,
+                "name": "Butter Naan",
+                "quantity": 1,
+                "measurement": "pieces",
+                "calories": 500
+            },
+            {
+                "index": 5,
+                "name": "Curd Rice",
+                "quantity": 1,
+                "measurement": "plate",
+                "calories": 80
+            },
+            {
+                "index": 6,
+                "name": "Water",
+                "quantity": 2,
+                "measurement": "glass",
+                "calories": 400
+            },
+            ]);
+        }
+        catch (error) {
+            console.error("Error fetching data: ", error);
+        }
+        finally {
+            setLoading(false)
+        }
         // get from API after uploading image and set FoodList
-        setFoodList([{
-            "index": 1,
-            "name": "Chapthi",
-            "quantity": 1,
-            "measurement": "pieces",
-            "calories": 300
-        },
-        {
-            "index": 2,
-            "name": "Rice",
-            "quantity": 1,
-            "measurement": "bowl",
-            "calories": 400
-        },
-        {
-            "index": 3,
-            "name": "Panner Butter Masala",
-            "quantity": 1,
-            "measurement": "bowl",
-            "calories": 900
-        },
-        {
-            "index": 4,
-            "name": "Butter Naan",
-            "quantity": 1,
-            "measurement": "pieces",
-            "calories": 500
-        },
-        {
-            "index": 5,
-            "name": "Curd Rice",
-            "quantity": 1,
-            "measurement": "plate",
-            "calories": 80
-        },
-        {
-            "index": 6,
-            "name": "Water",
-            "quantity": 2,
-            "measurement": "glass",
-            "calories": 400
-        },
-        ]);
     }
 
     function removeImage(e) {
@@ -114,6 +145,10 @@ export default function Food() {
         console.log("addNewFoodItem")
     }
 
+    function submitFood() {
+        console.log("submitFood");
+    }
+
     return (
         <main className="food-app">
             {
@@ -128,6 +163,27 @@ export default function Food() {
                     isNew={isNew}
                     setIsNew={setIsNew}
                 />
+            }
+            {
+                infoOpen &&
+                <Dialog
+                    open={infoOpen}
+                    onClose={handleInfoClose}
+                    className='food-info'
+                >
+                    <DialogTitle className='food-info-title'>
+                        {foodInfo["name"]}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText >
+                            {
+                                Object.entries(foodInfo).map(([key, value]) =>
+                                    (key === "name" || key === "index") ? "" : <span key={key}>{key}: {value}<br /></span>
+                                )
+                            }
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
             }
 
             <h2 className="heading">Add Food</h2>
@@ -156,7 +212,12 @@ export default function Food() {
                     foodList.map(food =>
                         <div className="each-food" key={Math.random()}>
                             <div>
-                                <h3>{food.name}</h3>
+                                <h3>{food.name}<InfoIcon onClick={
+                                    () => {
+                                        setFoodInfo(food)
+                                        handleInfoOpen()
+                                    }
+                                } /></h3>
                                 <span>{food.calories} cal</span>
                                 <span> - </span>
                                 <span>{food.quantity} {food.measurement}</span>
@@ -176,10 +237,26 @@ export default function Food() {
                         </div>
                     )
                 }
+                {
+                    loading &&
+                    <div className='loading-div'>
+                        <img src={Loading} alt="loading" />
+                        <center>We hope you are having a great meal😋. Hang on tight, while we spy on your foooooooood</center>
+                    </div>
+                }
             </section>
 
             <section className="add-food-item-btn-div">
-                <button className="submit-btn">Submit</button>
+                {/* <button className="submit-btn">Submit</button> */}
+                <LoadingButton
+                    loading={false}
+                    loadingPosition="end"
+                    endIcon={<SendIcon />}
+                    variant="contained"
+                    onClick={submitFood}
+                >
+                    Submit
+                </LoadingButton>
                 <button className="add-food-item-btn" onClick={() => addNewFoodItem()}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path fill="#ffffff"

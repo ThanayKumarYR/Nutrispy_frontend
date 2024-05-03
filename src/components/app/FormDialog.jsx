@@ -55,9 +55,12 @@ export default function FormDialog(props) {
                         variant="standard"
                         value={props.data.name || ""}
                         onChange={(e) => {
+                            let inputValue = e.target.value
+                            inputValue.replace(/[^0-9.]/g, '')
+                            console.log(inputValue);
                             props.setData(prevData => ({
                                 ...prevData,
-                                [e.target.name]: e.target.value
+                                [e.target.name]: inputValue
                             }))
                         }}
                     />
@@ -118,7 +121,6 @@ export default function FormDialog(props) {
                         <TextField
                             sx={{ width: 80, mr: 1 }}
                             InputProps={{ inputProps: { min: 1 } }}
-                            autoFocus
                             required
                             margin="dense"
                             name="calories"

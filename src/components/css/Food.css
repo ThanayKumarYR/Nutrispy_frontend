@@ -106,10 +106,12 @@
     color: #000;
     font-size: 18px;
     font-weight: 600;
+    line-height: 10px;
 }
-
-.food-app section.food-list .each-food span:nth-of-type(1) {
-    font-size: 17px;
+.food-app section.food-list .each-food div h3 svg{
+    font-size: 15px;
+    margin-left: 2px;
+    color: #777;
 }
 
 .food-app section.food-list .each-food span:nth-of-type(2) {
@@ -119,7 +121,7 @@
 
 .food-app section.food-list .each-food span {
     color: rgb(119, 119, 119);
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .food-app section.food-list .each-food .each-food-btns {
@@ -161,7 +163,7 @@
     right: 0;
 }
 
-.food-app section.add-food-item-btn-div button.submit-btn {
+.food-app section.add-food-item-btn-div button:nth-of-type(1) {
     padding: 10px;
     max-width: 300px;
     font-size: 18px;
@@ -191,8 +193,14 @@
     height: 100%;
 }
 
+.food-app .loading-div{
+    /* border: 1px solid #000; */
+}
 
-
+.food-app .loading-div img{
+    max-width: 200px;
+    margin: 0 auto;
+}
 
 @keyframes shake {
     0% {
@@ -234,4 +242,10 @@
     100% {
         transform: rotate(0deg) scale(1.1);
     }
+}
+
+
+
+.food-info .food-info-title{
+    text-transform: capitalize;
 }
