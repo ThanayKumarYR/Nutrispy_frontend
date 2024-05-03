@@ -119,7 +119,7 @@ export default function FormDialog(props) {
                     <Box
                         sx={{ display: "flex", placeItems: "end" }}>
                         <TextField
-                            sx={{ width: 80, mr: 1 }}
+                            sx={{ width: 75, mr: 1 }}
                             InputProps={{ inputProps: { min: 1 } }}
                             required
                             margin="dense"

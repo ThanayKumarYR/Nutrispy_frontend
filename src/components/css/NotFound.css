@@ -1,0 +1,33 @@
+.not-found main {
+    height: calc(100vh - 100px);
+    display: grid;
+    place-items: center;
+    font-weight: 300;
+    font-family: 'Anek Tamil';
+    font-size: 25px;
+}
+
+.not-found main a {
+    display: inline-block;
+    position: relative;
+    background: var(--pri);
+    padding-inline: 5px;
+    font-weight: 600;
+}
+
+.not-found main a:after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    left: 0%;
+    bottom: 4px;
+    transition: .3s;
+    display: grid;
+    place-items: center;
+}
+
+.not-found main a:hover:after {
+    width: 100%;
+    background: #000;
+}

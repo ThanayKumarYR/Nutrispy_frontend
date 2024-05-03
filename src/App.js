@@ -17,7 +17,7 @@ function App() {
                     </NavLink>
                 </div>
                 <div className="try-app">
-                    <NavLink to="app">Try App</NavLink>
+                    <NavLink to="app/dashboard">Try App</NavLink>
                 </div>
             </nav>
             <Home />
