@@ -9,7 +9,8 @@ import axios from 'axios';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import InfoIcon from '@mui/icons-material/Info';
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
 
 export default function Food() {
 
@@ -174,6 +175,18 @@ export default function Food() {
                     <DialogTitle className='food-info-title'>
                         {foodInfo["name"]}
                     </DialogTitle>
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleInfoClose}
+                            sx={{
+                                position: 'absolute',
+                                right: 8,
+                                top: 8,
+                                color: (theme) => theme.palette.grey[500],
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
                     <DialogContent>
                         <DialogContentText >
                             {
@@ -212,7 +225,9 @@ export default function Food() {
                     foodList.map(food =>
                         <div className="each-food" key={Math.random()}>
                             <div>
-                                <h3>{food.name}<InfoIcon onClick={
+                                <h3>{food.name}<InfoIcon 
+                                className='info-icon'
+                                onClick={
                                     () => {
                                         setFoodInfo(food)
                                         handleInfoOpen()

@@ -1,0 +1,55 @@
+.admin-nav .admin-navbar {
+    padding-block: 5px;
+    position: sticky;
+    top: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px clamp(5px, 10%, 100px);
+    background: var(--tri);
+    z-index: 10;
+}
+
+.admin-nav .admin-navbar div.logo-div .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+}
+
+.admin-nav .admin-navbar div.logo-div {
+    display: flex;
+    justify-content: center;
+    color: var(--sec);
+    font-family: "Berkshire Swash", serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    font-style: normal;
+}
+
+.admin-nav .admin-navbar .logo-div .logo p {
+    font-size: 22px;
+    color: var(--sec);
+    text-shadow: 0 0 4px var(--pri);
+}
+
+.admin-nav .admin-navbar .try-app {
+    color: var(--sec);
+    font-weight: 600;
+    background: var(--pri);
+    padding: 8px 20px;
+    font-size: 20px;
+    font-family: 'Anek Tamil';
+    border-radius: 30px;
+}
+
+.admin-nav .admin-navbar .try-app a {
+    color: var(--sec);
+}
+
+@media (width < 350px) {
+    .admin-nav .admin-navbar {
+        padding-inline: 0;
+    }
+}

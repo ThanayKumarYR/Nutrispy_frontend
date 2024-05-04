@@ -80,7 +80,8 @@
     overflow: auto;
     height: min-content;
 }
-.food-app section.food-list > h3{
+
+.food-app section.food-list>h3 {
     text-align: center;
 }
 
@@ -97,8 +98,8 @@
     border-radius: 5px;
 }
 
-.food-app section.food-list .each-food div {
-    /* border: 1px solid #000; */
+.food-app section.food-list .each-food .info-icon {
+    cursor: pointer;
 }
 
 .food-app section.food-list .each-food div h3 {
@@ -108,7 +109,12 @@
     font-weight: 600;
     line-height: 10px;
 }
-.food-app section.food-list .each-food div h3 svg{
+
+.food-app section.food-list .each-food div h3 svg:hover {
+    color: #333;
+}
+
+.food-app section.food-list .each-food div h3 svg {
     font-size: 15px;
     margin-left: 2px;
     color: #777;
@@ -193,11 +199,7 @@
     height: 100%;
 }
 
-.food-app .loading-div{
-    /* border: 1px solid #000; */
-}
-
-.food-app .loading-div img{
+.food-app .loading-div img {
     max-width: 200px;
     margin: 0 auto;
 }
@@ -244,8 +246,8 @@
     }
 }
 
-
-
-.food-info .food-info-title{
+.food-info .food-info-title {
     text-transform: capitalize;
+    margin-right: 25px;
+    padding: 16px 24px 0px 24px;
 }

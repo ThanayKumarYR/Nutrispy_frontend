@@ -6,12 +6,14 @@ const customFetch = axios.create({
 async function posting(url, formData) {
     console.log(formData);
     const response = await customFetch.post(url, formData);
+    console.log(response);
     return response
 }
 
 async function getting(url, formData) {
     console.log(formData);
     const response = await customFetch.get(url, formData);
+    console.log(response);
     return response
 }
 

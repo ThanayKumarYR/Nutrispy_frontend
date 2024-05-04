@@ -1,0 +1,63 @@
+.login-page {
+    max-width: 400px;
+    width: 90%;
+    padding: 20px 20px 30px 20px;
+    border-radius: 8px;
+    margin: 0 auto;
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 800px 0px rgba(74, 29, 29, 0.39);
+}
+
+.login-page .login-title {
+    font-size: 28px;
+    text-align: center;
+    font-family: 'Anek Tamil';
+    margin-bottom: 10px;
+}
+
+.login-page .login-sbt-btn {
+    background: var(--pri);
+    color: var(--sec);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.primary {
+    --main: '#f1cf90';
+    background: #f1cf90;
+    --contrastText: '#000000';
+    background: #000000;
+    --light: '#f9e8c1';
+    background: #f9e8c1;
+    --dark: '#d9ad5a';
+    background: #d9ad5a;
+}
+
+.secondary {
+    --main: '#4a1d1d';
+    background: #4a1d1d;
+}
+
+.text {
+    --primary: '#333333';
+    background: #333333;
+    --secondary: '#666666';
+    background: #666666;
+    --disabled: '#cccccc';
+    background: #cccccc;
+}
+
+.background {
+    --paper: '#f8f4ea';
+    background: #f8f4ea;
+}
+
+.warning {
+    --main: '#ffbf7f';
+    background: #ffbf7f;
+}
