@@ -41,11 +41,12 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
                 if (response.data.response.toLowerCase().includes("failed")) {
                     console.log('Succesfully logged in, going to dashboard in 5 sec');
                     setCookie("loggedIn=true")
+                    console.log(getCookie("loggedIn"))
                     setTimeout(() => {
                         setAdminLogin(true)
                         navigate("/admin");
                     }, 5000)
-                } 
+                }
             })
             .catch(error => {
                 console.error(error);
@@ -54,15 +55,16 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
     }
 
     useEffect(() => {
+        setAdminLogin(getCookie("loggedIn") ? true : false)
+        console.log("Logged in? from login: " + adminLogin)
         if (adminLogin)
             setInfoDetails({
                 "to": "/admin",
                 "message": "You have already logged in. Heading to Dashboard now",
                 "linkText": "Dashboard"
             })
-        setAdminLogin(getCookie("loggedIn") ? true : false)
-        console.log("Logged in? from login: "+adminLogin)
-    })
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <section className='login-page'>

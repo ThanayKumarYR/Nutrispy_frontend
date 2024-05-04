@@ -15,7 +15,8 @@ export default function Admin() {
     useEffect(() => {
         setAdminLogin(getCookie("loggedIn") ? true : false)
         console.log("Logged in? from admin: " + adminLogin)
-    }, [adminLogin])
+        // eslint-disable-next-line
+    }, [])
 
     function setCookie(parameter) {
         var now = new Date();
