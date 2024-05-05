@@ -11,6 +11,10 @@
     z-index: 10;
 }
 
+.admin-nav .admin-navbar:has(.login-menu) {
+    justify-content: space-between;
+}
+
 .admin-nav .admin-navbar div.logo-div .logo {
     display: flex;
     align-items: center;

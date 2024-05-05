@@ -13,7 +13,8 @@ export default function Dashboard({ adminLogin, setInfoDetails, getCookie, setAd
                 "message": "You need to login to access Dashboard. Heading to Login Page now",
                 "linkText": "Login"
             })
-    })
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <div>

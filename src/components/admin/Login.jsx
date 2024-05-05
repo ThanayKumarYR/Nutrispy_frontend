@@ -1,14 +1,14 @@
-import { LoadingButton } from '@mui/lab'
-import { Alert, Box, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
+import { axios } from '../../utilities'
 
-import './css/Login.css'
-
+import { Alert, Box, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import LoginIcon from '@mui/icons-material/Login';
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { axios } from '../../utilities'
+
+import './css/Login.css'
 
 export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCookie, getCookie }) {
 
@@ -38,7 +38,7 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
                 setFormResponse(response.data)
                 setLoading(false)
                 console.log(response)
-                if (response.data.response.toLowerCase().includes("failed")) {
+                if (response.data.response.toLowerCase().includes("success")) {
                     console.log('Succesfully logged in, going to dashboard in 5 sec');
                     setCookie("loggedIn=true")
                     console.log(getCookie("loggedIn"))
@@ -71,8 +71,8 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
             <Box className='login-form' component="form" onSubmit={handleLogin}>
                 <h1 className='login-title'>Login</h1>
                 {!loading && formResponse.response &&
-                    <Alert variant="filled" severity={formResponse.response.toLowerCase().includes("failed") ? "success" : "error"} sx={{ mb: 2 }}>
-                        {formResponse.response.toLowerCase().includes("attribute") ? "Successfully Logged In" : formResponse.data}
+                    <Alert variant="filled" severity={formResponse.response.toLowerCase().includes("success") ? "success" : "error"} sx={{ mb: 2 }}>
+                        {formResponse.response.toLowerCase().includes("success") ? "Successfully Logged In" : formResponse.data}
                     </Alert>}
                 <TextField
                     sx={{ my: 1 }}

@@ -33,7 +33,7 @@ body::-webkit-scrollbar {
 }
 
 /***************** Navbar *************/
-.App{
+.App {
     min-width: 300px;
 }
 
@@ -74,17 +74,16 @@ body::-webkit-scrollbar {
     text-shadow: 0 0 4px var(--pri);
 }
 
-.navbar .try-app {
+.navbar .try-app {}
+
+.navbar .try-app a {
     color: var(--sec);
     font-weight: 600;
-    background: var(--pri);
-    padding: 8px 20px;
     font-size: 20px;
     font-family: 'Anek Tamil';
     border-radius: 30px;
-}
-
-.navbar .try-app a {
+    background: var(--pri);
+    padding: 8px 20px;
     color: var(--sec);
 }
 

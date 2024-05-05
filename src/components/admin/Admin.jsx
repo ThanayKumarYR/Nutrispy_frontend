@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
+
 import Dashboard from './Dashboard'
 import Login from './Login'
 import Info from './Info'
 import AdminNav from './AdminNav'
 
-
-
 export default function Admin() {
 
     const [adminLogin, setAdminLogin] = useState(false)
-    const [infoDetails, setInfoDetails] = useState({})
+    const [infoDetails, setInfoDetails] = useState({
+        "to": "/admin/login",
+        "message": "We really dont know how you came here. Anyway, just login to see what we have. Heading to login page now ",
+        "loginText": "Login"
+    })
 
     useEffect(() => {
         setAdminLogin(getCookie("loggedIn") ? true : false)
@@ -37,10 +40,10 @@ export default function Admin() {
         document.cookie = `${parameter}; ${updatedTime}; path="/"`
     }
 
-    // function deleteCookie(parameter) {
-    //     document.cookie = `${parameter}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-    //     console.log("deleting a cookie")
-    // }
+    function deleteCookie(parameter) {
+        document.cookie = `${parameter}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+        console.log("deleting a cookie")
+    }
 
     function getCookie(name) {
         // console.log("getting cookie of " + name);
@@ -51,10 +54,10 @@ export default function Admin() {
 
     return (
         <section className='admin'>
-            <AdminNav />
+            <AdminNav adminLogin={adminLogin} setAdminLogin={setAdminLogin} deleteCookie={deleteCookie} setInfoDetails={setInfoDetails} />
             <Routes>
                 <Route path="/login" element={<Login adminLogin={adminLogin} setAdminLogin={setAdminLogin} setInfoDetails={setInfoDetails} setCookie={setCookie} getCookie={getCookie} />} />
-                <Route path="/info" element={<Info {...infoDetails} />} />
+                <Route path="/info" element={<Info {...infoDetails} setInfoDetails={setInfoDetails} adminLogin={adminLogin}/>} />
                 <Route path="/" element={< Dashboard adminLogin={adminLogin} setInfoDetails={setInfoDetails} setAdminLogin={setAdminLogin} getCookie={getCookie} />} />
             </Routes>
             {/* {(!adminLogin) && <Navigate to="/admin/login" />} */}
