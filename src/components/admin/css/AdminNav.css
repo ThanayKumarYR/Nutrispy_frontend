@@ -57,3 +57,7 @@
         padding-inline: 0;
     }
 }
+
+.admin-nav > a{
+    margin: 0 10px;
+}

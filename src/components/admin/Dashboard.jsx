@@ -5,8 +5,8 @@ export default function Dashboard({ adminLogin, setInfoDetails, getCookie, setAd
 
     useEffect(() => {
         setAdminLogin(getCookie("loggedIn") ? true : false)
-        console.log("Logged in? from dashboard: " + adminLogin)
-        console.log("Logged in? from dashboard: " + getCookie("loggedIn"))
+        // console.log("Logged in? from dashboard: " + adminLogin)
+        // console.log("Logged in? from dashboard: " + getCookie("loggedIn"))
         if (!adminLogin)
             setInfoDetails({
                 "to": "/admin/login",

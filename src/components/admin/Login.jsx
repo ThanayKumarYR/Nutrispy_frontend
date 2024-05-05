@@ -37,15 +37,15 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
             .then((response) => {
                 setFormResponse(response.data)
                 setLoading(false)
-                console.log(response)
+                console.log(response.data)
                 if (response.data.response.toLowerCase().includes("success")) {
-                    console.log('Succesfully logged in, going to dashboard in 5 sec');
+                    // console.log('Succesfully logged in, going to dashboard in 5 sec');
                     setCookie("loggedIn=true")
-                    console.log(getCookie("loggedIn"))
+                    // console.log(getCookie("loggedIn"))
                     setTimeout(() => {
                         setAdminLogin(true)
                         navigate("/admin");
-                    }, 5000)
+                    }, 2000)
                 }
             })
             .catch(error => {
@@ -56,7 +56,7 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
 
     useEffect(() => {
         setAdminLogin(getCookie("loggedIn") ? true : false)
-        console.log("Logged in? from login: " + adminLogin)
+        // console.log("Logged in? from login: " + adminLogin)
         if (adminLogin)
             setInfoDetails({
                 "to": "/admin",

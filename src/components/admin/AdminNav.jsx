@@ -1,5 +1,5 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 import Logo from "../../images/logo.png"
 
@@ -16,7 +16,7 @@ import Logout from '@mui/icons-material/Logout';
 
 import './css/AdminNav.css'
 
-export default function AdminNav({ adminLogin, setAdminLogin, deleteCookie, setInfoDetails }) {
+export default function AdminNav({ adminLogin, setAdminLogin, getCookie, deleteCookie, setInfoDetails }) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -27,22 +27,36 @@ export default function AdminNav({ adminLogin, setAdminLogin, deleteCookie, setI
         setAnchorEl(null);
     };
 
-    function handleLogout(){
+    function handleLogout() {
         handleClose();
         setAdminLogin(false)
         deleteCookie('loggedIn')
         setInfoDetails({
             "to": "/admin/login",
-            "message": "You have successfully logged out. Heading to Login Page now",
+            "message": "You have successfully logipged out. Heading to Login Page now",
             "linkText": "Login Page"
         })
+        navigate("/admin/info")
     }
+
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setAdminLogin(getCookie("loggedIn") ? true : false)
+        // console.log("Logged in? from admin nav: " + adminLogin)
+
+        if (!getCookie("loggedIn")) {
+            navigate("/admin/login")
+        }
+        // eslint-disable-next-line
+    }, [useLocation().pathname])
+
 
     return (
         <section className='admin-nav'>
             <nav className="admin-navbar">
                 <div className="logo-div">
-                    {`${adminLogin}`}
                     <NavLink to="/" className="logo">
                         <img src={Logo} alt="Nutrispy Logo" />
                         <p>NutriSpy</p>
@@ -116,6 +130,10 @@ export default function AdminNav({ adminLogin, setAdminLogin, deleteCookie, setI
                     </div>
                 }
             </nav>
+            <Link to="/admin">Admin</Link>
+            <Link to="/admin/login">Login</Link>
+            <Link to="/admin/info">Info</Link>
+            <Link to="/admin/contacts">Contacts</Link>
         </section>
     )
 }

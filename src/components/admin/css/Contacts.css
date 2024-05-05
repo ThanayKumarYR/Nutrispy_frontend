@@ -1,0 +1,19 @@
+.contacts .refresh-icon {
+    background: var(--sec-main);
+    border-radius: 50%;
+    padding: 1px;
+}
+
+.contacts .refresh-icon.loading {
+    animation: rotta 2s infinite linear;
+}
+
+@keyframes rotta {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

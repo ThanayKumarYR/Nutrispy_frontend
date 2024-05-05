@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
 import Dashboard from './Dashboard'
 import Login from './Login'
 import Info from './Info'
 import AdminNav from './AdminNav'
+import Contacts from './Contacts'
 
 export default function Admin() {
 
@@ -15,9 +16,15 @@ export default function Admin() {
         "loginText": "Login"
     })
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         setAdminLogin(getCookie("loggedIn") ? true : false)
-        console.log("Logged in? from admin: " + adminLogin)
+        // console.log("Logged in? from admin: " + adminLogin)
+
+        if (!getCookie("loggedIn")) {
+            navigate("/admin/login")
+        }
         // eslint-disable-next-line
     }, [])
 
@@ -54,10 +61,11 @@ export default function Admin() {
 
     return (
         <section className='admin'>
-            <AdminNav adminLogin={adminLogin} setAdminLogin={setAdminLogin} deleteCookie={deleteCookie} setInfoDetails={setInfoDetails} />
+            <AdminNav adminLogin={adminLogin} setAdminLogin={setAdminLogin} deleteCookie={deleteCookie} setInfoDetails={setInfoDetails} getCookie={getCookie} />
             <Routes>
                 <Route path="/login" element={<Login adminLogin={adminLogin} setAdminLogin={setAdminLogin} setInfoDetails={setInfoDetails} setCookie={setCookie} getCookie={getCookie} />} />
-                <Route path="/info" element={<Info {...infoDetails} setInfoDetails={setInfoDetails} adminLogin={adminLogin}/>} />
+                <Route path="/info" element={<Info {...infoDetails} setInfoDetails={setInfoDetails} adminLogin={adminLogin} />} />
+                <Route path="/contacts" element={< Contacts adminLogin={adminLogin} setInfoDetails={setInfoDetails} setAdminLogin={setAdminLogin} getCookie={getCookie} />} />
                 <Route path="/" element={< Dashboard adminLogin={adminLogin} setInfoDetails={setInfoDetails} setAdminLogin={setAdminLogin} getCookie={getCookie} />} />
             </Routes>
             {/* {(!adminLogin) && <Navigate to="/admin/login" />} */}
