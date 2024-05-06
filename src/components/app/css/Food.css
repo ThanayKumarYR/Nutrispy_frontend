@@ -1,0 +1,152 @@
+.food-app {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px 100px 20px;
+    position: relative;
+    min-height: calc(100dvh - 60px);
+    /* background: #f1f1f1; */
+    border-radius: 10px;
+    font-family: 'Anek Tamil';
+}
+
+.food-app .main-food {
+    padding: 10px;
+}
+
+.food-app .main-food h2 {
+    text-align: center;
+    font-size: 22px;
+}
+
+.food-app .main-food .food-dashboard {
+    background: var(--tri);
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 300px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.food-app .main-food .food-dashboard .dash-text {
+    margin-left: 0px;
+    font-weight: 600;
+}
+
+.food-app .main-food .food-dashboard .dash-text p.score {
+    font-size: 22px;
+    line-height: 22px;
+}
+
+.food-app .main-food .food-dashboard .dash-text .message {
+    line-height: 22px;
+    font-size: 18px;
+    color: green;
+}
+
+.food-app section.exercises-cards {
+    height: 255px;
+    /* background: #000; */
+    display: grid;
+    grid-auto-flow: column;
+    overflow: auto;
+    gap: 0 10px;
+    padding: 10px 5px;
+    margin: 10px auto;
+}
+
+.food-app section.exercises-cards::-webkit-scrollbar {
+    height: 4px;
+}
+
+.food-app section.exercises-cards::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+/* Handle */
+.food-app section.exercises-cards::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.food-app section.exercises-cards::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.food-app section.exercises-cards div.each-card {
+    filter: grayscale(0.1);
+    border-radius: 10px;
+    width: 200px;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 4px 0px #ccc;
+}
+
+.food-app section.exercises-cards div.each-card:hover,
+.food-app section.exercises-cards div.each-card:has(input[ name="exercise"]:checked) {
+    filter: grayscale(0);
+    transform: scale(1.03);
+}
+
+.food-app section.exercises-cards div.each-card span {
+    border-radius: 3.5px;
+    border: 1px solid rgb(212, 212, 212);
+    background: #fff;
+    width: 20px;
+    height: 20px;
+    position: fixed;
+    z-index: -1;
+    top: 5px;
+    right: 5px;
+    border: 1px solid #000;
+}
+
+.food-app section.exercises-cards div.each-card span svg {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.1);
+}
+
+.food-app section.exercises-cards div.each-card:has(input[ name="exercise"]:not(:checked)) span svg {
+    display: none;
+}
+
+.food-app section.exercises-cards div.each-card:has(input[ name="exercise"]:checked) span svg {
+    display: block;
+}
+
+.food-app section.exercises-cards div.each-card input[ name="exercise"] {
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    z-index: 20;
+}
+
+.food-app section.exercises-cards div.each-card img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.food-app section.exercises-cards div.each-card div.content {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    padding: 15px 0 10px 20px;
+    background: linear-gradient(transparent, #aaa);
+}
+.food-app section.exercises-cards div.each-card div.content p.name{
+    font-weight: 700;
+}

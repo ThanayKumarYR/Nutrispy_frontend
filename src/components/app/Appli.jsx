@@ -7,11 +7,11 @@ import Exercise from './Exercise'
 
 export default function Appli() {
     return (
-        <main className='app'>
+        <main>
             <Routes>
-                <Route path="/food" element={<Food />} />
-                <Route path="/exercise" element={<Exercise />} />
-                <Route path="/dashboard" element={<Dashborard />} />
+                <Route path="/food/*" element={<Food />} />
+                <Route path="/exercise/*" element={<Exercise />} />
+                <Route path="/dashboard/*" element={<Dashborard />} />
                 <Route path="/" element={<Navigate to="/app/dashboard" />} />
             </Routes>
             <Navbar />
