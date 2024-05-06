@@ -6,7 +6,7 @@ import { PieChart } from '@mui/x-charts'
 
 import Banner from '../../images/food-bg.png'
 
-export default function Food() {
+export default function Diet() {
     return (
         <main className="food-app">
             <Routes>

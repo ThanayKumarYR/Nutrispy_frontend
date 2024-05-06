@@ -3,7 +3,7 @@
     display: grid;
     place-items: center;
     font-weight: 300;
-    font-family: 'Anek Tamil';
+    font-family: "Anek Tamil", sans-serif;
     font-size: 25px;
 }
 

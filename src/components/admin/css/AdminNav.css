@@ -44,7 +44,7 @@
     background: var(--pri);
     padding: 8px 20px;
     font-size: 20px;
-    font-family: 'Anek Tamil';
+    font-family: "Anek Tamil", sans-serif;
     border-radius: 30px;
 }
 

@@ -1,0 +1,126 @@
+.chat {
+    background: var(--tri);
+    height: 100dvh;
+    padding: 20px;
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.chat h2 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 10px;
+    font-family: "Anek Tamil", sans-serif;
+}
+
+.chat .chat-window {
+    padding: 5px 10px;
+    position: relative;
+    height: calc(100dvh - 210px);
+    overflow: hidden auto;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.chat .chat-window::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chat .chat-window::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.chat .chat-window::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.chat .chat-window::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.chat .form-control {
+    background: var(--tri);
+    padding-top: 5px;
+    display: grid;
+    grid-template-columns: 1fr 65px;
+    gap: 10px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 90px;
+    width: inherit;
+    min-width: calc(100% - 40px);
+}
+
+.chat .form-control textarea.message-input::-webkit-resizer {
+    display: none;
+}
+
+.chat .form-control textarea.message-input::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chat .form-control textarea.message-input::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.chat .form-control textarea.message-input::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.chat .form-control textarea.message-input::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.chat .form-control textarea.message-input {
+    resize: none;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    background: transparent;
+    padding: 8px;
+    line-height: 25px;
+    height: 46px;
+    max-height: 90px;
+    overflow-y: auto;
+    border-radius: 5px;
+    outline: 1px solid var(--sec-main);
+    font-family: 'Helvetica', sans-serif;
+}
+
+.chat .form-control textarea.message-input:focus {
+    outline: 1px solid var(--pri);
+
+}
+
+.chat .chat-window .left-msg,
+.chat .chat-window .right-msg {
+    max-width: 90%;
+    border-radius: 0px 10px 10px 10px;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 18px;
+    overflow: hidden;
+}
+
+.chat .chat-window p:nth-of-type(1) {
+    margin-top: 0;
+}
+
+.chat .chat-window .left-msg {
+    border-radius: 0px 10px 10px 10px;
+    background: var(--pri);
+    border: 1.3px solid #ae8e54;
+}
+
+.chat .chat-window .right-msg {
+    border-radius: 10px 0px 10px 10px;
+    background: #f8f4ea;
+    border: 1.3px solid var(--pri);
+    margin-left: auto;
+    text-align: right;
+}

@@ -50,7 +50,7 @@ nav.app-nav section a svg {
 }
 
 nav.app-nav section a span {
-    font-family: 'Anek Tamil';
+    font-family: "Anek Tamil", sans-serif;
     border-radius: 30px;
     font-size: 1rem;
 }
