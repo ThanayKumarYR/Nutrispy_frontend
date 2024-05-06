@@ -24,6 +24,7 @@ function MainFood() {
 
     const foodScore = 100 * currentScore / goalScore;
 
+    // eslint-disable-next-line
     const [foodRecomends, setFoodRecomends] = useState([{
         "index": 1,
         "name": "Chapthi",
