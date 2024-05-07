@@ -13,35 +13,36 @@ export default function Contacts() {
         "status": "",
         "display": false
     })
-    const [contactResponse, setContactResponse] = useState({
-        "data": [
-            {
-                "company": "lytx",
-                "email": "sujan@gmail.com",
-                "id": "0FnaXpxWXMV7ulOxloZN",
-                "message": "I love you",
-                "name": "Sujan",
-                "number": "7259813815"
-            },
-            {
-                "company": "Sudhanva",
-                "email": "idiot@gmail.com",
-                "id": "hCdarc2MlvjRLPcuK0Zr",
-                "message": "I love you",
-                "name": "Sudhanva",
-                "number": "7259813815"
-            },
-            {
-                "company": "Stupid",
-                "email": "idiot@gmail.com",
-                "id": "q9FJMAnrswKWxTunRLbD",
-                "message": "I love you",
-                "name": "Sujan",
-                "number": "7259813815"
-            }
-        ],
-        "response": "success",
-        "statusCode": 200
+    const [contactResponse, setContactResponse] = useState(
+        {
+        // "data": [
+        //     {
+        //         "company": "lytx",
+        //         "email": "sujan@gmail.com",
+        //         "id": "0FnaXpxWXMV7ulOxloZN",
+        //         "message": "I love you",
+        //         "name": "Sujan",
+        //         "number": "7259813815"
+        //     },
+        //     {
+        //         "company": "Sudhanva",
+        //         "email": "idiot@gmail.com",
+        //         "id": "hCdarc2MlvjRLPcuK0Zr",
+        //         "message": "I love you",
+        //         "name": "Sudhanva",
+        //         "number": "7259813815"
+        //     },
+        //     {
+        //         "company": "Stupid",
+        //         "email": "idiot@gmail.com",
+        //         "id": "q9FJMAnrswKWxTunRLbD",
+        //         "message": "I love you",
+        //         "name": "Sujan",
+        //         "number": "7259813815"
+        //     }
+        // ],
+        // "response": "success",
+        // "statusCode": 200
     }
     )
 
@@ -64,7 +65,7 @@ export default function Contacts() {
                     setContactResponse({})
                     console.error(response.data)
                     setAlert({
-                        "message": "Failed to fetch the contacts",
+                        "message": response.data.data,
                         "status": "error",
                         "display": true
                     })
@@ -156,7 +157,8 @@ export default function Contacts() {
     }
 
     useEffect(() => {
-        // getAllContacts();
+        getAllContacts();
+        // eslint-disable-next-line 
     }, [])
 
     return (
