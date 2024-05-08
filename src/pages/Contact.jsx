@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { axios } from '../utilities';
+import { customAxios } from '../utilities';
 import "./css/Contact.css";
 
 const Contact = () => {
@@ -31,10 +31,10 @@ const Contact = () => {
         e.preventDefault();
 
         const url = '/contact';
-        axios.posting(url, formData)
+        customAxios.posting(url, formData)
             .then((response) => {
-                console.log(response.data)
-                if (response.data.response === "success") {
+                console.log(response.data.response)
+                if (response.data.response.toLowerCase() === "success") {
                     setMess(() => ({
                         message: 'Thanks for contacting. We will catch you soon!',
                         status: "ok"

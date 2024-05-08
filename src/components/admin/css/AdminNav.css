@@ -58,6 +58,6 @@
     }
 }
 
-.admin-nav > a{
-    margin: 0 10px;
+a.nav-link {
+    color: var(--sec);
 }

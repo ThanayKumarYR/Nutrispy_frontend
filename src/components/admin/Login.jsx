@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
-import { axios } from '../../utilities'
+import { customAxios } from '../../utilities'
 
 import { Alert, Box, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
@@ -9,6 +9,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 import './css/Login.css'
+import { setSession } from '../../utilities/session'
 
 export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCookie, getCookie }) {
 
@@ -30,18 +31,24 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
     function handleLogin(e) {
         e.preventDefault();
         setLoading(true)
-        axios.posting('/login', {
+        customAxios.posting('/login', {
             "email": email,
             "password": userPass
         })
             .then((response) => {
                 setFormResponse(response.data)
                 setLoading(false)
-                console.log(response.data)
                 if (response.data.response.toLowerCase().includes("success")) {
-                    // console.log('Succesfully logged in, going to dashboard in 5 sec');
+                    if(response.data.data.userType === 'admin'){
+                        setSession("admin")
+                        console.log('Succesfully logged in as admin, going to dashboard in 5 sec');
+                    }
+                    else{
+                        setSession("user")
+                        console.log('Succesfully logged in as user, going to dashboard in 5 sec');
+                    }
                     setCookie("loggedIn=true")
-                    // console.log(getCookie("loggedIn"))
+                    console.log(getCookie("loggedIn"))
                     setTimeout(() => {
                         setAdminLogin(true)
                         navigate("/admin");
@@ -52,6 +59,7 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
                 console.error(error);
                 setLoading(false)
             })
+
     }
 
     useEffect(() => {

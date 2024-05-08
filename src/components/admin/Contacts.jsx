@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
 import './css/Contacts.css'
-import { Alert, Box, Button, Card, CardActions, CardContent, Tooltip, Typography } from '@mui/material'
-import { axios } from '../../utilities'
+import { Alert, Box, Card, CardActions, CardContent, Tooltip, Typography } from '@mui/material'
+import { customAxios } from '../../utilities'
 import { Refresh } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
 
-export default function Contacts() {
+export default function Contacts({ adminLogin }) {
 
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState({
@@ -13,46 +14,15 @@ export default function Contacts() {
         "status": "",
         "display": false
     })
-    const [contactResponse, setContactResponse] = useState(
-        {
-        // "data": [
-        //     {
-        //         "company": "lytx",
-        //         "email": "sujan@gmail.com",
-        //         "id": "0FnaXpxWXMV7ulOxloZN",
-        //         "message": "I love you",
-        //         "name": "Sujan",
-        //         "number": "7259813815"
-        //     },
-        //     {
-        //         "company": "Sudhanva",
-        //         "email": "idiot@gmail.com",
-        //         "id": "hCdarc2MlvjRLPcuK0Zr",
-        //         "message": "I love you",
-        //         "name": "Sudhanva",
-        //         "number": "7259813815"
-        //     },
-        //     {
-        //         "company": "Stupid",
-        //         "email": "idiot@gmail.com",
-        //         "id": "q9FJMAnrswKWxTunRLbD",
-        //         "message": "I love you",
-        //         "name": "Sujan",
-        //         "number": "7259813815"
-        //     }
-        // ],
-        // "response": "success",
-        // "statusCode": 200
-    }
-    )
+    const [contactResponse, setContactResponse] = useState({})
 
     async function getAllContacts() {
         if (loading) return
         setLoading(true)
-        console.log("getting all contacts");
-        axios.getting("/contact", undefined)
+        // console.log("getting all contacts");
+        customAxios.getting("/contact", undefined)
             .then((response) => {
-                console.log(response.data.response)
+                // console.log(response.data.data)
                 if (response.data.response.toLowerCase().includes('success')) {
                     setContactResponse(response)
                     setAlert({
@@ -93,16 +63,25 @@ export default function Contacts() {
 
     function deleteContact(id) {
         if (loading) return
-        axios.deleting(`/contact/${id}`, undefined)
+        setLoading(true)
+        customAxios.deleting(`/contact/${id}`, undefined)
             .then(response => {
-                console.log(response)
-                if (response.response.toLowerCase().includes('success')) {
+                // console.log(response)
+                if (response.data.response.toLowerCase().includes('success')) {
                     setAlert({
                         "message": "Successfully deleted the contact",
                         "status": "success",
                         "display": true
                     })
-                    getAllContacts()
+                    // getAllContacts()
+                    setContactResponse(prevContacts => ({
+                        ...prevContacts,
+                        data: {
+                            ...prevContacts.data,
+                            data: prevContacts.data.data.filter(contact => contact.id !== id)
+                        }
+                    }));
+
                 }
                 else {
                     setContactResponse({})
@@ -116,10 +95,10 @@ export default function Contacts() {
                 }
             })
             .catch(error => {
-                setLoading(false)
                 console.log(error)
             })
             .finally(() => {
+                setLoading(false)
                 setTimeout(() => {
                     setAlert((oldAlert) => ({
                         ...oldAlert,
@@ -130,10 +109,12 @@ export default function Contacts() {
     }
 
     function deleteAll() {
-        axios.deleting("/contact", undefined)
+        // console.log("deleteing all")
+        setLoading(true)
+        customAxios.deleting("/contact", undefined)
             .then(response => {
-                console.log(response)
-                if (response.response.toLowerCase().includes('success')) {
+                // console.log(response)
+                if (response.data.response.toLowerCase().includes('success')) {
                     setContactResponse({})
                     setAlert({
                         "message": "Successfully deleted all the contacts",
@@ -154,16 +135,19 @@ export default function Contacts() {
             .catch(error => {
                 console.log(error)
             })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     useEffect(() => {
-        getAllContacts();
+        if (adminLogin)
+            getAllContacts();
         // eslint-disable-next-line 
     }, [])
 
     return (
         <section className='contacts'>
-            {JSON.stringify(contactResponse)}
             {alert.display &&
                 <Alert variant="filled" severity={alert.status} sx={{ m: 1, maxWidth: "300px", mx: "auto" }} >
                     {alert.message}
@@ -175,7 +159,13 @@ export default function Contacts() {
                 <Tooltip title="Refresh Contacts">
                     <Refresh className={`refresh-icon ${loading ? "loading" : ""}`} color='primary' variant="filled" onClick={getAllContacts} />
                 </Tooltip>
-                <Button variant="contained" color="error" onClick={deleteAll}>Delete All</Button>
+                <LoadingButton
+                    variant="contained"
+                    color="error"
+                    onClick={deleteAll}
+                    loading={loading}
+                    disabled={!(contactResponse.data?.data?.length > 0)}
+                >Delete All</LoadingButton>
             </Box>
             <Box textAlign="center">
                 {loading ?
@@ -186,8 +176,8 @@ export default function Contacts() {
                     ""}
             </Box>
             <Box className='contact-cards-div' sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-                {contactResponse.data?.length ?
-                    contactResponse.data.map((contact, index) =>
+                {contactResponse.data?.data?.length ?
+                    contactResponse.data.data.map((contact, index) =>
                         <Card sx={{ width: 300, m: 1, height: "auto" }} key={index}>
                             <CardContent>
                                 <Typography variant="h6" color="text.secondary">
@@ -207,7 +197,7 @@ export default function Contacts() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="medium" variant="contained" color='error' onClick={() => deleteContact(contact.id)}>Delete</Button>
+                                <LoadingButton loading={loading} size="medium" variant="contained" color='error' onClick={() => deleteContact(contact.id)}>Delete</LoadingButton>
                             </CardActions>
                         </Card>
                     )

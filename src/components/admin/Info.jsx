@@ -5,7 +5,7 @@ export default function Info({ to, message, linkText, setInfoDetails, adminLogin
 
     const navigate = useNavigate()
     useEffect(() => {
-        console.log("Navigating from Info page");
+        // console.log("Navigating from Info page");
         setTimeout(() => {
             navigate(to);
             if (!adminLogin) {

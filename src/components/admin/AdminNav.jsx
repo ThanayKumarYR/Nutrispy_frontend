@@ -8,6 +8,8 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -15,6 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 
 import './css/AdminNav.css'
+import { customAxios } from '../../utilities';
 
 export default function AdminNav({ adminLogin, setAdminLogin, getCookie, deleteCookie, setInfoDetails }) {
 
@@ -29,14 +32,29 @@ export default function AdminNav({ adminLogin, setAdminLogin, getCookie, deleteC
 
     function handleLogout() {
         handleClose();
-        setAdminLogin(false)
-        deleteCookie('loggedIn')
-        setInfoDetails({
-            "to": "/admin/login",
-            "message": "You have successfully logipged out. Heading to Login Page now",
-            "linkText": "Login Page"
-        })
-        navigate("/admin/info")
+        customAxios.getting("/logout", undefined)
+            .then(response => {
+                console.log(response.data)
+                if (response.data.response.toLowerCase().includes('success')) {
+                    setAdminLogin(false)
+                    localStorage.removeItem('session');
+                    deleteCookie('loggedIn')
+                    setInfoDetails({
+                        "to": "/admin/login",
+                        "message": "You have successfully logipged out. Heading to Login Page now",
+                        "linkText": "Login Page"
+                    })
+                    navigate("/admin/info")
+                } else {
+                    setInfoDetails({
+                        "to": "/admin",
+                        "message": "Error while logging out. Heading toDashboard now",
+                        "linkText": "Dashboard"
+                    })
+                    navigate("/admin/info")
+                }
+            })
+            .catch(error => console.error(error))
     }
 
 
@@ -114,10 +132,10 @@ export default function AdminNav({ adminLogin, setAdminLogin, getCookie, deleteC
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
                             <MenuItem onClick={handleClose}>
-                                <Avatar /> Contacts
+                                <ContactsIcon sx={{ mr: 1 }} /> <Link className='nav-link' to="/admin/contacts"> Contacts</Link>
                             </MenuItem>
                             <MenuItem onClick={handleClose}>
-                                <Avatar /> My account
+                                <DashboardIcon sx={{ mr: 1 }} /> <Link className='nav-link' to="/admin"> Dashboard</Link>
                             </MenuItem>
                             <Divider />
                             <MenuItem onClick={handleLogout}>
@@ -130,10 +148,6 @@ export default function AdminNav({ adminLogin, setAdminLogin, getCookie, deleteC
                     </div>
                 }
             </nav>
-            <Link to="/admin">Admin</Link>
-            <Link to="/admin/login">Login</Link>
-            <Link to="/admin/info">Info</Link>
-            <Link to="/admin/contacts">Contacts</Link>
         </section>
     )
 }
