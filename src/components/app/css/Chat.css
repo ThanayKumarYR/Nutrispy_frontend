@@ -1,9 +1,10 @@
 .chat {
-    background: var(--tri);
+    /* background: var(--tri); */
+    border: 1px solid var(--sec-main);
     height: 100dvh;
-    padding: 20px;
+    padding: 10px 20px;
     position: relative;
-    max-width: 400px;
+    max-width: 600px;
     margin: 0 auto;
 }
 
@@ -17,7 +18,7 @@
 .chat .chat-window {
     padding: 5px 10px;
     position: relative;
-    height: calc(100dvh - 210px);
+    height: calc(100dvh - 200px);
     overflow: hidden auto;
     border: 1px solid #000;
     border-radius: 5px;
@@ -42,7 +43,6 @@
 }
 
 .chat .form-control {
-    background: var(--tri);
     padding-top: 5px;
     display: grid;
     grid-template-columns: 1fr 65px;
@@ -81,15 +81,16 @@
     font-size: 16px;
     outline: none;
     border: none;
-    background: transparent;
+    background: var(--tri);
     padding: 8px;
-    line-height: 25px;
-    height: 46px;
+    line-height: 22px;
+    height: 40px;
     max-height: 90px;
     overflow-y: auto;
     border-radius: 5px;
     outline: 1px solid var(--sec-main);
-    font-family: 'Helvetica', sans-serif;
+    /* font-family: "Comic Neue", cursive; */
+    font-family: "Poppins", sans-serif;
 }
 
 .chat .form-control textarea.message-input:focus {
@@ -105,6 +106,8 @@
     margin: 10px 0;
     font-size: 18px;
     overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
 }
 
 .chat .chat-window p:nth-of-type(1) {
@@ -113,7 +116,7 @@
 
 .chat .chat-window .left-msg {
     border-radius: 0px 10px 10px 10px;
-    background: var(--pri);
+    background: var(--tri);
     border: 1.3px solid #ae8e54;
 }
 
@@ -123,4 +126,11 @@
     border: 1.3px solid var(--pri);
     margin-left: auto;
     text-align: right;
+}
+
+.chat div.error-div {
+    position: absolute;
+    width: 100%;
+    top: 50px;
+    z-index: 2;
 }

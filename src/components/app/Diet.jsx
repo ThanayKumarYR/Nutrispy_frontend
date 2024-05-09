@@ -103,8 +103,8 @@ function MainFood() {
             </section>
             <section>
                 <h2>Recommended Foods</h2>
-                <section class="exercises-cards">
-                    {foodRecomends.length && foodRecomends.map(food => <div class="each-card">
+                <section className="exercises-cards">
+                    {foodRecomends.length && foodRecomends.map((food, index) => <div className="each-card" key={index}>
                         <div className='content'>
                             <p className='name'>{food.name}</p>
                             <p className='body'>{food.calories} cal</p>
@@ -119,6 +119,9 @@ function MainFood() {
                         </span>
                     </div>)}
                 </section>
+            </section>
+            <section>
+                aljdf
             </section>
         </main>
     )

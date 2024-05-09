@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { customAxios } from '../../utilities'
 
@@ -11,7 +11,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import './css/Login.css'
 import { setSession } from '../../utilities/session'
 
-export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCookie, getCookie }) {
+export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
 
     const navigate = useNavigate()
 
@@ -39,49 +39,44 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
                 setFormResponse(response.data)
                 setLoading(false)
                 if (response.data.response.toLowerCase().includes("success")) {
-                    if(response.data.data.userType === 'admin'){
+                    if (response.data.data.userType === 'admin') {
+                        setTimeout(() => {
+                            navigate("/admin")
+                        }, 2000)
                         setSession("admin")
                         console.log('Succesfully logged in as admin, going to dashboard in 5 sec');
-                        setTimeout(() => {
-                            setAdminLogin(true)
-                            navigate("/admin");
-                        }, 2000)
+                        setCookie("loggedIn=true")
+                        console.log(getCookie("loggedIn"))
                     }
-                    else{
+                    else {
                         setSession("user")
                         console.log('Succesfully logged in as user, going to dashboard in 5 sec');
+                        setCookie("userLoggedIn=true")
+                        console.log(getCookie("userLoggedIn"))
                         setTimeout(() => {
-                            setAdminLogin(true)
-                            navigate("/app/dashboard");
+                            setUserLoggedIn(true)
+                            navigate("/app/dashboard")
                         }, 2000)
                     }
-                    setCookie("loggedIn=true")
-                    console.log(getCookie("loggedIn"))
                 }
             })
             .catch(error => {
                 console.error(error);
                 setLoading(false)
             })
-
     }
 
     useEffect(() => {
-        setAdminLogin(getCookie("loggedIn") ? true : false)
-        // console.log("Logged in? from login: " + adminLogin)
-        if (adminLogin)
-            setInfoDetails({
-                "to": "/admin",
-                "message": "You have already logged in. Heading to Dashboard now",
-                "linkText": "Dashboard"
-            })
+        setUserLoggedIn(getCookie("userLoggedIn") ? true : false)
+        if (getCookie("userLoggedIn"))
+            navigate("/app/dashboard")
         // eslint-disable-next-line
     }, [])
 
     return (
         <section className='login-page'>
             <Box className='login-form' component="form" onSubmit={handleLogin}>
-                <h1 className='login-title'>Admin Login</h1>
+                <h1 className='login-title'>User Login</h1>
                 {!loading && formResponse.response &&
                     <Alert variant="filled" severity={formResponse.response.toLowerCase().includes("success") ? "success" : "error"} sx={{ mb: 2 }}>
                         {formResponse.response.toLowerCase().includes("success") ? "Successfully Logged In" : formResponse.data}
@@ -137,8 +132,6 @@ export default function Login({ adminLogin, setInfoDetails, setAdminLogin, setCo
                     Log In
                 </LoadingButton>
             </Box>
-
-            {adminLogin && <Navigate to="/admin/info" />}
         </section >
     )
 }

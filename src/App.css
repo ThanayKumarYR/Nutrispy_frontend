@@ -45,11 +45,15 @@ body::-webkit-scrollbar {
     top: 0;
     -webkit-tap-highlight-color: transparent;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 10px clamp(5px, 10%, 100px);
     background: var(--tri);
     z-index: 10;
+}
+
+.navbar:has(.try-app){
+    justify-content: space-between;
 }
 
 .navbar div.logo-div .logo {

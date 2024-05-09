@@ -7,7 +7,7 @@ nav.app-nav {
 }
 
 nav.app-nav section {
-    background: #fff;
+    background: var(--pri);
     border-radius: 20px 20px 0px 0px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);

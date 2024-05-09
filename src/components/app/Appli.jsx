@@ -1,20 +1,129 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Link, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import Dashborard from './Dashborard'
 import Diet from './Diet'
 import Chat from './Chat'
+import Login from './Login'
+import IsUserLoggedIn from './IsUserLoggedIn'
+
+import Logo from "../../images/logo.png"
+import { customAxios } from '../../utilities'
+import { Button } from '@mui/material'
+
 
 export default function Appli() {
+
+    const [userLoggedIn, setUserLoggedIn] = useState(false)
+
+    const [data, setData] = useState([])
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setUserLoggedIn(getCookie("userLoggedIn") ? true : false)
+
+        if (!getCookie("userLoggedIn")) {
+            navigate("/app/login")
+        }
+        getSession()
+        // eslint-disable-next-line
+    }, [])
+
+    function getSession() {
+        customAxios.getting("/check_session", undefined)
+            .then(response => {
+                setData(response.data)
+            })
+            .catch(error => {
+                setData(error.data)
+            })
+    }
+
+    function setCookie(parameter) {
+        var now = new Date();
+
+        now.setDate(now.getDate() + 1);
+
+        var options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        var updatedTime = now.toLocaleString('en-US', options);
+        console.log("setting cookie")
+
+        document.cookie = `${parameter}; ${updatedTime}; path="/"`
+    }
+
+    // eslint-disable-next-line
+    function deleteCookie(parameter) {
+        document.cookie = `${parameter}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+        console.log("deleting a cookie")
+    }
+
+    function getCookie(name) {
+        // console.log("getting cookie of " + name);
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function logout(setLoading) {
+        setLoading(true)
+        customAxios.getting("/logout", undefined)
+            .then(response => {
+                console.log(response.data)
+                if (response.data.response.toLowerCase().includes('success')) {
+                    setUserLoggedIn(false)
+                    localStorage.removeItem('session');
+                    deleteCookie('userLoggedIn')
+                    console.log("Successfully logged out")
+                    navigate("/app/login")
+                } else {
+                    alert(JSON.stringify(response.data))
+                }
+            })
+            .catch(error => console.error(error))
+            .finally(() => {
+                setLoading(false)
+            })
+    }
+
     return (
         <main>
+            {!userLoggedIn &&
+                <nav className="navbar">
+                    <div className="logo-div">
+                        <NavLink to="/" className="logo">
+                            <img src={Logo} alt="Nutrispy Logo" />
+                            <p>NutriSpy</p>
+                        </NavLink>
+                    </div>
+                    <div className="try-app">
+                        <NavLink to="/app/login">Try App</NavLink>
+                    </div>
+                </nav>
+            }
+            session: {localStorage.removeItem('session')}<br />
+            cookie: {getCookie('userLoggedIn')}<br />
+            userlogged in: {String(userLoggedIn)}<br />
+            data:{JSON.stringify(data)}
+            <Button variant='contained' onClick={getSession}>Get session</Button>
             <Routes>
-                <Route path="/diet/*" element={<Diet />} />
-                <Route path="/chat/*" element={<Chat />} />
-                <Route path="/dashboard/*" element={<Dashborard />} />
-                <Route path="/" element={<Navigate to="/app/dashboard" />} />
+                <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet /></IsUserLoggedIn>} />
+                <Route path="/chat/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Chat /></IsUserLoggedIn>} />
+                <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard logout={logout} /></IsUserLoggedIn>} />
+                <Route path="/" exact element={<Navigate to="/app/dashboard" />} />
+                <Route path="/*" exact element={<>Uh oh! Not found page. Head to {userLoggedIn ? <Link to="/app/dashboard"><b>Dashboard page</b></Link> : <Link to="/app/login"><b>Login page</b></Link>} page</>} />
+                <Route path="/login" element={<Login userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />
             </Routes>
-            <Navbar />
+            {userLoggedIn &&
+                <Navbar />
+            }
         </main>
     )
 }
+
