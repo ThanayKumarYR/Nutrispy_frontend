@@ -1,0 +1,32 @@
+.dashboard{
+    font-family: "Anek Tamil", sans-serif;
+}
+
+.dashboard .food-dashboard {
+    background: var(--tri);
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 300px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard .food-dashboard .dash-text {
+    margin-left: 0px;
+    font-weight: 600;
+}
+
+.dashboard .food-dashboard .dash-text p.score {
+    font-size: 22px;
+    line-height: 22px;
+}
+
+.dashboard .food-dashboard .dash-text .message {
+    line-height: 22px;
+    font-size: 18px;
+    color: green;
+}

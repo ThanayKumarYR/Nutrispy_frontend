@@ -9,15 +9,23 @@ import IsUserLoggedIn from './IsUserLoggedIn'
 
 import Logo from "../../images/logo.png"
 import { customAxios } from '../../utilities'
-import { Button } from '@mui/material'
+// import { Button } from '@mui/material'
 
 
 export default function Appli() {
 
     const [userLoggedIn, setUserLoggedIn] = useState(false)
 
-    const [data, setData] = useState([])
+    // const [data, setData] = useState([])
     const navigate = useNavigate()
+
+    // eslint-disable-next-line
+    const [userPoints, setUserPoints] = useState({
+        "goalScore": 4000,
+        "currentScore": 3400
+    })
+
+    // const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
     useEffect(() => {
         setUserLoggedIn(getCookie("userLoggedIn") ? true : false)
@@ -25,19 +33,19 @@ export default function Appli() {
         if (!getCookie("userLoggedIn")) {
             navigate("/app/login")
         }
-        getSession()
+        // getSession()
         // eslint-disable-next-line
     }, [])
 
-    function getSession() {
-        customAxios.getting("/check_session", undefined)
-            .then(response => {
-                setData(response.data)
-            })
-            .catch(error => {
-                setData(error.data)
-            })
-    }
+    // function getSession() {
+    //     customAxios.getting("/check_session", undefined)
+    //         .then(response => {
+    //             setData(response.data)
+    //         })
+    //         .catch(error => {
+    //             setData(error.data)
+    //         })
+    // }
 
     function setCookie(parameter) {
         var now = new Date();
@@ -107,15 +115,15 @@ export default function Appli() {
                     </div>
                 </nav>
             }
-            session: {localStorage.removeItem('session')}<br />
+            {/* session: {localStorage.getItem('session')}<br />
             cookie: {getCookie('userLoggedIn')}<br />
             userlogged in: {String(userLoggedIn)}<br />
             data:{JSON.stringify(data)}
-            <Button variant='contained' onClick={getSession}>Get session</Button>
+            <Button variant='contained' onClick={getSession}>Get session</Button> */}
             <Routes>
-                <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet /></IsUserLoggedIn>} />
+                <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet userPoints={userPoints} /></IsUserLoggedIn>} />
                 <Route path="/chat/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Chat /></IsUserLoggedIn>} />
-                <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard logout={logout} /></IsUserLoggedIn>} />
+                <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
                 <Route path="/" exact element={<Navigate to="/app/dashboard" />} />
                 <Route path="/*" exact element={<>Uh oh! Not found page. Head to {userLoggedIn ? <Link to="/app/dashboard"><b>Dashboard page</b></Link> : <Link to="/app/login"><b>Login page</b></Link>} page</>} />
                 <Route path="/login" element={<Login userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />

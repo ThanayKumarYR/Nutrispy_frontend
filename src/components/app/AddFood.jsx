@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-// import './css/AddFood.css'
+import './css/AddFood.css'
 import FormDialog from './FormDialog';
 
 import Loading from '../../images/loading.gif'

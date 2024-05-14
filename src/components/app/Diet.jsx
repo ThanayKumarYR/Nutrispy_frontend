@@ -6,23 +6,20 @@ import { PieChart } from '@mui/x-charts'
 
 import Banner from '../../images/food-bg.png'
 
-export default function Diet() {
+export default function Diet({ userPoints }) {
     return (
         <main className="food-app">
             <Routes>
                 <Route path="/add" element={<AddFood />} />
-                <Route path="/*" element={<MainFood />} />
+                <Route path="/*" element={<MainFood userPoints={userPoints} />} />
             </Routes>
         </main>
     )
 }
 
-function MainFood() {
+function MainFood({ userPoints }) {
 
-    const goalScore = 4000;
-    const currentScore = 3400;
-
-    const foodScore = 100 * currentScore / goalScore;
+    const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
     // eslint-disable-next-line
     const [foodRecomends, setFoodRecomends] = useState([{
@@ -74,7 +71,7 @@ function MainFood() {
             <h2>Food</h2>
             <section className='food-dashboard'>
                 <PieChart
-                    colors={['green', 'blue', 'green']} 
+                    colors={['green', 'blue', 'green']}
                     className='chart'
                     height={70}
                     width={70}
@@ -97,7 +94,7 @@ function MainFood() {
                     ]}
                 />
                 <div className='dash-text'>
-                    <p className='score'>{currentScore} / {goalScore} K Cal</p>
+                    <p className='score'>{userPoints.currentScore} / {userPoints.goalScore} K Cal</p>
                     <p className='message'>Good</p>
                 </div>
             </section>
@@ -121,7 +118,7 @@ function MainFood() {
                 </section>
             </section>
             <section>
-                aljdf
+
             </section>
         </main>
     )
