@@ -38,7 +38,7 @@ export default function Chat() {
                         left: 0,
                         behavior: "smooth",
                     });
-                }, 2000)
+                }, 500)
             })
     }
 

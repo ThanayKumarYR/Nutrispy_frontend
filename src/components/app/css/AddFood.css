@@ -235,8 +235,36 @@
     }
 }
 
+main.add-food-main{
+    /* border: 5px solid #000; */
+}
+
+main.add-food-main  section.hide{
+    display: none;
+    background: pink;
+}
+
 .food-info .food-info-title {
     text-transform: capitalize;
     margin-right: 25px;
     padding: 16px 24px 0px 24px;
+}
+
+.add-section {
+    border: 1px solid #000;
+    min-height: calc(100dvh - 150px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-section > *{
+}
+.add-section img {
+    max-height: 75dvh;
+}
+.add-section button {
+
 }

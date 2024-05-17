@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import AddFood from './AddFood'
-import { Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes } from 'react-router-dom'
 import './css/Food.css'
 import { PieChart } from '@mui/x-charts'
+import LoginIcon from '@mui/icons-material/Login';
 
 import Banner from '../../images/food-bg.png'
+import { Button } from '@mui/material'
+
 
 export default function Diet({ userPoints }) {
     return (
@@ -66,6 +69,7 @@ function MainFood({ userPoints }) {
     },
     ])
 
+
     return (
         <main className='main-food'>
             <h2>Food</h2>
@@ -97,6 +101,14 @@ function MainFood({ userPoints }) {
                     <p className='score'>{userPoints.currentScore} / {userPoints.goalScore} K Cal</p>
                     <p className='message'>Good</p>
                 </div>
+            </section>
+            <section className='add-link'>
+                <Link to="/app/diet/add">
+                    <Button variant='contained'>
+                        Add Food
+                        <LoginIcon />
+                    </Button>
+                </Link>
             </section>
             <section>
                 <h2>Recommended Foods</h2>

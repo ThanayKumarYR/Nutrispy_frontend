@@ -77,19 +77,24 @@
 }
 
 .chat .form-control textarea.message-input {
-    resize: none;
+    /* --padding: 8px;
+    min-height: calc(1lh + 2 * var(--padding));
+    max-height: calc(4lh + 2 * var(--padding));
+    field-sizing: content;
+    line-height: 1.5;
+    padding: var(--padding);
+    padding-inline: calc(var(--padding) + calc((1lh - 1ex) / 2));
     font-size: 16px;
-    outline: none;
+    resize: none; */
+    font-size: 16px;
     border: none;
     background: var(--tri);
     padding: 8px;
-    line-height: 22px;
     height: 40px;
     max-height: 90px;
     overflow-y: auto;
     border-radius: 5px;
     outline: 1px solid var(--sec-main);
-    /* font-family: "Comic Neue", cursive; */
     font-family: "Poppins", sans-serif;
 }
 

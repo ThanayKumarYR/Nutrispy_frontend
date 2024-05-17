@@ -9,14 +9,14 @@ import IsUserLoggedIn from './IsUserLoggedIn'
 
 import Logo from "../../images/logo.png"
 import { customAxios } from '../../utilities'
-// import { Button } from '@mui/material'
+import { Button } from '@mui/material'
 
 
 export default function Appli() {
 
     const [userLoggedIn, setUserLoggedIn] = useState(false)
 
-    // const [data, setData] = useState([])
+    const [data, setData] = useState([])
     const navigate = useNavigate()
 
     // eslint-disable-next-line
@@ -33,19 +33,19 @@ export default function Appli() {
         if (!getCookie("userLoggedIn")) {
             navigate("/app/login")
         }
-        // getSession()
+        getSession()
         // eslint-disable-next-line
     }, [])
 
-    // function getSession() {
-    //     customAxios.getting("/check_session", undefined)
-    //         .then(response => {
-    //             setData(response.data)
-    //         })
-    //         .catch(error => {
-    //             setData(error.data)
-    //         })
-    // }
+    function getSession() {
+        customAxios.getting("/check_session", undefined)
+            .then(response => {
+                setData(response.data)
+            })
+            .catch(error => {
+                setData(error.data)
+            })
+    }
 
     function setCookie(parameter) {
         var now = new Date();
