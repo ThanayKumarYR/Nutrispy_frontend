@@ -9,13 +9,13 @@ import IsUserLoggedIn from './IsUserLoggedIn'
 
 import Logo from "../../images/logo.png"
 import { customAxios } from '../../utilities'
-import { Button } from '@mui/material'
 
 
 export default function Appli() {
 
     const [userLoggedIn, setUserLoggedIn] = useState(false)
 
+    // eslint-disable-next-line
     const [data, setData] = useState([])
     const navigate = useNavigate()
 

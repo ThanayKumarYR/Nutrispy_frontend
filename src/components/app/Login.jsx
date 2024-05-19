@@ -62,6 +62,13 @@ export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
             })
             .catch(error => {
                 console.error(error);
+                setFormResponse({
+                    data: error.message,
+                    response: "error"
+                })
+                setTimeout(()=> {
+                    setFormResponse({})
+                }, 5000)
                 setLoading(false)
             })
     }
