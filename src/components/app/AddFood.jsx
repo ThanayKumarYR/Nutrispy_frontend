@@ -30,22 +30,9 @@ export default function AddFood() {
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState({});
 
-    const [foodButtonList, setFoodButtonList] = React.useState([
-        {
-            index: 1,
-            img: ""
-        },
-        {
-            index: 2,
-            img: ""
-        },
-        {
-            index: 3,
-            img: ""
-        }
-    ]);
+    const [imagesAndDetails, setImagesAndDetails] = useState([])
 
-    const [uploadFood, setUploadFood] = useState(false)
+    const [currentPreviewUrl, setCurrentPreviewUrl] = useState("")
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -64,6 +51,7 @@ export default function AddFood() {
     };
 
     const handleClose = () => {
+        setData({})
         setOpen(false);
     };
     const handleInfoOpen = () => {
@@ -74,8 +62,7 @@ export default function AddFood() {
     };
 
     const imagePreview = useRef()
-    const inputRef = useRef()
-    const deleteBtn = useRef()
+    // const deleteBtn = useRef()
 
     const [foodList, setFoodList] = useState([])
 
@@ -86,24 +73,48 @@ export default function AddFood() {
         setFoodList([])
         let file = e.target.files[0]
         console.log(file);
-        if (!file) return
-        setUploadFood(true)
+        if (!file) {
+            setLoading(false)
+            return
+        }
+        const fileUrl = URL.createObjectURL(file);
+        setImagesAndDetails(prevData => {
+            let prev = prevData;
+            if (prev.length) {
+                prev.push({
+                    "index": prev[prev.length - 1].index + 1,
+                    "img": fileUrl
+                })
+            } 
+            else {
+                prev = [
+                    {
+                        "index": 0,
+                        "img": fileUrl
+                    }]
+            }
+            return prev
+        })
         const imagePreviewElement = imagePreview['current']
-        imagePreviewElement.src = URL.createObjectURL(file)
+        // imagePreviewElement.src = fileUrl
+        setCurrentPreviewUrl(fileUrl)
         imagePreviewElement.style.opacity = 1;
-        deleteBtn['current'].style.display = "block"
+        // deleteBtn['current'].style.display = "block"
 
         var formData = new FormData();
         formData.append('image', file)
         console.log(formData)
-        // formData.append('file', file);
-        const url = URL.createObjectURL(file)
-        console.log(url);
+        console.log(fileUrl);
 
         try {
             const response = await customAxios.posting("/detect", formData);
             console.log(response.data.data);
             setFoodList([response.data.data]);
+            setImagesAndDetails(prevData => {
+                const prev = prevData;
+                prev[prev.length - 1].details = response.data.data
+                return prev
+            })
         } catch (error) {
             console.error("Error fetching data: ", error);
         } finally {
@@ -115,9 +126,10 @@ export default function AddFood() {
         e.preventDefault()
         const imagePreviewElement = imagePreview['current']
         imagePreviewElement.src = '';
+        setCurrentPreviewUrl("")
         imagePreviewElement.value = '';
         imagePreviewElement.style.opacity = 0;
-        deleteBtn['current'].style.opacity = 0
+        // deleteBtn['current'].style.opacity = 0
         console.log("removeImage")
     }
 
@@ -194,12 +206,16 @@ export default function AddFood() {
             }
 
             <h2 className="heading">Add Food</h2>
-            <section className={`add-food-after ${uploadFood ? "" : " hide"}`}>
+            {/* {JSON.stringify(uploadedImages)} */}
+            {/* {JSON.stringify(imagesAndDetails)} */}
+            <section className={`add-food-after ${imagesAndDetails.length > 0 ? "" : " hide"}`}>
                 <section>
                     <div className="select-image-div">
-                        <img className="preview-image" src="" alt="" ref={imagePreview} />
-                        {/* <input type="file" accept="image/png, image/jpeg, image/jpg" onChange={(e) => handleImage(e)} ref={inputRef} /> */}
-                        <button className="del-btn" onClick={(e) => removeImage(e)} ref={deleteBtn} type="button">
+                        <img className="preview-image" src={currentPreviewUrl} alt="" ref={imagePreview} />
+                        {/* <input type="file" accept="image/png, image/jpeg, image/jpg" onChange={(e) => handleImage(e)}  /> */}
+                        <button className="del-btn" onClick={(e) => removeImage(e)}
+                            // ref={deleteBtn}
+                            type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                 <path fill="#ff000d"
                                     d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
@@ -207,37 +223,43 @@ export default function AddFood() {
                         </button>
                     </div>
                 </section>
+                {/* {currentPreviewUrl} */}
                 <section className='cards-container' >
                     <section className='uploaded-image-cards'>
-                        {foodButtonList.length &&
-                            foodButtonList.map((eachButton, index) =>
-                                <Button variant="outlined" className='each-card' key={index}>
-                                    <img src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e" alt="" />
+                        {imagesAndDetails.length &&
+                            imagesAndDetails.map((eachImage, index) =>
+                                <Button variant="outlined" className={`each-card ${eachImage.img === currentPreviewUrl ? "active" : ""}`} key={index} onClick={() => {setCurrentPreviewUrl(eachImage.img)}}>
+                                    <img src={eachImage.img} alt="" />
                                 </Button>
                             )
                         }
                     </section>
                     <section className='add-item-container'>
-                        <Button variant="contained" className='each-card add-item' onClick={() => {
-                            setFoodButtonList(oldList => {
-                                const arr = Array.from(oldList)
-                                arr.push({ "index": arr.length + 1 })
-                                return arr
-                            })
-                        }}>
+                        {/* <Button variant="contained" className='each-card add-item'>
                             <AddIcon />
+                        </Button> */}
+                        <Button
+                            className="each-card add-item"
+                            component="label"
+                            variant="contained"
+                            tabIndex={-1}
+                        // startIcon={<AddIcon />}
+                        >
+                            <AddIcon />
+                            <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => handleImage(e)} accept="image/png, image/jpeg, image/jpg" />
                         </Button>
                     </section>
+                    {/* <input type="file" accept="image/png, image/jpeg, image/jpg" onClick={(e) => handleImage(e)} /> */}
                 </section>
                 <section className="food-list">
-                    {(foodList.length > 0) ? <h3>{foodList.length} items - {foodList.reduce((acc, currentValue) => acc + Number(currentValue.calories), 0)} calories</h3> : ''}
+                    {imagesAndDetails.length > 0  && loading ? <h3>{imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items - {imagesAndDetails.reduce((acc, currentValue) => acc + Number(currentValue.details?.calories ?? 0), 0)} calories</h3> : null}
                     {
-                        (foodList.length > 0) &&
-                        foodList.map(food =>
-                            (food.food === "yes") ?
-                                <div className="each-food" key={Math.random()}>
+                        (imagesAndDetails.length > 0) &&
+                        imagesAndDetails.map(food =>
+                            (food.details && food.details.food === "yes") ?
+                                <div className="each-food" key={food.index}>
                                     <div>
-                                        <h3>{food.name}<InfoIcon
+                                        <h3>{food.details.name}<InfoIcon
                                             className='info-icon'
                                             onClick={
                                                 () => {
@@ -262,7 +284,7 @@ export default function AddFood() {
                                         </button>
                                     </div>
                                 </div>
-                                : ""
+                                : null
                         )
                     }
                     {
@@ -292,7 +314,7 @@ export default function AddFood() {
                     </button>
                 </section>
             </section >
-            <section className={`add-section ${uploadFood ? "hide" : ""}`}>
+            <section className={`add-section ${imagesAndDetails.length > 0 ? "hide" : ""}`}>
                 <img src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1661385244-3b38a8fc-796c-4545-8394-ac9a7bfe3455-1661385196.png?crop=1xw:1xh;center,top&resize=980:*" alt="" />
                 <Button
                     className="upload-btn"
@@ -305,7 +327,7 @@ export default function AddFood() {
                     startIcon={<CloudUploadIcon />}
                 >
                     Add Food
-                    <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => handleImage(e)} ref={inputRef} accept="image/png, image/jpeg, image/jpg" />
+                    <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => handleImage(e)} accept="image/png, image/jpeg, image/jpg" />
                 </Button>
             </section>
         </main >

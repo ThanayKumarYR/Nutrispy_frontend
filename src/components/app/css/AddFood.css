@@ -103,7 +103,7 @@
 
 .food-app section.cards-container section.uploaded-image-cards .each-card {
     display: inline-block;
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
     position: relative;
     min-width: 60px;
     min-height: 60px;
@@ -116,6 +116,9 @@
     overflow: hidden;
 }
 
+.food-app section.cards-container section.uploaded-image-cards .each-card.active:after {
+    background: rgba(40, 40, 40, 0.1);
+}
 .food-app section.cards-container section.uploaded-image-cards .each-card:after {
     content: "";
     width: 100%;
@@ -123,8 +126,12 @@
     position: absolute;
     left: 0;
     top: 0;
-    background: rgba(40, 40, 40, 0.4);
+    background: rgba(40, 40, 40, 0.5);
     z-index: 1;
+}
+
+.food-app section.cards-container section.uploaded-image-cards .each-card:hover:after {
+    background: rgba(40, 40, 40, 0.1);
 }
 
 .food-app section.cards-container section.uploaded-image-cards .each-card .icon-info {
@@ -153,6 +160,17 @@
 .food-app section.cards-container section.add-item-container .each-card {
     width: 60px;
     height: 60px;
+}
+
+.food-app section.cards-container section.add-item-container .each-card input {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    /* visibility: hidden; */
+    cursor: pointer;
 }
 
 .food-app section.food-list {
