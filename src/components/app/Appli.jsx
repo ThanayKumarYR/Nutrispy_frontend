@@ -10,7 +10,6 @@ import IsUserLoggedIn from './IsUserLoggedIn'
 import Logo from "../../images/logo.png"
 import { customAxios } from '../../utilities'
 
-
 export default function Appli() {
 
     const [userLoggedIn, setUserLoggedIn] = useState(false)

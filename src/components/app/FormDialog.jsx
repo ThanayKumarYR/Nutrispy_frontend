@@ -5,7 +5,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+
+import nutrition from '../../utilities/nutrition.json'
 
 export default function FormDialog(props) {
 
@@ -27,7 +29,7 @@ export default function FormDialog(props) {
                             console.log(props.imagesAndDetails);
                             let tempList = props.imagesAndDetails;
                             tempList.push({
-                                "index": tempList.length > 0 ? props.foodList[props.foodList.length - 1]["index"] + 1 : 0,
+                                "index": tempList.length > 0 ? tempList[tempList.length - 1]["index"] + 1 : 0,
                                 "img": "",
                                 "details": {
                                     "food": "yes",
@@ -66,25 +68,22 @@ export default function FormDialog(props) {
                 }}
             >
                 <DialogTitle>Add Food</DialogTitle>
-                { }
+                {JSON.stringify(props.data)}
                 <DialogContent>
-                    <TextField
-                        autoFocus
-                        required
+                    <Autocomplete
+                        freeSolo
+                        selectOnFocus
                         name="name"
-                        label="Food Name"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={props.data.name || ""}
-                        onChange={(e) => {
-                            let inputValue = e.target.value
-                            inputValue.replace(/[^0-9.]/g, '')
-                            console.log(inputValue);
+                        options={nutrition.map((option) => option.Name)}
+                        renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
+                        onChange={(e, newValue) => {
+                            newValue.replace(/[^0-9.]/g, '')
+                            console.log(newValue);
                             props.setData(prevData => ({
                                 ...prevData,
-                                [e.target.name]: inputValue
+                                "name": newValue
                             }))
+                            console.log(e.target)
                         }}
                     />
                     <Box

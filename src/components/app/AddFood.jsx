@@ -9,7 +9,6 @@ import FormDialog from './FormDialog';
 import Loading from '../../images/loading.gif'
 import customAxios from "../../utilities/axios"
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import InfoIcon from '@mui/icons-material/Info';
 import CloseIcon from '@mui/icons-material/Close';
@@ -62,21 +61,21 @@ export default function AddFood() {
     };
 
     const imagePreview = useRef()
-    // const deleteBtn = useRef()
-
-    const [foodList, setFoodList] = useState([])
 
     async function handleImage(e) {
         e.preventDefault()
-        setLoading(true)
         console.log(imagePreview)
-        setFoodList([])
         let file = e.target.files[0]
-        console.log(file);
-        if (!file) {
-            setLoading(false)
+        if (!file)
+            return
+
+        var allowedExtensions = ['png', 'jpeg', 'jpg'];
+        var extension = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(extension)) {
             return
         }
+        setLoading(true)
         const fileUrl = URL.createObjectURL(file);
         setImagesAndDetails(prevData => {
             let prev = prevData;
@@ -96,10 +95,8 @@ export default function AddFood() {
             return prev
         })
         const imagePreviewElement = imagePreview['current']
-        // imagePreviewElement.src = fileUrl
         setCurrentPreviewUrl(fileUrl)
         imagePreviewElement.style.opacity = 1;
-        // deleteBtn['current'].style.display = "block"
 
         var formData = new FormData();
         formData.append('image', file)
@@ -109,7 +106,6 @@ export default function AddFood() {
         try {
             const response = await customAxios.posting("/detect", formData);
             console.log(response.data.data);
-            setFoodList([response.data.data]);
             setImagesAndDetails(prevData => {
                 const prev = prevData;
                 if (response.data.data.food === "yes") {
@@ -140,17 +136,6 @@ export default function AddFood() {
         }
     }
 
-    function removeImage(e) {
-        e.preventDefault()
-        const imagePreviewElement = imagePreview['current']
-        imagePreviewElement.src = '';
-        setCurrentPreviewUrl("")
-        imagePreviewElement.value = '';
-        imagePreviewElement.style.opacity = 0;
-        // deleteBtn['current'].style.opacity = 0
-        console.log("removeImage")
-    }
-
     function editFood(e) {
         console.log("editFood", e)
         const theFood = imagesAndDetails.filter(food => food["index"] === e)[0]
@@ -175,7 +160,7 @@ export default function AddFood() {
     }
 
     function submitFood() {
-        console.log("submitFood");
+        console.log(imagesAndDetails);
     }
 
     return (
@@ -185,10 +170,8 @@ export default function AddFood() {
                 <FormDialog
                     open={open}
                     handleClose={handleClose}
-                    setFoodList={setFoodList}
                     imagesAndDetails={imagesAndDetails}
                     setImagesAndDetails={setImagesAndDetails}
-                    foodList={foodList}
                     data={data}
                     setData={setData}
                     isNew={isNew}
@@ -236,7 +219,6 @@ export default function AddFood() {
                                             }
                                         </span>
                                 ))
-
                             }
                         </DialogContentText>
                     </DialogContent>
@@ -248,48 +230,31 @@ export default function AddFood() {
                 <section>
                     <div className="select-image-div">
                         <img className="preview-image" src={currentPreviewUrl} alt="" ref={imagePreview} />
-                        {/* <input type="file" accept="image/png, image/jpeg, image/jpg" onChange={(e) => handleImage(e)}  /> */}
-                        <button className="del-btn" onClick={(e) => removeImage(e)}
-                            // ref={deleteBtn}
-                            type="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                <path fill="#ff000d"
-                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                            </svg>
-                        </button>
                     </div>
                 </section>
-                {/* {currentPreviewUrl} */}
                 <section className='cards-container' >
                     <section className='uploaded-image-cards'>
                         {imagesAndDetails.length &&
                             imagesAndDetails.map((eachImage, index) =>
-                                <Button variant="outlined" className={`each-card ${eachImage.img === currentPreviewUrl ? "active" : ""} ${eachImage.details?.food === "no" ? "no-food" : ""}`} key={index} onClick={() => { setCurrentPreviewUrl(eachImage.img) }} title={`${eachImage.details && (eachImage.details?.name) ? eachImage.details?.name : "Not Food"}`}> 
+                                <Button variant="outlined" className={`each-card ${eachImage.img === currentPreviewUrl ? "active" : ""} ${eachImage.details?.food === "no" ? "no-food" : ""}`} key={index} onClick={() => { setCurrentPreviewUrl(eachImage.img) }} title={`${eachImage.details && (eachImage.details?.name) ? eachImage.details?.name : "Not Food"}`}>
                                     {eachImage.img ? <img src={eachImage.img} alt="" /> : "No Image"}
                                 </Button>
                             )
                         }
                     </section>
                     <section className='add-item-container'>
-                        {/* <Button variant="contained" className='each-card add-item'>
-                            <AddIcon />
-                        </Button> */}
                         <Button
                             className="each-card add-item"
                             component="label"
                             variant="contained"
                             tabIndex={-1}
-                        // startIcon={<AddIcon />}
                         >
                             <AddIcon />
                             <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => handleImage(e)} accept="image/png, image/jpeg, image/jpg" />
                         </Button>
                     </section>
-                    {/* <input type="file" accept="image/png, image/jpeg, image/jpg" onClick={(e) => handleImage(e)} /> */}
                 </section>
-                {/* {JSON.stringify(imagesAndDetails)} */}
                 <section className="food-list">
-                    {/* {imagesAndDetails.length > 0 && loading ? <h3>{imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items - {imagesAndDetails.reduce((acc, currentValue) => acc + Number(currentValue.details?.calories ?? 0), 0)} calories</h3> : null} */}
                     {imagesAndDetails.length > 0 && !loading ?
                         <h3>
                             {imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items -
@@ -341,22 +306,16 @@ export default function AddFood() {
                     }
                 </section>
                 <section className="add-food-item-btn-div">
-                    {/* <button className="submit-btn">Submit</button> */}
-                    <LoadingButton
-                        loading={false}
-                        loadingPosition="end"
-                        endIcon={<SendIcon />}
+                    <Button className="add-food-btn" onClick={() => addNewFoodItem()} variant='contained'>
+                        <AddIcon sx={{fontSize: "2.5rem"}} />
+                    </Button>
+                    <Button
+                        className='submit-btn'
                         variant="contained"
                         onClick={submitFood}
                     >
-                        Submit
-                    </LoadingButton>
-                    <button className="add-food-item-btn" onClick={() => addNewFoodItem()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path fill="#ffffff"
-                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                        </svg>
-                    </button>
+                        <SendIcon/>
+                    </Button>
                 </section>
             </section >
             <section className={`add-section ${imagesAndDetails.length > 0 ? "hide" : ""}`}>

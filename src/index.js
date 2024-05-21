@@ -6,6 +6,7 @@ import Appli from "./components/app/Appli";
 import Admin from "./components/admin/Admin";
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Playground from "./Playground";
 
 const theme = createTheme({
     palette: {
@@ -84,7 +85,7 @@ root.render(
                     <Route path="/app/*" element={<Appli />} />
                     <Route path="/admin/*" element={<Admin />} />
                     <Route path="/" element={<App />} />
-                    {/* <Route path="/*" element={<Navigate to="/app" />} /> */}
+                    <Route path="/play" element={<Playground />} />
                 </Routes>
             </HashRouter>
         </ThemeProvider>
