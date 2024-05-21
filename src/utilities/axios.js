@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const customFetch = axios.create({
-    baseURL: 'https://nutrispyserver.onrender.com/api/v1/',
+    baseURL: 'http://nutrispyserver.onrender.com/api/v1/',
     withCredentials: true,
 });
 
@@ -47,7 +47,6 @@ function getCookies() {
     var cookies = document.cookie.split(';').reduce(function (prev, current) {
         var cookie = current.trim().split('=');
         prev[cookie[0]] = cookie[1];
-        // console.log(prev)
         return prev;
     }, {});
     return cookies;

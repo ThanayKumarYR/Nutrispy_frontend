@@ -85,7 +85,7 @@ export default function AddFood() {
                     "index": prev[prev.length - 1].index + 1,
                     "img": fileUrl
                 })
-            } 
+            }
             else {
                 prev = [
                     {
@@ -112,9 +112,27 @@ export default function AddFood() {
             setFoodList([response.data.data]);
             setImagesAndDetails(prevData => {
                 const prev = prevData;
-                prev[prev.length - 1].details = response.data.data
-                return prev
-            })
+                if (response.data.data.food === "yes") {
+                    prev[prev.length - 1].details = {
+                        ...response.data.data,
+                        "nutrients": {
+                            "name": response.data.data.name,
+                            "quantity": 1,
+                            "measurement": "bowl",
+                            "calories": 100,
+                            "fat": 100,
+                            "protiens": 200
+                        }
+                    };
+                }
+                else {
+                    prev[prev.length - 1].details = {
+                        ...response.data.data
+                    };
+                }
+                return prev;
+            });
+
         } catch (error) {
             console.error("Error fetching data: ", error);
         } finally {
@@ -135,12 +153,16 @@ export default function AddFood() {
 
     function editFood(e) {
         console.log("editFood", e)
-        setData(foodList.filter(food => food["index"] === e)[0])
+        const theFood = imagesAndDetails.filter(food => food["index"] === e)[0]
+        setData({
+            ...theFood.details.nutrients,
+            "index": e
+        })
         handleClickOpen()
     }
 
     function deleteFood(e) {
-        setFoodList(prevList =>
+        setImagesAndDetails(prevList =>
             prevList.filter(food => food.index !== e)
         )
         console.log("deleteFood")
@@ -164,6 +186,8 @@ export default function AddFood() {
                     open={open}
                     handleClose={handleClose}
                     setFoodList={setFoodList}
+                    imagesAndDetails={imagesAndDetails}
+                    setImagesAndDetails={setImagesAndDetails}
                     foodList={foodList}
                     data={data}
                     setData={setData}
@@ -196,9 +220,23 @@ export default function AddFood() {
                     <DialogContent>
                         <DialogContentText >
                             {
-                                Object.entries(foodInfo).map(([key, value]) =>
-                                    (key === "name" || key === "index" || key === "food") ? "" : <span key={key}>{key}: {value}<br /></span>
-                                )
+                                Object.entries(foodInfo).map(([key, value], index) => (
+                                    ["name", "index", "food"].includes(key) ? null :
+                                        <span key={index}>
+                                            {key === "nutrients" ?
+                                                <span>
+                                                    {key === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
+                                                    {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
+                                                        nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" ? null :
+                                                            <span key={nutrientIndex}>{nutrientKey}: {nutrientValue}<br /></span>
+                                                    ))}
+                                                </span>
+                                                :
+                                                <span>{key}: {value}<br /></span>
+                                            }
+                                        </span>
+                                ))
+
                             }
                         </DialogContentText>
                     </DialogContent>
@@ -206,8 +244,6 @@ export default function AddFood() {
             }
 
             <h2 className="heading">Add Food</h2>
-            {/* {JSON.stringify(uploadedImages)} */}
-            {/* {JSON.stringify(imagesAndDetails)} */}
             <section className={`add-food-after ${imagesAndDetails.length > 0 ? "" : " hide"}`}>
                 <section>
                     <div className="select-image-div">
@@ -228,8 +264,8 @@ export default function AddFood() {
                     <section className='uploaded-image-cards'>
                         {imagesAndDetails.length &&
                             imagesAndDetails.map((eachImage, index) =>
-                                <Button variant="outlined" className={`each-card ${eachImage.img === currentPreviewUrl ? "active" : ""}`} key={index} onClick={() => {setCurrentPreviewUrl(eachImage.img)}}>
-                                    <img src={eachImage.img} alt="" />
+                                <Button variant="outlined" className={`each-card ${eachImage.img === currentPreviewUrl ? "active" : ""} ${eachImage.details?.food === "no" ? "no-food" : ""}`} key={index} onClick={() => { setCurrentPreviewUrl(eachImage.img) }} title={`${eachImage.details && (eachImage.details?.name) ? eachImage.details?.name : "Not Food"}`}> 
+                                    {eachImage.img ? <img src={eachImage.img} alt="" /> : "No Image"}
                                 </Button>
                             )
                         }
@@ -251,25 +287,34 @@ export default function AddFood() {
                     </section>
                     {/* <input type="file" accept="image/png, image/jpeg, image/jpg" onClick={(e) => handleImage(e)} /> */}
                 </section>
+                {/* {JSON.stringify(imagesAndDetails)} */}
                 <section className="food-list">
-                    {imagesAndDetails.length > 0  && loading ? <h3>{imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items - {imagesAndDetails.reduce((acc, currentValue) => acc + Number(currentValue.details?.calories ?? 0), 0)} calories</h3> : null}
+                    {/* {imagesAndDetails.length > 0 && loading ? <h3>{imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items - {imagesAndDetails.reduce((acc, currentValue) => acc + Number(currentValue.details?.calories ?? 0), 0)} calories</h3> : null} */}
+                    {imagesAndDetails.length > 0 && !loading ?
+                        <h3>
+                            {imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items -
+                            {imagesAndDetails.reduce((acc, currentValue) =>
+                                acc + (Number(currentValue.details?.nutrients?.calories ?? 0) * Number(currentValue.details?.nutrients?.quantity ?? 1)), 0
+                            )} calories
+                        </h3>
+                        : null}
                     {
                         (imagesAndDetails.length > 0) &&
                         imagesAndDetails.map(food =>
                             (food.details && food.details.food === "yes") ?
-                                <div className="each-food" key={food.index}>
+                                <div className={`each-food ${food.img === currentPreviewUrl ? "active" : ""}`} key={food.index}>
                                     <div>
                                         <h3>{food.details.name}<InfoIcon
                                             className='info-icon'
                                             onClick={
                                                 () => {
-                                                    setFoodInfo(food)
+                                                    setFoodInfo(food.details)
                                                     handleInfoOpen()
                                                 }
                                             } /></h3>
-                                        <span>{food.calories} cal</span>
+                                        <span>{food.details.nutrients.calories} cal</span>
                                         <span> - </span>
-                                        <span>{food.quantity} {food.measurement}</span>
+                                        <span>{food.details.nutrients.quantity} {food.details.nutrients.measurement}</span>
                                     </div>
                                     <div className="each-food-btns">
                                         <button title="Edit" onClick={() => editFood(food.index)}>

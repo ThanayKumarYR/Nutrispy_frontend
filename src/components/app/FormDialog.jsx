@@ -24,19 +24,41 @@ export default function FormDialog(props) {
                         const formJson = Object.fromEntries(formData.entries());
                         console.log(formJson);
                         if (props.isNew) {
-                            console.log(props.foodList);
-                            let tempList = props.foodList;
-                            tempList.push({ "index": props.foodList.length > 0 ? props.foodList[props.foodList.length - 1]["index"] + 1 : 0, ...props.data });
+                            console.log(props.imagesAndDetails);
+                            let tempList = props.imagesAndDetails;
+                            tempList.push({
+                                "index": tempList.length > 0 ? props.foodList[props.foodList.length - 1]["index"] + 1 : 0,
+                                "img": "",
+                                "details": {
+                                    "food": "yes",
+                                    "name": props.data.name,
+                                    "nutrients": {
+                                        ...props.data
+                                    }
+                                },
+                                ...props.data
+                            });
                             props.setIsNew(false)
+                            console.log(props.data)
                             console.log("is new and pushed");
                         }
                         else {
                             console.log("not new and updated");
-                            console.log(props.foodList);
-                            props.setFoodList(
-                                props.foodList.map(
-                                    e => e.index === props.data['index'] ? { "index": props.data['index'], ...formJson } : e)
-                            )
+                            props.setImagesAndDetails(
+                                props.imagesAndDetails?.map(e =>
+                                    e.index === props.data['index'] ? {
+                                        ...e,
+                                        details: {
+                                            ...e.details,
+                                            nutrients: {
+                                                ...e.details.nutrients,
+                                                ...formJson
+                                            }
+                                        }
+                                    } : e
+                                )
+                            );
+                            console.table(props.imagesAndDetails);
                         }
                         props.setData({})
                         props.handleClose();
@@ -44,6 +66,7 @@ export default function FormDialog(props) {
                 }}
             >
                 <DialogTitle>Add Food</DialogTitle>
+                { }
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -147,6 +170,6 @@ export default function FormDialog(props) {
                     <Button type="submit" color="success" variant='contained'>Okay</Button>
                 </DialogActions>
             </Dialog>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

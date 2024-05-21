@@ -103,7 +103,7 @@
 
 .food-app section.cards-container section.uploaded-image-cards .each-card {
     display: inline-block;
-    /* border: 1px solid #000; */
+    border: 1px solid transparent;
     position: relative;
     min-width: 60px;
     min-height: 60px;
@@ -116,9 +116,24 @@
     overflow: hidden;
 }
 
+
+.food-app section.cards-container section.uploaded-image-cards .each-card.active {
+    border: 1px solid var(--pri);
+}
+
 .food-app section.cards-container section.uploaded-image-cards .each-card.active:after {
     background: rgba(40, 40, 40, 0.1);
 }
+
+.food-app section.cards-container section.uploaded-image-cards .each-card.no-food:before {
+    content: "X";
+    position: absolute;
+    font-size: 81px;
+    top: -40px;
+    z-index: 1;
+    color: rgba(255, 0, 0, 0.5);
+}
+
 .food-app section.cards-container section.uploaded-image-cards .each-card:after {
     content: "";
     width: 100%;
@@ -127,7 +142,7 @@
     left: 0;
     top: 0;
     background: rgba(40, 40, 40, 0.5);
-    z-index: 1;
+    z-index: 0;
 }
 
 .food-app section.cards-container section.uploaded-image-cards .each-card:hover:after {
@@ -187,15 +202,21 @@
 
 .food-app section.food-list .each-food {
     padding: 5px;
-    margin: 5px auto;
+    margin: 2px auto;
     display: grid;
     max-width: 500px;
     grid-template-columns: 1fr 80px;
+    border: 3px solid transparent;
+}
+
+.food-app section.food-list .each-food.active {
+    /* background: #ddd; */
+    border: 3px solid var(--tri);
+    border-radius: 5px;
 }
 
 .food-app section.food-list .each-food:hover {
-    background: #ddd;
-    border-radius: 5px;
+    /* background: #ddd; */
 }
 
 .food-app section.food-list .each-food .info-icon {
