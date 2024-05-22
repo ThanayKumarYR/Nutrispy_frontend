@@ -33,9 +33,9 @@ export default function AddFood() {
 
     const [comment, setComment] = useState({
         "loading": false,
-        "comment": null
+        "comment": null,
+        "show": false
     })
-
 
     const [imagesAndDetails, setImagesAndDetails] = useState([])
 
@@ -165,11 +165,12 @@ export default function AddFood() {
     }
 
     function submitFood() {
-        setComment({ "loading": true, "message": null })
+        setComment({ "loading": true, "message": null, "show": false })
         setTimeout(() => {
             setComment({
                 "loading": false,
-                "message": "message"
+                "message": "a detailed comment from the server ",
+                "show": true
             })
         }, 5000)
         console.log(imagesAndDetails);
@@ -182,7 +183,6 @@ export default function AddFood() {
                 setOpen={setComment}
             />
             {
-
                 <FormDialog
                     open={open}
                     handleClose={handleClose}
@@ -192,6 +192,9 @@ export default function AddFood() {
                     setData={setData}
                     isNew={isNew}
                     setIsNew={setIsNew}
+                    currentPreview={currentPreview}
+                    setCurrentPreview={setCurrentPreview}
+                    comment={comment}
                 />
             }
             {
@@ -241,7 +244,7 @@ export default function AddFood() {
                 </Dialog>
             }
 
-            <h2 className="heading">Add Food a</h2>
+            <h2 className="heading">Add Food</h2>
             <section className={`add-food-after ${imagesAndDetails.length > 0 ? "" : " hide"}`}>
                 <section>
                     <div className="select-image-div">
@@ -337,10 +340,9 @@ export default function AddFood() {
                         loading={comment.loading}
                         className='submit-btn'
                         variant="contained"
-                        onClick={submitFood}
+                        onClick={(e) =>submitFood(e)}
                         startIcon={<SendIcon />}
                     >
-                        {/* <SendIcon /> */}
                     </LoadingButton>
                 </section>
             </section >

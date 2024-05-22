@@ -13,6 +13,19 @@ export default function FormDialog(props) {
 
     console.log(props.data);
 
+    function setFood(foodName) {
+        nutrition.forEach(eachFood => {
+            if (eachFood.Name === foodName) {
+                props.setData({
+                    "name": eachFood.Name,
+                    "quantity": 1,
+                    "measurement": "piece",
+                    "calories": eachFood.Calories ?? null
+                })
+            }
+        })
+    }
+
     return (
         <React.Fragment>
             <Dialog
@@ -40,6 +53,10 @@ export default function FormDialog(props) {
                                 },
                                 ...props.data
                             });
+                            props.setCurrentPreview({
+                                "index": tempList.length - 1,
+                                "img": ""
+                            })
                             props.setIsNew(false)
                             console.log(props.data)
                             console.log("is new and pushed");
@@ -68,8 +85,7 @@ export default function FormDialog(props) {
                 }}
             >
                 <DialogTitle>Add Food</DialogTitle>
-                {/* {JSON.stringify(props.data)} */}
-                <DialogContent>
+\                <DialogContent>
                     <Autocomplete
                         required
                         freeSolo
@@ -80,12 +96,11 @@ export default function FormDialog(props) {
                         options={nutrition.map((option) => option.Name)}
                         renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
                         onChange={(e, newValue) => {
-                            // const cleanedValue = newValue.replace(/[^0-9.]/g, '')
-                            props.setData(prevData => ({
-                                ...prevData,
-                                "name": newValue
-                            }))
-                            console.log(newValue)
+                            // props.setData(prevData => ({
+                            //     ...prevData,
+                            //     "name": newValue
+                            // }))
+                            setFood(newValue)
                         }}
                         onInputChange={(e, newInputValue) => {
                             props.setData(prevData => ({
@@ -168,7 +183,7 @@ export default function FormDialog(props) {
                             }}
                         />
                         <Typography variant="body1" display="inline" gutterBottom>
-                            Cal
+                            cal / {props.data.measurement}
                         </Typography>
                     </Box>
 
