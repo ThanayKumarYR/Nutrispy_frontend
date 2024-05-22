@@ -5,13 +5,14 @@
     padding: 10px;
 }
 
-.food-app>section {}
+.food-app section.add-food-after {
+}
 
 .food-app section div.select-image-div {
-    background: rgb(219, 219, 219);
+    /* background: rgb(219, 219, 219); */
     aspect-ratio: 5/3;
     width: 100%;
-    max-width: 500px;
+    max-width: 400px;
     margin: 0 auto;
     display: grid;
     place-items: center;
@@ -19,7 +20,7 @@
 }
 
 .food-app section div.select-image-div:hover {
-    background: rgb(151, 151, 151);
+    /* background: rgb(151, 151, 151); */
 }
 
 .food-app section div.select-image-div input {
@@ -188,11 +189,11 @@
 }
 
 .food-app section.food-list {
-    margin-block: 10px 35px;
+    margin-block: 10px 15px;
     margin-inline: auto;
     padding: 5px;
+    padding-bottom: 60px;
     overflow: auto;
-    /* height: min-content; */
 }
 
 .food-app section.food-list>h3 {
@@ -257,13 +258,18 @@
     gap: 0 20px;
 }
 
+.food-app section.food-list .each-food .each-food-btns button:focus {
+    outline: 1px solid var(--sec);
+}
 .food-app section.food-list .each-food .each-food-btns button {
-    width: 30px;
-    height: 30px;
-    outline: transparent;
+    /* width: 50px;
+    height: 40px; */
+    outline: 1px solid transparent;
     border: transparent;
     background: transparent;
     cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .food-app section.food-list .each-food .each-food-btns button:hover svg {
@@ -285,11 +291,13 @@
     right: 2px;
 }
 
-.food-app section.add-food-item-btn-div button.submit-btn .MuiButton-icon svg{
+.food-app section.add-food-item-btn-div button.submit-btn .MuiButton-icon svg {
     font-size: 1.8rem;
 }
-.food-app section.add-food-item-btn-div button.submit-btn .MuiButton-icon{
+
+.food-app section.add-food-item-btn-div button.submit-btn .MuiButton-icon {
     margin-left: 0;
+    margin-right: 0;
 }
 
 .food-app section.add-food-item-btn-div button.add-food-btn {
@@ -349,8 +357,8 @@
 main.add-food-main {}
 
 main.add-food-main section.add-food-after {
-    border: 1px solid #000;
-    min-height: calc(100dvh - 145px);
+    /* border: 1px solid #000; */
+    min-height: calc(100dvh - 165px);
     position: relative;
 }
 

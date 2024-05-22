@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const customFetch = axios.create({
-    baseURL: 'https://nutrispyserver.onrender.com/api/v1/',
+    baseURL: 'http://192.168.74.145:30000/api/v1/',
     withCredentials: true,
 });
 

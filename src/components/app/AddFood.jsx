@@ -17,6 +17,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
+import CommentDialog from './CommentDialog';
+import { LoadingButton } from '@mui/lab';
 
 export default function AddFood() {
 
@@ -29,9 +31,18 @@ export default function AddFood() {
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState({});
 
+    const [comment, setComment] = useState({
+        "loading": false,
+        "comment": null
+    })
+
+
     const [imagesAndDetails, setImagesAndDetails] = useState([])
 
-    const [currentPreviewUrl, setCurrentPreviewUrl] = useState("")
+    const [currentPreview, setCurrentPreview] = useState({
+        img: "",
+        index: ""
+    })
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -77,25 +88,19 @@ export default function AddFood() {
         }
         setLoading(true)
         const fileUrl = URL.createObjectURL(file);
+        let index = imagesAndDetails.length ? imagesAndDetails[imagesAndDetails.length - 1]?.index + 1 : 0;
+        console.log({ index })
         setImagesAndDetails(prevData => {
-            let prev = prevData;
-            if (prev.length) {
-                prev.push({
-                    "index": prev[prev.length - 1].index + 1,
-                    "img": fileUrl
-                })
-            }
-            else {
-                prev = [
-                    {
-                        "index": 0,
-                        "img": fileUrl
-                    }]
-            }
-            return prev
+            let newIndex = prevData.length ? prevData[prevData.length - 1].index + 1 : 0;
+            return [...prevData, { index: newIndex, img: fileUrl }];
         })
         const imagePreviewElement = imagePreview['current']
-        setCurrentPreviewUrl(fileUrl)
+        console.log(index)
+        setCurrentPreview({
+            index,
+            "img": fileUrl
+        })
+
         imagePreviewElement.style.opacity = 1;
 
         var formData = new FormData();
@@ -160,13 +165,24 @@ export default function AddFood() {
     }
 
     function submitFood() {
+        setComment({ "loading": true, "message": null })
+        setTimeout(() => {
+            setComment({
+                "loading": false,
+                "message": "message"
+            })
+        }, 5000)
         console.log(imagesAndDetails);
     }
 
     return (
         <main className="add-food-main">
+            <CommentDialog
+                open={comment}
+                setOpen={setComment}
+            />
             {
-                open &&
+
                 <FormDialog
                     open={open}
                     handleClose={handleClose}
@@ -225,18 +241,24 @@ export default function AddFood() {
                 </Dialog>
             }
 
-            <h2 className="heading">Add Food</h2>
+            <h2 className="heading">Add Food a</h2>
             <section className={`add-food-after ${imagesAndDetails.length > 0 ? "" : " hide"}`}>
                 <section>
                     <div className="select-image-div">
-                        <img className="preview-image" src={currentPreviewUrl} alt="" ref={imagePreview} />
+                        <img className="preview-image" src={currentPreview.img} alt="" ref={imagePreview} style={{ display: currentPreview.img ? "block" : "none" }} />
+                        {/* {currentPreview.img || "NO IMAGE - MANUAL ENTRY"} */}
                     </div>
                 </section>
                 <section className='cards-container' >
                     <section className='uploaded-image-cards'>
                         {imagesAndDetails.length &&
                             imagesAndDetails.map((eachImage, index) =>
-                                <Button variant="outlined" className={`each-card ${eachImage.img === currentPreviewUrl ? "active" : ""} ${eachImage.details?.food === "no" ? "no-food" : ""}`} key={index} onClick={() => { setCurrentPreviewUrl(eachImage.img) }} title={`${eachImage.details && (eachImage.details?.name) ? eachImage.details?.name : "Not Food"}`}>
+                                <Button variant="outlined" className={`each-card ${eachImage.index === currentPreview.index ? "active" : ""} ${eachImage.details?.food === "no" ? "no-food" : ""}`} key={index} onClick={() => {
+                                    setCurrentPreview({
+                                        "index": eachImage.index,
+                                        "img": eachImage.img
+                                    })
+                                }} title={`${eachImage.details && (eachImage.details?.name) ? eachImage.details?.name : "Not Food"}`}>
                                     {eachImage.img ? <img src={eachImage.img} alt="" /> : "No Image"}
                                 </Button>
                             )
@@ -256,8 +278,8 @@ export default function AddFood() {
                 </section>
                 <section className="food-list">
                     {imagesAndDetails.length > 0 && !loading ?
-                        <h3>
-                            {imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items -
+                        <h3 className='calo-heading'>
+                            {imagesAndDetails.filter(prev => prev.details && prev.details.food === "yes").length ?? 0} Food items&nbsp;-&nbsp;
                             {imagesAndDetails.reduce((acc, currentValue) =>
                                 acc + (Number(currentValue.details?.nutrients?.calories ?? 0) * Number(currentValue.details?.nutrients?.quantity ?? 1)), 0
                             )} calories
@@ -267,16 +289,18 @@ export default function AddFood() {
                         (imagesAndDetails.length > 0) &&
                         imagesAndDetails.map(food =>
                             (food.details && food.details.food === "yes") ?
-                                <div className={`each-food ${food.img === currentPreviewUrl ? "active" : ""}`} key={food.index}>
+                                <div className={`each-food ${food.index === currentPreview.index ? "active" : ""}`} key={food.index}>
                                     <div>
-                                        <h3>{food.details.name}<InfoIcon
-                                            className='info-icon'
-                                            onClick={
-                                                () => {
-                                                    setFoodInfo(food.details)
-                                                    handleInfoOpen()
-                                                }
-                                            } /></h3>
+                                        <h3>{food.details.name}
+                                            <InfoIcon
+                                                className='info-icon'
+                                                onClick={
+                                                    () => {
+                                                        setFoodInfo(food.details)
+                                                        handleInfoOpen()
+                                                    }
+                                                } />
+                                        </h3>
                                         <span>{food.details.nutrients.calories} cal</span>
                                         <span> - </span>
                                         <span>{food.details.nutrients.quantity} {food.details.nutrients.measurement}</span>
@@ -307,15 +331,17 @@ export default function AddFood() {
                 </section>
                 <section className="add-food-item-btn-div">
                     <Button className="add-food-btn" onClick={() => addNewFoodItem()} variant='contained'>
-                        <AddIcon sx={{fontSize: "2.5rem"}} />
+                        <AddIcon sx={{ fontSize: "2.5rem" }} />
                     </Button>
-                    <Button
+                    <LoadingButton
+                        loading={comment.loading}
                         className='submit-btn'
                         variant="contained"
                         onClick={submitFood}
+                        startIcon={<SendIcon />}
                     >
-                        <SendIcon/>
-                    </Button>
+                        {/* <SendIcon /> */}
+                    </LoadingButton>
                 </section>
             </section >
             <section className={`add-section ${imagesAndDetails.length > 0 ? "hide" : ""}`}>

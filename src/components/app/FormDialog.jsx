@@ -68,22 +68,31 @@ export default function FormDialog(props) {
                 }}
             >
                 <DialogTitle>Add Food</DialogTitle>
-                {JSON.stringify(props.data)}
+                {/* {JSON.stringify(props.data)} */}
                 <DialogContent>
                     <Autocomplete
+                        required
                         freeSolo
                         selectOnFocus
                         name="name"
+                        sx={{ mt: 1 }}
+                        value={props.data.name || ""}
                         options={nutrition.map((option) => option.Name)}
                         renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
                         onChange={(e, newValue) => {
-                            newValue.replace(/[^0-9.]/g, '')
-                            console.log(newValue);
+                            // const cleanedValue = newValue.replace(/[^0-9.]/g, '')
                             props.setData(prevData => ({
                                 ...prevData,
                                 "name": newValue
                             }))
-                            console.log(e.target)
+                            console.log(newValue)
+                        }}
+                        onInputChange={(e, newInputValue) => {
+                            props.setData(prevData => ({
+                                ...prevData,
+                                "name": newInputValue
+                            }));
+                            console.log(newInputValue);
                         }}
                     />
                     <Box
