@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AddFood from './AddFood'
 import { Link, Route, Routes } from 'react-router-dom'
 import './css/Food.css'
@@ -9,6 +9,7 @@ import Banner from '../../images/food-bg.png'
 import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 
 import nutrition from '../../utilities/nutrition.json'
+import axios from 'axios'
 
 export default function Diet({ userPoints }) {
     return (
@@ -26,30 +27,61 @@ function MainFood({ userPoints }) {
     const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
     // eslint-disable-next-line
-    const [foodRecomends, setFoodRecomends] = useState(nutrition.map((e, index) => (
+    const [foodRecommends, setFoodRecommends] = useState(nutrition.map((e, index) => (
         {
             index,
+            imageUrl: "",
             ...e,
         }
     )))
 
+    // function getFoodImages() {
+    //     axios.get(
+    //         "https://api.unsplash.com/search/photos?query=idli&per_page=1"
+    //     ).then(res => console.log(res.data.results[0].urls.raw))
+    //         .catch(err => console.log(err))
+    // }
+
+    async function getFoodImages(foodName) {
+        return axios.get(
+            `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=HXGD1C04FfGYVQMM6Z9029JOPtjSqYIAuYeeaeFaczU`
+        );
+    }
+
+    useEffect(() => {
+        foodRecommends.forEach((food, index) => {
+            getFoodImages(food.Name)
+                .then(res => {
+                    const imageUrl = res.data.results[0].urls.raw;
+                    console.log({index}, {imageUrl})
+                    setFoodRecommends(prevFoodRecommends => {
+                        const updatedFoodRecommends = [...prevFoodRecommends];
+                        updatedFoodRecommends[index] = { ...food, imageUrl };
+                        return updatedFoodRecommends;
+                    });
+                })
+                .catch(err => console.log(err));
+        });
+        // eslint-disable-next-line
+    }, []);
+
     const [filter, setFilter] = useState({
         foodType: "All",
-        sortBy: null
+        sortBy: ""
     })
 
     const filteredSortedFoods = filter.sortBy ?
-        foodRecomends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType).sort((a, b) => {
+        foodRecommends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType).sort((a, b) => {
             if (b[filter.sortBy] === a[filter.sortBy]) {
                 return 0;
             }
-            else if (filter.sortBy === "Fat"){
+            else if (filter.sortBy === "Fat") {
                 return a[filter.sortBy] - b[filter.sortBy];
             }
             return b[filter.sortBy] - a[filter.sortBy];
         })
-        : 
-        foodRecomends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType)
+        :
+        foodRecommends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType)
 
     return (
         <main className='main-food'>
@@ -92,7 +124,6 @@ function MainFood({ userPoints }) {
                 </Link>
             </section>
             <section>
-                {filteredSortedFoods.length}
                 <h2>Recommended Foods</h2>
                 <FormControl sx={{ minWidth: 100 }}>
                     <InputLabel id="food-type">Food Type</InputLabel>
@@ -137,14 +168,14 @@ function MainFood({ userPoints }) {
                     </Select>
                 </FormControl>
                 <section className="exercises-cards">
-                    {foodRecomends.length &&
+                    {foodRecommends.length &&
                         filteredSortedFoods.map((food, index) => <div className="each-card" key={index}>
                             <div className='content'>
                                 <p className='name'>{food.Name}</p>
                                 <p className='body'>{food.Calories} cal</p>
                                 <p className='body'>{food.Fat}gm Fat</p>
                             </div>
-                            <img src={food.imageUrl || Banner} alt="" />
+                            <img loading="lazy" src={food.imageUrl || Banner} alt="" />
                             <input type="checkbox" name="exercise" />
                             <span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
