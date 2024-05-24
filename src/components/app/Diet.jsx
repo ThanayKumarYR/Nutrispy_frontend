@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AddFood from './AddFood'
 import { Link, Route, Routes } from 'react-router-dom'
 import './css/Food.css'
@@ -42,28 +42,29 @@ function MainFood({ userPoints }) {
     //         .catch(err => console.log(err))
     // }
 
+    // eslint-disable-next-line
     async function getFoodImages(foodName) {
         return axios.get(
             `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=HXGD1C04FfGYVQMM6Z9029JOPtjSqYIAuYeeaeFaczU`
         );
     }
 
-    useEffect(() => {
-        foodRecommends.forEach((food, index) => {
-            getFoodImages(food.Name)
-                .then(res => {
-                    const imageUrl = res.data.results[0].urls.raw;
-                    console.log({index}, {imageUrl})
-                    setFoodRecommends(prevFoodRecommends => {
-                        const updatedFoodRecommends = [...prevFoodRecommends];
-                        updatedFoodRecommends[index] = { ...food, imageUrl };
-                        return updatedFoodRecommends;
-                    });
-                })
-                .catch(err => console.log(err));
-        });
-        // eslint-disable-next-line
-    }, []);
+    // useEffect(() => {
+    //     foodRecommends.forEach((food, index) => {
+    //         getFoodImages(food.Name)
+    //             .then(res => {
+    //                 const imageUrl = res.data.results[0].urls.raw;
+    //                 console.log({index}, {imageUrl})
+    //                 setFoodRecommends(prevFoodRecommends => {
+    //                     const updatedFoodRecommends = [...prevFoodRecommends];
+    //                     updatedFoodRecommends[index] = { ...food, imageUrl };
+    //                     return updatedFoodRecommends;
+    //                 });
+    //             })
+    //             .catch(err => console.log(err));
+    //     });
+    //     // eslint-disable-next-line
+    // }, []);
 
     const [filter, setFilter] = useState({
         foodType: "All",
