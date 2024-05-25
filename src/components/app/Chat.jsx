@@ -5,17 +5,31 @@ import SendIcon from '@mui/icons-material/Send';
 import { customAxios } from '../../utilities'
 import { LoadingButton } from '@mui/lab';
 
+import MicNoneIcon from '@mui/icons-material/MicNone';
+import MicIcon from '@mui/icons-material/Mic';
+
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
 export default function Chat() {
 
     document.title = "NutriSpy - Chat"
 
     const [loading, setLoading] = useState(false)
     const [userQuestion, setUserQuestion] = useState("")
-    const [error, setError] = useState({})
+    const [error, setError] = useState({
+        "message": ""
+    })
 
     const windowRef = useRef();
 
     const [userYallaMessages, setUserYallaMessages] = useState([])
+
+    function setTheError(data) {
+        setError(data)
+        setTimeout(() => {
+            setError({})
+        }, 5000)
+    }
 
     async function fetchOldConversations() {
         customAxios.getting('/recommend', undefined)
@@ -24,11 +38,11 @@ export default function Chat() {
                     setUserYallaMessages(response.data.data)
                     console.log("Got old messages", response.data.data)
                 } else {
-                    setError(response.data)
+                    setTheError({ "message": response.data })
                 }
             })
             .catch(error => {
-                setError(error)
+                setTheError({ "message": error })
             }
             )
             .finally(() => {
@@ -43,24 +57,37 @@ export default function Chat() {
     }
 
     useEffect(() => {
-        fetchOldConversations()
-    }, [])
+        fetchOldConversations();
+        // eslint-disable-next-line
+    }, []);
 
     function handleChat(e) {
         e.preventDefault()
+        resetTranscript()
         setLoading(true)
         setUserQuestion("")
 
-        customAxios.posting("/recommend", { "question": userQuestion })
+        var updatedConversations = [
+            ...userYallaMessages,
+            { "question": transcript || userQuestion, answer: "" }
+        ];
+        setUserYallaMessages(updatedConversations);
+
+        customAxios.posting("/recommend", { "question": transcript || userQuestion })
             .then(response => {
                 console.log("handle chat")
                 console.log(response.data)
                 if (response.data.response.toLowerCase().includes("success")) {
-                    const updatedConversations = [
-                        ...userYallaMessages,
-                        { "question": userQuestion, answer: response.data.data }
-                    ];
+                    updatedConversations[updatedConversations.length - 1].answer = response.data.data
                     setUserYallaMessages(updatedConversations);
+                    setTimeout(() => {
+                        e.target.message.focus()
+                        windowRef.current.scrollTo({
+                            top: windowRef.current.scrollHeight + 1000,
+                            left: 0,
+                            behavior: "smooth",
+                        });
+                    }, 100)
                 }
             })
             .catch(error => {
@@ -69,19 +96,22 @@ export default function Chat() {
             .finally(() => {
                 setLoading(false)
             })
-        setTimeout(() => {
-            e.target.message.focus()
-            windowRef.current.scrollTo({
-                top: windowRef.current.scrollHeight + 1000,
-                left: 0,
-                behavior: "smooth",
-            });
-        }, 100)
     }
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition,
+    } = useSpeechRecognition();
+
+    // if (!browserSupportsSpeechRecognition) {
+    //     return <span>Browser doesn't support speech recognition.</span>;
+    // }
 
     return (
         <main className='chat'>
-            <h2>Chat</h2>
+            <h2 >Chat</h2>
             <div className='error-div'>
                 {error.message?.length > 0 && <Alert variant="filled" severity="error" sx={{ m: 1, maxWidth: "300px", mx: "auto" }} >
                     {error.message}
@@ -106,17 +136,46 @@ export default function Chat() {
                 component="form"
                 onSubmit={handleChat}
                 className='form-control'>
-                <textarea
-                    autoFocus
-                    name="message"
-                    label="Ask me"
-                    className='message-input'
-                    value={userQuestion}
-                    autoComplete="off"
-                    placeholder='Ask me ...'
-                    onChange={e => setUserQuestion(e.target.value)}
-                />
-                <LoadingButton loading={loading} variant='contained' className='send-btn' disabled={(!userQuestion.length || loading)} type='submit'>
+                <Box
+                    component="div"
+                    className='input-div'
+                >
+                    <textarea
+                        autoFocus
+                        name="message"
+                        label="Ask me"
+                        className='message-input'
+                        value={transcript ? transcript : userQuestion}
+                        autoComplete="off"
+                        placeholder='Ask me...'
+                        onChange={e => {
+                            setUserQuestion(e.target.value)
+                        }}
+                        onClick={() => {
+                            if (transcript) {
+                                setUserQuestion(transcript)
+                                resetTranscript()
+                            }
+                        }}
+                    />
+                    <button
+                        className={`${listening ? "active" : ""} ${!browserSupportsSpeechRecognition ? "disabled" : ""}`}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            if (!browserSupportsSpeechRecognition) {
+                                setTheError({ "message": "Your browser does not support Speech Recognition. Please use Chrome Browser" })
+                                return
+                            }
+                            if (!browserSupportsSpeechRecognition || loading) return
+                            if (listening) SpeechRecognition.stopListening()
+                            SpeechRecognition.startListening();
+                        }}
+                    // disabled={!browserSupportsSpeechRecognition || loading}
+                    >
+                        {listening ? <MicIcon /> : <MicNoneIcon />}
+                    </button>
+                </Box>
+                <LoadingButton loading={loading} variant='contained' className='send-btn' disabled={listening || (!(userQuestion.length || transcript) || loading)} type='submit'>
                     <SendIcon />
                 </LoadingButton>
             </Box>
@@ -127,14 +186,11 @@ export default function Chat() {
 function LeftMessage({ m }) {
 
     const formatMessage = (message) => {
+        if (!message) return message
         try {
-
             const formattedMessage = message.replace(/(\d+\.) /g, '<br />$1 ');
-
             const boldRegex = /\*\*(.*?)\*\*/g;
-
             const boldFormatted = formattedMessage.replace(boldRegex, '<b>$1</b>');
-
             return boldFormatted;
         }
         catch (e) {

@@ -45,6 +45,7 @@
 .chat .form-control {
     padding-top: 5px;
     display: grid;
+    align-items: center;
     grid-template-columns: 1fr 65px;
     gap: 10px;
     border-radius: 5px;
@@ -52,31 +53,98 @@
     bottom: 90px;
     width: inherit;
     min-width: calc(100% - 40px);
+    /* border: 1px solid #000; */
 }
 
-.chat .form-control textarea.message-input::-webkit-resizer {
+.chat .form-control .input-div:has(textarea.message-input:focus) {
+    outline: 1px solid var(--pri);
+}
+
+.chat .form-control .input-div {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* border: 1px solid #000; */
+    outline: 1px solid var(--sec-main);
+    background: var(--tri);
+    border-radius: 5px;
+    position: relative;
+    padding-right: 1px;
+}
+
+.chat .form-control .input-div button.active svg {
+    animation: beat 1.5s infinite ease-in-out;
+}
+
+@keyframes beat {
+
+    from,
+    to {
+        padding: 0px;
+        transform: scale(80%);
+    }
+
+    50% {
+        padding: 2px;
+        transform: scale(155%);
+    }
+}
+
+.chat .form-control .input-div button.active,
+.chat .form-control .input-div button:hover,
+.chat .form-control .input-div button:focus-visible,
+.chat .form-control .input-div button:focus {
+    background: #d9ad5a;
+    outline: 1px solid #f1cf90;
+    color: white;
+    border: none;
+}
+
+.chat .form-control .input-div button.disabled {
+    background: #e0e0e0;
+    color: #a6a6a6;
+}
+
+.chat .form-control .input-div button {
+    border-radius: 35px;
+    border: none;
+    outline: 1px solid transparent;
+    display: grid;
+    place-items: center;
+    margin: 2px 5px;
+    position: absolute;
+    right: 2px;
+    top: 1px;
+    width: 35px;
+    height: 35px;
+    /* color: #f1cf90; */
+    color: #000;
+    background: #f1cf90;
+    cursor: pointer;
+}
+
+.chat .form-control .input-div textarea.message-input::-webkit-resizer {
     display: none;
 }
 
-.chat .form-control textarea.message-input::-webkit-scrollbar {
-    width: 4px;
+.chat .form-control .input-div textarea.message-input::-webkit-scrollbar {
+    width: 3px;
 }
 
-.chat .form-control textarea.message-input::-webkit-scrollbar-track {
+.chat .form-control .input-div textarea.message-input::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.chat .form-control textarea.message-input::-webkit-scrollbar-thumb {
+.chat .form-control .input-div textarea.message-input::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
 }
 
-.chat .form-control textarea.message-input::-webkit-scrollbar-thumb:hover {
+.chat .form-control .input-div textarea.message-input::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
-.chat .form-control textarea.message-input {
+.chat .form-control .input-div textarea.message-input {
     /* --padding: 8px;
     min-height: calc(1lh + 2 * var(--padding));
     max-height: calc(4lh + 2 * var(--padding));
@@ -86,21 +154,20 @@
     padding-inline: calc(var(--padding) + calc((1lh - 1ex) / 2));
     font-size: 16px;
     resize: none; */
+    resize: none;
     font-size: 16px;
     border: none;
-    background: var(--tri);
     padding: 8px;
+    padding-right: 42px;
     height: 40px;
     max-height: 90px;
+    background: transparent;
     overflow-y: auto;
-    border-radius: 5px;
-    outline: 1px solid var(--sec-main);
     font-family: "Poppins", sans-serif;
 }
 
-.chat .form-control textarea.message-input:focus {
-    outline: 1px solid var(--pri);
-
+.chat .form-control .input-div textarea.message-input:focus {
+    outline: transparent;
 }
 
 .chat .chat-window .left-msg,
@@ -117,6 +184,10 @@
 
 .chat .chat-window p:nth-of-type(1) {
     margin-top: 0;
+}
+
+.chat .chat-window .left-msg:empty {
+    display: none;
 }
 
 .chat .chat-window .left-msg {
@@ -138,4 +209,6 @@
     width: 100%;
     top: 50px;
     z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
 }
