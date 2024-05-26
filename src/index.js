@@ -34,43 +34,43 @@ const theme = createTheme({
     },
     typography: {
         h1: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         h2: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         h3: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         h4: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         h5: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         h6: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         subtitle1: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         subtitle2: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         body1: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         body2: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         button: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         caption: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
         overline: {
-            fontFamily: '"Anek Tami", "Helvetica", "Arial", sans-serif',
+            fontFamily: '"Anek Tamil", "Helvetica", "Arial", sans-serif',
         },
     },
 });
