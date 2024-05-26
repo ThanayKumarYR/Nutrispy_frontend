@@ -4,31 +4,33 @@ import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { LoadingButton } from '@mui/lab';
 
 import './css/Dashboard.css'
-import { Box, Typography } from '@mui/material';
+import { Box, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
 import { MdFoodBank } from "react-icons/md";
 import { CgGym } from "react-icons/cg";
+import { BarChart } from '@mui/x-charts';
 
 export default function Dashborard({ logout, userPoints }) {
 
     document.title = "NutriSpy - Dashboard"
 
     const [loading, setLoading] = useState(false)
+    const [chartType, setChartType] = useState(0)
 
     const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
-    const foodData = [
-        { value: 30, label: 'Carbohydrates' },
-        { value: 15, label: 'Protiens' },
-        { value: 10, label: 'Fat' },
-        { value: 10, label: 'Others' },
-    ];
-    const exerciseData = [
-        { value: 6, label: 'Others' },
-        { value: 8, label: 'Weight Lifting' },
-        { value: 12, label: 'Jogging' },
-        { value: 20, label: 'Push Ups' },
-    ];
+    // const foodData = [
+    //     { value: 30, label: 'Carbohydrates' },
+    //     { value: 15, label: 'Protiens' },
+    //     { value: 10, label: 'Fat' },
+    //     { value: 10, label: 'Others' },
+    // ];
+    // const exerciseData = [
+    //     { value: 6, label: 'Others' },
+    //     { value: 8, label: 'Weight Lifting' },
+    //     { value: 12, label: 'Jogging' },
+    //     { value: 20, label: 'Push Ups' },
+    // ];
 
     return (
         <main className='dashboard'>
@@ -108,8 +110,27 @@ export default function Dashborard({ logout, userPoints }) {
                     </div>
                 </section>
             </Box>
+            <Box sx={{ width: 100 }}>
+                <InputLabel id="chart-type">Chart Type</InputLabel>
+                <Select
+                    fullWidth
+                    labelId="chart-type"
+                    value={chartType}
+                    label="Chart Type"
+                    defaultValue='All'
+                    onChange={(e) => {
+                        setChartType(e.target.value)
+                    }}
+                >
+                    <MenuItem value="0">0</MenuItem>
+                    <MenuItem value="1">1</MenuItem>
+                    <MenuItem value="2">2</MenuItem>
+                    <MenuItem value="3">3</MenuItem>
+                    <MenuItem value="4">4</MenuItem>
+                </Select>
+            </Box>
 
-            <Box border="1px solid red" className="pie-chart" display="flex" flexWrap="wrap" alignItems="center" justifyContent="center"  >
+            {/* <Box className="pie-chart" display="flex" flexWrap="wrap" alignItems="center" justifyContent="center"  >
                 <PieChart
                     className='chart'
                     hideTooltip
@@ -119,6 +140,13 @@ export default function Dashborard({ logout, userPoints }) {
                             arcLabel: (item) => `${item.label} (${item.value})`,
                             arcLabelMinAngle: 45,
                             data: foodData,
+                            innerRadius: 0,
+                            outerRadius: 120,
+                            paddingAngle: 0,
+                            cornerRadius: 4,
+                            startAngle: 0,
+                            cx: 60,
+                            cy: 140,
                         },
                     ]}
                     sx={{
@@ -127,6 +155,8 @@ export default function Dashborard({ logout, userPoints }) {
                             fontWeight: 'bold',
                         },
                     }}
+                    height={300}
+                    width={140}
                 />
                 <PieChart
                     className='chart'
@@ -137,6 +167,13 @@ export default function Dashborard({ logout, userPoints }) {
                             arcLabel: (item) => `${item.label} (${item.value})`,
                             arcLabelMinAngle: 45,
                             data: exerciseData,
+                            innerRadius: 0,
+                            outerRadius: 120,
+                            paddingAngle: 0,
+                            cornerRadius: 4,
+                            startAngle: 0,
+                            cx: 60,
+                            cy: 140,
                         },
                     ]}
                     sx={{
@@ -145,7 +182,51 @@ export default function Dashborard({ logout, userPoints }) {
                             fontWeight: 'bold',
                         },
                     }}
+                    height={300}
+                    width={140}
                 />
+            </Box>
+            <Box>
+                <BarChart
+                    series={[
+                        { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+                        { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+                        { data: [14, 6, 5, 8, 9], label: 'Series B1' },
+                    ]}
+                    barLabel={(item, context) => {
+                        if ((item.value ?? 0) > 10) {
+                            return 'High';
+                        }
+                        return context.bar.height < 60 ? null : item.value?.toString();
+                    }}
+                    width={700}
+                    height={350}
+                />
+                <BarChart
+                    series={[
+                        { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+                        { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+                        { data: [14, 6, 5, 8, 9], label: 'Series B1' },
+                    ]}
+                    barLabel={(item, context) => {
+                        if ((item.value ?? 0) > 10) {
+                            return 'High';
+                        }
+                        return context.bar.height < 60 ? null : item.value?.toString();
+                    }}
+                    width={600}
+                    height={350}
+                />
+                <BarChart
+                    xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
+                    series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
+                    width={500}
+                    height={300}
+                    barLabel="value"
+                />
+            </Box> */}
+            <Box fullWidth>
+                {charts[chartType]}
             </Box>
             <LoadingButton
                 loading={loading}
@@ -158,3 +239,95 @@ export default function Dashborard({ logout, userPoints }) {
         </main>
     )
 }
+
+const charts = [
+    <PieChart
+        className='chart'
+        hideTooltip
+        slotProps={{ legend: { hidden: true } }}
+        series={[
+            {
+                arcLabel: (item) => `${item.label} (${item.value})`,
+                arcLabelMinAngle: 45,
+                data: [{ value: 30, label: 'Carbohydrates' },
+                { value: 15, label: 'Protiens' },
+                { value: 10, label: 'Fat' },
+                { value: 10, label: 'Others' }],
+            },
+        ]}
+        sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+                fill: 'white',
+                fontWeight: 'bold',
+            },
+        }}
+        height={300}
+        width={440}
+    />,
+
+    <PieChart
+        className='chart'
+        hideTooltip
+        slotProps={{ legend: { hidden: true } }}
+        series={[
+            {
+                arcLabel: (item) => `${item.label} (${item.value})`,
+                arcLabelMinAngle: 45,
+                data: [{ value: 6, label: 'Others' },
+                { value: 8, label: 'Weight Lifting' },
+                { value: 12, label: 'Jogging' },
+                { value: 20, label: 'Push Ups' }],
+            },
+        ]}
+        sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+                fill: 'white',
+                fontWeight: 'bold',
+            },
+        }}
+        height={300}
+        width={440}
+    />,
+
+
+    <BarChart
+        series={[
+            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+            { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+            { data: [14, 6, 5, 8, 9], label: 'Series B1' },
+        ]}
+        barLabel={(item, context) => {
+            if ((item.value ?? 0) > 10) {
+                return 'High';
+            }
+            return context.bar.height < 60 ? null : item.value?.toString();
+        }}
+        width={700}
+        height={350}
+    />,
+
+    <BarChart
+        series={[
+            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+            { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+            { data: [14, 6, 5, 8, 9], label: 'Series B1' },
+        ]}
+        barLabel={(item, context) => {
+            if ((item.value ?? 0) > 10) {
+                return 'High';
+            }
+            return context.bar.height < 60 ? null : item.value?.toString();
+        }}
+        width={600}
+        height={350}
+    />,
+
+    <BarChart
+        xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
+        series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
+        width={500}
+        height={300}
+        barLabel="value"
+    />
+
+]

@@ -1,5 +1,6 @@
 .dashboard {
     font-family: "Anek Tamil", sans-serif;
+    margin-bottom: 103px;
 }
 
 .dashboard .food-div,
@@ -47,14 +48,14 @@
 }
 
 .dashboard .pie-chart > * {
-    border: 1px solid #000;
-    height: 180px;
-    width: 200px;
+    max-width: 300px;
+    min-width: 300px;
+    position: relative;
 }
 
 .dashboard .pie-chart .MuiPieArcLabel-root {
-    color: red;
-    font-size: 10px;
+    /* color: red; */
+    /* font-size: 10px; */
 }
 
 @media (width<300px) {

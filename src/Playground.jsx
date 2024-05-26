@@ -1,72 +1,75 @@
 import './Playground.css'
 
-import React, { useRef, useState } from 'react'
-import { Alert, Box } from '@mui/material'
-import SendIcon from '@mui/icons-material/Send';
-import { LoadingButton } from '@mui/lab';
+import React, { useState } from 'react'
+import { Box, InputLabel, MenuItem, Select } from '@mui/material'
+// import SendIcon from '@mui/icons-material/Send';
+// import { LoadingButton } from '@mui/lab';
 
-import MicNoneIcon from '@mui/icons-material/MicNone';
-import MicIcon from '@mui/icons-material/Mic';
+// import MicNoneIcon from '@mui/icons-material/MicNone';
+// import MicIcon from '@mui/icons-material/Mic';
 
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { BarChart, PieChart, pieArcLabelClasses } from '@mui/x-charts';
 
 export default function Playground() {
 
     document.title = "NutriSpy - Play"
+    const [chartType, setChartType] = useState(0)
 
-    const [loading, setLoading] = useState(false)
-    const [userQuestion, setUserQuestion] = useState("")
-    const [error, setError] = useState({
-        "message": ""
-    })
+    // const [loading, setLoading] = useState(false)
+    // const [userQuestion, setUserQuestion] = useState("")
+    // const [error, setError] = useState({
+    //     "message": ""
+    // })
 
-    const windowRef = useRef();
 
-    const [userYallaMessages, setUserYallaMessages] = useState([])
+    // const windowRef = useRef();
 
-    function setTheError(data) {
-        setError(data)
-        setTimeout(() => {
-            setError({})
-        }, 5000)
-    }
+    // const [userYallaMessages, setUserYallaMessages] = useState([])
 
-    function handleChat(e) {
-        e.preventDefault()
-        resetTranscript()
-        setLoading(true)
-        setUserQuestion("")
+    // function setTheError(data) {
+    //     setError(data)
+    //     setTimeout(() => {
+    //         setError({})
+    //     }, 5000)
+    // }
 
-        var updatedConversations = [
-            ...userYallaMessages,
-            { "question": transcript || userQuestion, answer: "" }
-        ];
-        setUserYallaMessages(updatedConversations);
+    // function handleChat(e) {
+    //     e.preventDefault()
+    //     resetTranscript()
+    //     setLoading(true)
+    //     setUserQuestion("")
 
-        updatedConversations[updatedConversations.length - 1].answer = "AH! Dummy answer"
-        setUserYallaMessages(updatedConversations);
-        setTimeout(() => {
-            e.target.message.focus()
-            windowRef.current.scrollTo({
-                top: windowRef.current.scrollHeight + 1000,
-                left: 0,
-                behavior: "smooth",
-            });
-        }, 100)
+    //     var updatedConversations = [
+    //         ...userYallaMessages,
+    //         { "question": transcript || userQuestion, answer: "" }
+    //     ];
+    //     setUserYallaMessages(updatedConversations);
 
-        setLoading(false)
-    }
+    //     updatedConversations[updatedConversations.length - 1].answer = "AH! Dummy answer"
+    //     setUserYallaMessages(updatedConversations);
+    //     setTimeout(() => {
+    //         e.target.message.focus()
+    //         windowRef.current.scrollTo({
+    //             top: windowRef.current.scrollHeight + 1000,
+    //             left: 0,
+    //             behavior: "smooth",
+    //         });
+    //     }, 100)
 
-    const {
-        transcript,
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition,
-    } = useSpeechRecognition();
+    //     setLoading(false)
+    // }
+
+    // const {
+    //     transcript,
+    //     listening,
+    //     resetTranscript,
+    //     browserSupportsSpeechRecognition,
+    // } = useSpeechRecognition();
 
     return (
         <main className='chat'>
-            <h2 >Chat</h2>
+            {/* <h2 >Chat</h2>
             <div className='error-div'>
                 {error.message?.length > 0 && <Alert variant="filled" severity="error" sx={{ m: 1, maxWidth: "300px", mx: "auto" }} >
                     {error.message}
@@ -111,6 +114,8 @@ export default function Playground() {
                                 setUserQuestion(transcript)
                                 resetTranscript()
                             }
+                            if (listening)
+                                SpeechRecognition.stopListening()
                         }}
                     />
                     <button
@@ -125,7 +130,6 @@ export default function Playground() {
                             if (listening) SpeechRecognition.stopListening()
                             SpeechRecognition.startListening();
                         }}
-                    // disabled={!browserSupportsSpeechRecognition || loading}
                     >
                         {listening ? <MicIcon /> : <MicNoneIcon />}
                     </button>
@@ -134,34 +138,151 @@ export default function Playground() {
                     <SendIcon />
                 </LoadingButton>
             </Box>
+        */}
+
+            <Box sx={{ width: 100 }}>
+                <InputLabel id="chart-type">Chart Type</InputLabel>
+                <Select
+                    fullWidth
+                    labelId="chart-type"
+                    value={chartType}
+                    label="Chart Type"
+                    defaultValue='All'
+                    onChange={(e) => {
+                        setChartType(e.target.value)
+                    }}
+                >
+                    <MenuItem value="0">0</MenuItem>
+                    <MenuItem value="1">1</MenuItem>
+                    <MenuItem value="2">2</MenuItem>
+                    <MenuItem value="3">3</MenuItem>
+                    <MenuItem value="4">4</MenuItem>
+                </Select>
+            </Box>
+            <Box fullWidth>
+                {charts[chartType]}
+            </Box>
         </main>
     )
 }
 
-function LeftMessage({ m }) {
+// function LeftMessage({ m }) {
 
-    const formatMessage = (message) => {
-        if (!message) return message
-        try {
-            const formattedMessage = message.replace(/(\d+\.) /g, '<br />$1 ');
-            const boldRegex = /\*\*(.*?)\*\*/g;
-            const boldFormatted = formattedMessage.replace(boldRegex, '<b>$1</b>');
-            return boldFormatted;
-        }
-        catch (e) {
-            console.log(e);
-            return message;
-        }
-    };
+//     const formatMessage = (message) => {
+//         if (!message) return message
+//         try {
+//             const formattedMessage = message.replace(/(\d+\.) /g, '<br />$1 ');
+//             const boldRegex = /\*\*(.*?)\*\*/g;
+//             const boldFormatted = formattedMessage.replace(boldRegex, '<b>$1</b>');
+//             return boldFormatted;
+//         }
+//         catch (e) {
+//             console.log(e);
+//             return message;
+//         }
+//     };
 
-    return (
-        <p className='left-msg' dangerouslySetInnerHTML={{ __html: formatMessage(m) }} />
-    );
-}
-function RightMessage({ m }) {
-    return (
-        <p className='right-msg'>
-            {m}
-        </p>
-    )
-}
+//     return (
+//         <p className='left-msg' dangerouslySetInnerHTML={{ __html: formatMessage(m) }} />
+//     );
+// }
+// function RightMessage({ m }) {
+//     return (
+//         <p className='right-msg'>
+//             {m}
+//         </p>
+//     )
+// }
+
+
+const charts = [
+    <PieChart
+        className='chart'
+        hideTooltip
+        slotProps={{ legend: { hidden: true } }}
+        series={[
+            {
+                arcLabel: (item) => `${item.label} (${item.value})`,
+                arcLabelMinAngle: 45,
+                data: [{ value: 30, label: 'Carbohydrates' },
+                { value: 15, label: 'Protiens' },
+                { value: 10, label: 'Fat' },
+                { value: 10, label: 'Others' }],
+            },
+        ]}
+        sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+                fill: 'white',
+                fontWeight: 'bold',
+            },
+        }}
+        height={300}
+        width={440}
+    />,
+
+    <PieChart
+        className='chart'
+        hideTooltip
+        slotProps={{ legend: { hidden: true } }}
+        series={[
+            {
+                arcLabel: (item) => `${item.label} (${item.value})`,
+                arcLabelMinAngle: 45,
+                data: [{ value: 6, label: 'Others' },
+                { value: 8, label: 'Weight Lifting' },
+                { value: 12, label: 'Jogging' },
+                { value: 20, label: 'Push Ups' }],
+            },
+        ]}
+        sx={{
+            [`& .${pieArcLabelClasses.root}`]: {
+                fill: 'white',
+                fontWeight: 'bold',
+            },
+        }}
+        height={300}
+        width={440}
+    />,
+
+
+    <BarChart
+        series={[
+            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+            { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+            { data: [14, 6, 5, 8, 9], label: 'Series B1' },
+        ]}
+        barLabel={(item, context) => {
+            if ((item.value ?? 0) > 10) {
+                return 'High';
+            }
+            return context.bar.height < 60 ? null : item.value?.toString();
+        }}
+        width={700}
+        height={350}
+    />,
+
+    <BarChart
+        series={[
+            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+            { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+            { data: [14, 6, 5, 8, 9], label: 'Series B1' },
+        ]}
+        barLabel={(item, context) => {
+            if ((item.value ?? 0) > 10) {
+                return 'High';
+            }
+            return context.bar.height < 60 ? null : item.value?.toString();
+        }}
+        width={600}
+        height={350}
+    />,
+
+    <BarChart
+        xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
+        series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
+        width={500}
+        height={300}
+        barLabel="value"
+    />
+
+]
