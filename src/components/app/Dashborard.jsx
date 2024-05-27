@@ -225,7 +225,7 @@ export default function Dashborard({ logout, userPoints }) {
                     barLabel="value"
                 />
             </Box> */}
-            <Box fullWidth>
+            <Box>
                 {charts[chartType]}
             </Box>
             <LoadingButton
@@ -244,11 +244,11 @@ const charts = [
     <PieChart
         className='chart'
         hideTooltip
-        slotProps={{ legend: { hidden: true } }}
+        // slotProps={{ legend: { hidden: true } }}
         series={[
             {
                 arcLabel: (item) => `${item.label} (${item.value})`,
-                arcLabelMinAngle: 45,
+                arcLabelMinAngle: 35,
                 data: [{ value: 30, label: 'Carbohydrates' },
                 { value: 15, label: 'Protiens' },
                 { value: 10, label: 'Fat' },
@@ -257,18 +257,17 @@ const charts = [
         ]}
         sx={{
             [`& .${pieArcLabelClasses.root}`]: {
-                fill: 'white',
-                fontWeight: 'bold',
+                fill: 'white'
             },
         }}
         height={300}
-        width={440}
+        width={540}
     />,
 
     <PieChart
         className='chart'
         hideTooltip
-        slotProps={{ legend: { hidden: true } }}
+        // slotProps={{ legend: { hidden: true } }}
         series={[
             {
                 arcLabel: (item) => `${item.label} (${item.value})`,
@@ -282,11 +281,11 @@ const charts = [
         sx={{
             [`& .${pieArcLabelClasses.root}`]: {
                 fill: 'white',
-                fontWeight: 'bold',
+                // fontWeight: 'bold',
             },
         }}
         height={300}
-        width={440}
+        width={540}
     />,
 
 

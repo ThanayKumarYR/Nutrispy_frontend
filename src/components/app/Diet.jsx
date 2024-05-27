@@ -6,10 +6,13 @@ import { PieChart } from '@mui/x-charts'
 import LoginIcon from '@mui/icons-material/Login';
 
 import Banner from '../../images/food-bg.png'
-import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material'
 
 import nutrition from '../../utilities/nutrition.json'
 import axios from 'axios'
+
+import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Diet({ userPoints }) {
     return (
@@ -23,6 +26,9 @@ export default function Diet({ userPoints }) {
 }
 
 function MainFood({ userPoints }) {
+
+    const [infoOpen, setInfoOpen] = useState(false)
+    const [foodInfo, setFoodInfo] = useState({})
 
     const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
@@ -70,6 +76,16 @@ function MainFood({ userPoints }) {
         foodType: "All",
         sortBy: ""
     })
+
+    function getCount(filt) {
+        if (filt === "") {
+            return foodRecommends.length;
+        } else if (filt === undefined) {
+            return foodRecommends.filter(item => !item.hasOwnProperty("Food Type")).length;
+        } else {
+            return foodRecommends.filter(item => item.hasOwnProperty("Food Type") && item["Food Type"] === filt).length;
+        }
+    }
 
     const filteredSortedFoods = filter.sortBy ?
         foodRecommends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType).sort((a, b) => {
@@ -141,11 +157,11 @@ function MainFood({ userPoints }) {
                             }))
                         }}
                     >
-                        <MenuItem value="All">All</MenuItem>
-                        <MenuItem value="Indian">Indian Food</MenuItem>
-                        <MenuItem value="Chinese">Chinese Food</MenuItem>
-                        <MenuItem value="Fruits and Vegetables">Fruits and Vegetables</MenuItem>
-                        <MenuItem value="Other">Others</MenuItem>
+                        <MenuItem value="All">All ({getCount("")})</MenuItem>
+                        <MenuItem value="Indian">Indian Food ({getCount("Indian")})</MenuItem>
+                        <MenuItem value="Chinese">Chinese Food ({getCount("Chinese")})</MenuItem>
+                        <MenuItem value="Fruits and Vegetables">Fruits and Vegetables ({getCount("Fruits")})</MenuItem>
+                        <MenuItem value="Other">Others ({getCount()})</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: 100, ml: 2 }}>
@@ -176,9 +192,10 @@ function MainFood({ userPoints }) {
                                 <p className='body'>{food.Calories} cal</p>
                                 <p className='body'>{food.Fat}gm Fat</p>
                             </div>
+                            <button className='info' variant='contained' onClick={() => { setInfoOpen(true); setFoodInfo(food) }}><InfoIcon /></button>
                             <img loading="lazy" src={food.imageUrl || Banner} alt="" />
                             <input type="checkbox" name="exercise" />
-                            <span>
+                            <span className='checkmark'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path fill="#4a1d1d"
                                         d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" />
@@ -189,6 +206,60 @@ function MainFood({ userPoints }) {
             </section>
             <section>
             </section>
+            <InfoDialog
+                infoOpen={infoOpen}
+                setInfoOpen={setInfoOpen}
+                foodInfo={foodInfo}
+            />
         </main >
+    )
+}
+
+
+function InfoDialog({ infoOpen, setInfoOpen, foodInfo }) {
+    return (
+        <Dialog
+            open={infoOpen}
+            onClose={() => setInfoOpen(false)}
+            className='food-info'
+        >
+            <DialogTitle className='food-info-title'>
+                {foodInfo["Name"]}
+            </DialogTitle>
+            <IconButton
+                aria-label="close"
+                onClick={() => setInfoOpen(false)}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
+            <DialogContent>
+                <DialogContentText >
+                    {
+                        Object.entries(foodInfo).map(([key, value], index) => (
+                            ["Name", "index", "food", "imageUrl"].includes(key) ? null :
+                                <span key={index}>
+                                    {key === "nutrients" ?
+                                        <span>
+                                            {key === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
+                                            {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
+                                                nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" ? null :
+                                                    <span key={nutrientIndex}>{nutrientKey}: {nutrientValue}<br /></span>
+                                            ))}
+                                        </span>
+                                        :
+                                        <span>{key}: {value}<br /></span>
+                                    }
+                                </span>
+                        ))
+                    }
+                </DialogContentText>
+            </DialogContent>
+        </Dialog>
     )
 }
