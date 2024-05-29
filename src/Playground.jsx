@@ -69,6 +69,102 @@ export default function Playground() {
 
     return (
         <main className='chat'>
+            {JSON.stringify([
+                {
+                    "index": 0,
+                    "img": "blob:http://192.168.74.145:3000/98f3f73f-d4f7-4b05-82a7-e9981f7e5b06",
+                    "details": {
+                        "food": "yes",
+                        "name": "watermelon",
+                        "type": "Healthy Food",
+                        "nutrients": {
+                            "name": "watermelon",
+                            "quantity": 1,
+                            "measurement": "bowl",
+                            "calories": 100,
+                            "fat": 100,
+                            "protiens": 200
+                        }
+                    }
+                },
+                {
+                    "index": 1,
+                    "img": "",
+                    "details": {
+                        "food": "yes",
+                        "name": "Chole Bhature",
+                        "nutrients": {
+                            "Food Type": "Indian",
+                            "name": "Chole Bhature",
+                            "quantity": 1,
+                            "measurement": "pieces",
+                            "calories": 500,
+                            "protien": "12.5gm",
+                            "carbohydrates": "55gm",
+                            "Fat": "27",
+                            "Sodium": "650mg",
+                            "Fiber": "6.5g",
+                            "Sugars": "8.6g",
+                            "Vitamin": "a,c,k,b6,b9b2,b1,b3",
+                            "Calcium": "122mg",
+                            "Iron": "3.6mg",
+                            "Potassium": "526.3mg",
+                            "Cholestrol": "5.7mg"
+                        }
+                    },
+                    "Food Type": "Indian",
+                    "name": "Chole Bhature",
+                    "quantity": 1,
+                    "measurement": "pieces",
+                    "calories": 500,
+                    "protien": "12.5gm",
+                    "carbohydrates": "55gm",
+                    "Fat": "27",
+                    "Sodium": "650mg",
+                    "Fiber": "6.5g",
+                    "Sugars": "8.6g",
+                    "Vitamin": "a,c,k,b6,b9b2,b1,b3",
+                    "Calcium": "122mg",
+                    "Iron": "3.6mg",
+                    "Potassium": "526.3mg",
+                    "Cholestrol": "5.7mg"
+                },
+                {
+                    "index": 2,
+                    "img": "",
+                    "details": {
+                        "food": "yes",
+                        "name": "fadsf",
+                        "nutrients": {
+                            "name": "fadsf",
+                            "quantity": 4,
+                            "measurement": "spoon",
+                            "calories": "200"
+                        }
+                    },
+                    "name": "fadsf",
+                    "quantity": 4,
+                    "measurement": "spoon",
+                    "calories": "200"
+                },
+                {
+                    "index": 3,
+                    "img": "blob:http://192.168.74.145:3000/2cc92949-046d-4d80-a301-d8befe741c86",
+                    "details": {
+                        "food": "no",
+                        "name": null,
+                        "type": null
+                    }
+                }
+            ].filter(e => e.details.food === "yes").map(f => {
+                return {
+                    "name": f.details.name,
+                    "type": f.details.type || f.details.nutrients["Food Type"] || null,
+                    "quantity": f.details.nutrients.quantity,
+                    "measurement": f.details.nutrients.measurement,
+                    "calories": f.details.nutrients.calories,
+                }
+            }))}
             {/* <h2 >Chat</h2>
             <div className='error-div'>
                 {error.message?.length > 0 && <Alert variant="filled" severity="error" sx={{ m: 1, maxWidth: "300px", mx: "auto" }} >

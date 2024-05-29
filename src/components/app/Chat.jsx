@@ -32,19 +32,23 @@ export default function Chat() {
     }
 
     async function fetchOldConversations() {
+        setError({
+            "message": "Loading previous conversations if any",
+            "severity": "info"
+        })
         customAxios.getting('/recommend', undefined)
             .then(response => {
                 if (response.data.response.toLowerCase() === "success") {
                     setUserYallaMessages(response.data.data)
+                    setTheError({ "message": "Successfully loaded previous conversations", "severity": "success" })
                     console.log("Got old messages", response.data.data)
                 } else {
-                    setTheError({ "message": response.data })
+                    setTheError({ "message": response.data, "severity": "error" })
                 }
             })
             .catch(error => {
                 setTheError({ "message": error })
-            }
-            )
+            })
             .finally(() => {
                 setTimeout(() => {
                     windowRef.current?.scrollTo({
@@ -105,15 +109,13 @@ export default function Chat() {
         browserSupportsSpeechRecognition,
     } = useSpeechRecognition();
 
-    // if (!browserSupportsSpeechRecognition) {
-    //     return <span>Browser doesn't support speech recognition.</span>;
-    // }
-
     return (
         <main className='chat'>
             <h2 >Chat</h2>
+            {/* {JSON.stringify(error)}
+            {JSON.stringify(userYallaMessages)} */}
             <div className='error-div'>
-                {error.message?.length > 0 && <Alert variant="filled" severity="error" sx={{ m: 1, maxWidth: "300px", mx: "auto" }} >
+                {error.message?.length > 0 && <Alert variant="filled" severity={error.severity} sx={{ m: 1, maxWidth: "300px", mx: "auto" }} >
                     {error.message}
                 </Alert>}
             </div>

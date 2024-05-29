@@ -14,17 +14,37 @@ export default function FormDialog(props) {
     console.log(props.data);
 
     function setFood(foodName) {
+        // console.log("set food")
+        let found = false;
         nutrition.forEach(eachFood => {
             if (eachFood.Name === foodName) {
+                found = true;
+                const defaultValues = {};
+                Object.keys(eachFood).forEach(key => {
+                    if (key !== "Name" && key !== "Calories") {
+                        defaultValues[key] = eachFood[key];
+                    }
+                });
                 props.setData({
+                    "Food Type": eachFood["Food Type"],
                     "name": eachFood.Name,
                     "quantity": 1,
-                    "measurement": "piece",
-                    "calories": eachFood.Calories ?? null
-                })
+                    "measurement": "pieces",
+                    "calories": eachFood.Calories ?? null,
+                    ...defaultValues
+                });
             }
-        })
+        });
+        if (!found) {
+            props.setData({
+                "name": foodName,
+                "quantity": 1,
+                "measurement": "pieces",
+                "calories": null,
+            });
+        }
     }
+
 
     return (
         <React.Fragment>
@@ -85,7 +105,7 @@ export default function FormDialog(props) {
                 }}
             >
                 <DialogTitle>Add Food</DialogTitle>
-\                <DialogContent>
+                <DialogContent>
                     <Autocomplete
                         required
                         freeSolo
@@ -96,18 +116,15 @@ export default function FormDialog(props) {
                         options={nutrition.map((option) => option.Name)}
                         renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
                         onChange={(e, newValue) => {
-                            // props.setData(prevData => ({
-                            //     ...prevData,
-                            //     "name": newValue
-                            // }))
                             setFood(newValue)
                         }}
                         onInputChange={(e, newInputValue) => {
                             props.setData(prevData => ({
-                                ...prevData,
-                                "name": newInputValue
+                                "name": newInputValue,
+                                "quantity": "",
+                                "measurement": "",
+                                "calories": "",
                             }));
-                            console.log(newInputValue);
                         }}
                     />
                     <Box
@@ -178,7 +195,7 @@ export default function FormDialog(props) {
                             onChange={(e) => {
                                 props.setData(prevData => ({
                                     ...prevData,
-                                    [e.target.name]: e.target.value
+                                    [e.target.name]: Number(e.target.value)
                                 }))
                             }}
                         />
@@ -186,10 +203,31 @@ export default function FormDialog(props) {
                             cal / {props.data.measurement}
                         </Typography>
                     </Box>
-
+                    <Box>
+                        {
+                            Object.entries(props.data).map(([key, value], index) => (
+                                ["name", "index", "food", "quantity", "measurement", "calories"].includes(key) ? null :
+                                    <span key={index}>
+                                        {key === "nutrients" ?
+                                            <span>
+                                                {key === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
+                                                {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
+                                                    nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" ? null :
+                                                        <span key={nutrientIndex}>{nutrientKey}: {nutrientValue}<br /></span>
+                                                ))}
+                                            </span>
+                                            :
+                                            <span>{key}: {value}<br /></span>
+                                        }
+                                    </span>
+                            ))
+                        }
+                    </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.handleClose} color='error'>Cancel</Button>
+                    {props.imagesAndDetails.length !== 0 &&
+                        <Button onClick={props.handleClose} color='error'>Cancel</Button>
+                    }
                     <Button type="submit" color="success" variant='contained'>Okay</Button>
                 </DialogActions>
             </Dialog>

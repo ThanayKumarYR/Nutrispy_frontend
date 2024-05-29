@@ -5,8 +5,7 @@
     padding: 10px;
 }
 
-.food-app section.add-food-after {
-}
+.food-app section.add-food-after {}
 
 .food-app section div.select-image-div {
     /* background: rgb(219, 219, 219); */
@@ -128,8 +127,8 @@
 .food-app section.cards-container section.uploaded-image-cards .each-card.no-food:before {
     content: "X";
     position: absolute;
-    font-size: 81px;
-    top: -40px;
+    font-size: 88px;
+    top: -44px;
     z-index: 1;
     color: rgba(255, 0, 0, 0.5);
 }
@@ -261,6 +260,7 @@
 .food-app section.food-list .each-food .each-food-btns button:focus {
     outline: 1px solid var(--sec);
 }
+
 .food-app section.food-list .each-food .each-food-btns button {
     /* width: 50px;
     height: 40px; */
@@ -354,7 +354,9 @@
     }
 }
 
-main.add-food-main {}
+main.add-food-main {
+    position: relative;
+}
 
 main.add-food-main section.add-food-after {
     /* border: 1px solid #000; */
@@ -382,7 +384,13 @@ main.add-food-main section.hide {
     align-items: center;
 }
 
-.add-section>* {}
+.add-section.before-add {
+    padding-bottom: 20px;
+}
+
+.add-section.before-add button {
+    display: inline-block;
+}
 
 .add-section img {
     max-height: 75dvh;

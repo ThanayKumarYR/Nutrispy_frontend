@@ -65,7 +65,6 @@ export default function Dashborard({ logout, userPoints }) {
                         ]}
                     />
                     <MdFoodBank className='dash-icon' />
-
                     <div className='dash-text'>
                         <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
                             {userPoints.currentScore} / {userPoints.goalScore} <span>K Cal</span>
