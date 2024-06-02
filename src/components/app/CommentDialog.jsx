@@ -9,7 +9,7 @@ import Slide from '@mui/material/Slide';
 import SendIcon from '@mui/icons-material/Send';
 import { LoadingButton } from '@mui/lab';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -59,7 +59,7 @@ export default function CommentDialog(props) {
     };
 
     function convertToHTML(response) {
-        if(!response) return null
+        if (!response) return null
         response = response.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
 
         response = response.replace(/\n/g, "<br>");
@@ -87,25 +87,20 @@ export default function CommentDialog(props) {
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle sx={{ display: "flex", placeItems: "center" }}>{submitDiet.sent ? "Added to your diet" : "Review your food"}&nbsp;{submitDiet.sent && <CheckCircleIcon color='success' />}</DialogTitle>
+                <DialogTitle sx={{ display: "flex", placeItems: "center" }}>Food added to your diet <CheckCircleIcon color='success' /></DialogTitle>
                 <DialogContent>
-                    {!submitDiet.sent ? <DialogContentText id="alert-dialog-slide-description">
-                        {convertToHTML(props.open.message)}
-                        {props.open.message}
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Comment: {convertToHTML(props.open.message)}
                     </DialogContentText>
-                        : <DialogContent>Heading to Dashboard</DialogContent>}
                 </DialogContent>
-                {!submitDiet.sent && <DialogActions>
-                    <Button variant='contained' color="error" onClick={backToDiet} disabled={submitDiet.loading}>Go Back to Diet Page</Button>
-                    <LoadingButton
-                        loading={submitDiet.loading}
-                        variant='contained'
-                        color="success"
-                        endIcon={<SendIcon />}
-                        onClick={(e) => headToDashboard(e)}>
-                        Head to Dashboard
-                    </LoadingButton>
-                </DialogActions>}
+                <DialogActions>
+                    <Link to="/app/diet">
+                        <Button variant='contained'><SendIcon style={{ "transform": "rotate(180deg)" }} />&nbsp;  Go Back to Diet Page</Button>
+                    </Link>
+                    <Link to="/app/">
+                        <Button variant='contained'>Head to Dashboard &nbsp;<SendIcon /></Button>
+                    </Link>
+                </DialogActions>
             </Dialog>
         </React.Fragment>
     );

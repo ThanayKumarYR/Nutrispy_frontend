@@ -7,17 +7,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
-import nutrition from '../../utilities/nutrition.json'
+import nutrition from '../../utilities/nutrition'
 
 export default function FormDialog(props) {
 
-    console.log(props.data);
-
     function setFood(foodName) {
-        // console.log("set food")
+        console.log("set food")
         let found = false;
         nutrition.forEach(eachFood => {
-            if (eachFood.Name === foodName) {
+            if (eachFood.name === foodName) {
                 found = true;
                 const defaultValues = {};
                 Object.keys(eachFood).forEach(key => {
@@ -27,7 +25,7 @@ export default function FormDialog(props) {
                 });
                 props.setData({
                     "Food Type": eachFood["Food Type"],
-                    "name": eachFood.Name,
+                    "name": eachFood.name,
                     "quantity": 1,
                     "measurement": "pieces",
                     "calories": eachFood.Calories ?? null,
@@ -110,10 +108,11 @@ export default function FormDialog(props) {
                         required
                         freeSolo
                         selectOnFocus
+                        autoFocus
                         name="name"
                         sx={{ mt: 1 }}
                         value={props.data.name || ""}
-                        options={nutrition.map((option) => option.Name)}
+                        options={nutrition.map((option) => option.name)}
                         renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
                         onChange={(e, newValue) => {
                             setFood(newValue)
@@ -124,6 +123,7 @@ export default function FormDialog(props) {
                                 "quantity": "",
                                 "measurement": "",
                                 "calories": "",
+                                ...prevData
                             }));
                         }}
                     />
@@ -204,20 +204,27 @@ export default function FormDialog(props) {
                         </Typography>
                     </Box>
                     <Box>
+                        <span>{props.data["Food Type"] && `Food Type: ${props.data["Food Type"]}`}</span><br />
                         {
                             Object.entries(props.data).map(([key, value], index) => (
-                                ["name", "index", "food", "quantity", "measurement", "calories"].includes(key) ? null :
+                                ["name", "index", "food", "quantity", "measurement", "calories"].includes(key.toLocaleLowerCase()) ? null :
                                     <span key={index}>
+                                        
                                         {key === "nutrients" ?
                                             <span>
-                                                {key === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
+                                                {key.toLocaleLowerCase() === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
                                                 {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
                                                     nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" ? null :
-                                                        <span key={nutrientIndex}>{nutrientKey}: {nutrientValue}<br /></span>
+                                                        <span key={nutrientIndex}>{nutrientKey} : {nutrientValue}<br /></span>
                                                 ))}
                                             </span>
                                             :
-                                            <span>{key}: {value}<br /></span>
+                                            <span>{
+                                                key === "Food Type"
+                                                    ?
+                                                    null
+                                                    : <>{key[0].toUpperCase() + key.slice(1, key.length)}: {value}  <br /></>
+                                            }</span>
                                         }
                                     </span>
                             ))

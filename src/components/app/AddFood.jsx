@@ -22,9 +22,11 @@ import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import axios from 'axios';
 
-export default function AddFood() {
+import recomFoods from '../../utilities/nutrition'
 
-    document.title = "NutriSpy - Food"
+export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
+
+    document.title = "NutriSpy - Add Food"
 
     const [open, setOpen] = React.useState(false);
     const [infoOpen, setInfoOpen] = React.useState(false);
@@ -39,32 +41,34 @@ export default function AddFood() {
         "show": false
     })
 
-    // [
-    //     {
-    //         "name": "lassi",
-    //         "type": "Indian Food",
-    //         "quantity": 1,
-    //         "measurement": "bowl",
-    //         "calories": 100,
-    //         "fat": 100,
-    //         "protiens": 200
-    //     },
-    //     {
-    //         "name": "watermelon",
-    //         "type": "Healthy Food",
-    //         "quantity": 1,
-    //         "measurement": "bowl",
-    //         "calories": 100,
-    //         "fat": 100,
-    //         "protiens": 200
-    //     }
-    // ]
+    const [imagesAndDetails, setImagesAndDetails] = useState(
+        selectRecomFoods.length > 0 ?
+            recomFoods
+                .filter(food => selectRecomFoods.includes(recomFoods.indexOf(food)))
+                .map((food, index) => {
+                    const details = {
+                        food: "yes",
+                        name: food.name,
+                        nutrients: {
+                            name: food.name,
+                            quantity: 1,
+                            measurement: "bowl",
+                            ...food
+                        }
+                    };
+                    return {
+                        index,
+                        img: "",
+                        details
+                    };
+                })
+            : []
+    );
 
-    const [imagesAndDetails, setImagesAndDetails] = useState([])
 
     const [currentPreview, setCurrentPreview] = useState({
         img: "",
-        index: ""
+        index: selectRecomFoods.length - 1 ?? ""
     })
 
     const [error, setError] = useState({
@@ -111,7 +115,6 @@ export default function AddFood() {
 
     async function handleImage(e) {
         e.preventDefault()
-        console.log(imagePreview)
         let file = e.target.files[0]
         if (!file)
             return
@@ -125,13 +128,11 @@ export default function AddFood() {
         setLoading(true)
         const fileUrl = URL.createObjectURL(file);
         let index = imagesAndDetails.length ? imagesAndDetails[imagesAndDetails.length - 1]?.index + 1 : 0;
-        console.log({ index })
         setImagesAndDetails(prevData => {
             let newIndex = prevData.length ? prevData[prevData.length - 1].index + 1 : 0;
             return [...prevData, { index: newIndex, img: fileUrl }];
         })
         const imagePreviewElement = imagePreview['current']
-        console.log(index)
         setCurrentPreview({
             index,
             "img": fileUrl
@@ -141,12 +142,9 @@ export default function AddFood() {
 
         var formData = new FormData();
         formData.append('image', file)
-        console.log(formData)
-        console.log(fileUrl);
 
         try {
             const response = await customAxios.posting("/detect", formData);
-            console.log(response.data.data);
             setImagesAndDetails(prevData => {
                 const prev = prevData;
                 if (response.data.data.food === "yes") {
@@ -175,17 +173,13 @@ export default function AddFood() {
         } finally {
             setLoading(false);
         }
-        console.table(imagesAndDetails)
-        console.log(imagesAndDetails)
     }
 
     function editFood(e) {
-        console.log("editFood", e)
         const theFood = imagesAndDetails.filter(food => food["index"] === e)[0]
-        setData({
-            ...theFood.details.nutrients,
-            "index": e
-        })
+        const nutrients = theFood.details.nutrients
+        const sett = { ...nutrients, "index": e }
+        setData(sett)
         handleClickOpen()
     }
 
@@ -193,13 +187,11 @@ export default function AddFood() {
         setImagesAndDetails(prevList =>
             prevList.filter(food => food.index !== e)
         )
-        console.log("deleteFood")
     }
 
     function addNewFoodItem(e) {
         setIsNew(true)
         setOpen(true)
-        console.log("addNewFoodItem")
     }
 
     function submitFood() {
@@ -252,21 +244,19 @@ export default function AddFood() {
                 open={comment}
                 setOpen={setComment}
             />
-            {
-                <FormDialog
-                    open={open}
-                    handleClose={handleClose}
-                    imagesAndDetails={imagesAndDetails}
-                    setImagesAndDetails={setImagesAndDetails}
-                    data={data}
-                    setData={setData}
-                    isNew={isNew}
-                    setIsNew={setIsNew}
-                    currentPreview={currentPreview}
-                    setCurrentPreview={setCurrentPreview}
-                    comment={comment}
-                />
-            }
+            <FormDialog
+                open={open}
+                handleClose={handleClose}
+                imagesAndDetails={imagesAndDetails}
+                setImagesAndDetails={setImagesAndDetails}
+                data={data}
+                setData={setData}
+                isNew={isNew}
+                setIsNew={setIsNew}
+                currentPreview={currentPreview}
+                setCurrentPreview={setCurrentPreview}
+                comment={comment}
+            />
             {
                 infoOpen &&
                 <Dialog
@@ -319,7 +309,7 @@ export default function AddFood() {
             {error.message?.length > 0 && <Alert variant="filled" severity={error.severity} sx={{ m: 1, minWidth: "200px", mx: "auto", position: "absolute", top: "50px", left: "50%", transform: "translateX(-50%)", zIndex: 10 }} >
                 {error.message}
             </Alert>}
-            <section className={`add-food-after ${(frontPage.current && Array.from(frontPage?.current?.classList)?.includes('hide')) ? "" : "hide"}`}>
+            <section className={`add-food-after ${imagesAndDetails.length ? "" : "hide"}`}>
                 <section>
                     <div className="select-image-div">
                         <img className="preview-image" src={currentPreview.img} alt="" ref={imagePreview} style={{ display: currentPreview.img ? "block" : "none" }} />
@@ -408,7 +398,6 @@ export default function AddFood() {
                             <center>We hope you are having a great meal😋. Hang on tight, while we spy on your foooooooood</center>
                         </div>
                     }
-                    {JSON.stringify(imagesAndDetails)}
                 </section>
                 <section className="add-food-item-btn-div">
                     <Button className="add-food-btn" onClick={() => addNewFoodItem()} variant='contained'>
@@ -418,13 +407,13 @@ export default function AddFood() {
                         loading={comment.loading}
                         className='submit-btn'
                         variant="contained"
-                        onClick={(e) => submitFood(e)}
+                        onClick={(e) => { submitFood(e); setSelectRecomFoods([]); }}
                         startIcon={<SendIcon />}
                     >
                     </LoadingButton>
                 </section>
             </section >
-            <section className={`add-section before-add`} ref={frontPage}>
+            <section className={`add-section before-add ${imagesAndDetails.length ? "hide" : ""}`} ref={frontPage}>
                 <img src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1661385244-3b38a8fc-796c-4545-8394-ac9a7bfe3455-1661385196.png?crop=1xw:1xh;center,top&resize=980:*" alt="" />
                 <Stack direction="row" spacing={2}>
                     <Button
@@ -437,7 +426,7 @@ export default function AddFood() {
                         startIcon={<CloudUploadIcon />}
                     >
                         Upload Pic
-                        <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => { handleImage(e); frontPage.current.classList.add('hide'); }} accept="image/png, image/jpeg, image/jpg" />
+                        <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => { handleImage(e); }} accept="image/png, image/jpeg, image/jpg" />
                     </Button>
                     <Button
                         className="upload-btn"
@@ -447,10 +436,9 @@ export default function AddFood() {
                         variant="contained"
                         tabIndex={-1}
                         startIcon={<ModeEditIcon />}
-                        onClick={() => { addNewFoodItem(); frontPage.current.classList.add('hide'); }}
+                        onClick={() => { addNewFoodItem(); }}
                     >
                         Add Manually
-                        {/* <VisuallyHiddenInput type="file" className='file-input' onChange={(e) => { addNewFoodItem(); frontPage.current.classList.add('hide'); }} accept="image/png, image/jpeg, image/jpg" /> */}
                     </Button>
                 </Stack>
             </section>

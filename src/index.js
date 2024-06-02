@@ -30,6 +30,7 @@ const theme = createTheme({
         },
         warning: {
             main: '#ffbf7f',
+            sec: "#d32f2f"
         },
     },
     typography: {
