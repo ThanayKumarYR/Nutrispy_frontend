@@ -9,6 +9,7 @@ import IsUserLoggedIn from './IsUserLoggedIn'
 
 import Logo from "../../images/logo.png"
 import { customAxios } from '../../utilities'
+import Profile from './Profile'
 
 export default function Appli() {
 
@@ -30,7 +31,8 @@ export default function Appli() {
         setUserLoggedIn(getCookie("userLoggedIn") ? true : false)
 
         if (!getCookie("userLoggedIn")) {
-            navigate("/app/login")
+            // navigate("/app/login")
+            console.log(getCookie("userLoggedIn"))
         }
         getSession()
         // eslint-disable-next-line
@@ -65,17 +67,9 @@ export default function Appli() {
         document.cookie = `${parameter}; ${updatedTime}; path="/"`
     }
 
-    // eslint-disable-next-line
     function deleteCookie(parameter) {
         document.cookie = `${parameter}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
         console.log("deleting a cookie")
-    }
-
-    function getCookie(name) {
-        // console.log("getting cookie of " + name);
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
     function logout(setLoading) {
@@ -114,23 +108,24 @@ export default function Appli() {
                     </div>
                 </nav>
             }
-            {/* session: {localStorage.getItem('session')}<br />
-            cookie: {getCookie('userLoggedIn')}<br />
-            userlogged in: {String(userLoggedIn)}<br />
-            data:{JSON.stringify(data)}
-            <Button variant='contained' onClick={getSession}>Get session</Button> */}
             <Routes>
                 <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet userPoints={userPoints} /></IsUserLoggedIn>} />
                 <Route path="/chat/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Chat /></IsUserLoggedIn>} />
                 <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
+                <Route path="/profile" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Profile userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
                 <Route path="/" exact element={<Navigate to="/app/dashboard" />} />
                 <Route path="/*" exact element={<>Uh oh! Not found page. Head to {userLoggedIn ? <Link to="/app/dashboard"><b>Dashboard page</b></Link> : <Link to="/app/login"><b>Login page</b></Link>} page</>} />
                 <Route path="/login" element={<Login userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />
             </Routes>
             {userLoggedIn &&
-                <Navbar />
+                <Navbar logout={logout}/>
             }
         </main>
     )
 }
 
+export function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import Appli from "./components/app/Appli";
 import Admin from "./components/admin/Admin";
 
@@ -79,16 +79,17 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-   // <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <HashRouter>
-                <Routes>
-                    <Route path="/app/*" element={<Appli />} />
-                    <Route path="/admin/*" element={<Admin />} />
-                    <Route path="/" element={<App />} />
-                    <Route path="/play" element={<Playground />} />
-                </Routes>
-            </HashRouter>
-        </ThemeProvider>
+    // <React.StrictMode>
+    <ThemeProvider theme={theme}>
+        <HashRouter>
+            <Routes>
+                <Route path="/app/*" element={<Appli />} />
+                <Route path="/admin/*" element={<Admin />} />
+                <Route path="/play" element={<Playground />} />
+                <Route path="/" element={<App />} />
+                <Route path="/*" element={<Navigate to="/" replace={true} />} />
+            </Routes>
+        </HashRouter>
+    </ThemeProvider>
     //</React.StrictMode>
 );

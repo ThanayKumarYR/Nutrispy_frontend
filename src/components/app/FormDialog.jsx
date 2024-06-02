@@ -108,11 +108,12 @@ export default function FormDialog(props) {
                         required
                         freeSolo
                         selectOnFocus
-                        autoFocus
+                        autoFocus 
                         name="name"
                         sx={{ mt: 1 }}
                         value={props.data.name || ""}
                         options={nutrition.map((option) => option.name)}
+                        getOptionLabel={(option) => option}
                         renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
                         onChange={(e, newValue) => {
                             setFood(newValue)
@@ -215,7 +216,7 @@ export default function FormDialog(props) {
                                                 {key.toLocaleLowerCase() === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
                                                 {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
                                                     nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" ? null :
-                                                        <span key={nutrientIndex}>{nutrientKey} : {nutrientValue}<br /></span>
+                                                        <span key={nutrientIndex + index}>{nutrientKey} : {nutrientValue}<br /></span>
                                                 ))}
                                             </span>
                                             :

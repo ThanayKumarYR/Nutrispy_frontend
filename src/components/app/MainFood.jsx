@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './css/Food.css'
 
@@ -37,36 +37,31 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
         }
     )))
 
-    // function getFoodImages() {
-    //     axios.get(
-    //         "https://api.unsplash.com/search/photos?query=idli&per_page=1"
-    //     ).then(res => console.log(res.data.results[0].urls.raw))
-    //         .catch(err => console.log(err))
-    // }
-
-    // eslint-disable-next-line
     async function getFoodImages(foodName) {
         return axios.get(
             `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=HXGD1C04FfGYVQMM6Z9029JOPtjSqYIAuYeeaeFaczU`
         );
     }
 
-    // useEffect(() => {
-    //     foodRecommends.forEach((food, index) => {
-    //         getFoodImages(food.name)
-    //             .then(res => {
-    //                 const imageUrl = res.data.results[0].urls.raw;
-    //                 console.log({index}, {imageUrl})
-    //                 setFoodRecommends(prevFoodRecommends => {
-    //                     const updatedFoodRecommends = [...prevFoodRecommends];
-    //                     updatedFoodRecommends[index] = { ...food, imageUrl };
-    //                     return updatedFoodRecommends;
-    //                 });
-    //             })
-    //             .catch(err => console.log(err));
-    //     });
-    //     // eslint-disable-next-line
-    // }, []);
+    useEffect(() => {
+        setSelectRecomFoods([])
+    }, [])
+
+    useEffect(() => {
+        foodRecommends.forEach((food, index) => {
+            getFoodImages(food.name)
+                .then(res => {
+                    const imageUrl = res.data.results[0].urls.raw;
+                    setFoodRecommends(prevFoodRecommends => {
+                        const updatedFoodRecommends = [...prevFoodRecommends];
+                        // updatedFoodRecommends[index] = { ...food, imageUrl };
+                        return updatedFoodRecommends;
+                    });
+                })
+                .catch(err => console.log(err));
+        });
+        // eslint-disable-next-line
+    }, []);
 
     const [filter, setFilter] = useState({
         foodType: "All",
@@ -84,15 +79,17 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
     }
 
     const filteredSortedFoods = filter.sortBy ?
-        foodRecommends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType).sort((a, b) => {
-            if (b[filter.sortBy] === a[filter.sortBy]) {
-                return 0;
-            }
-            else if (filter.sortBy === "Fat") {
-                return a[filter.sortBy] - b[filter.sortBy];
-            }
-            return b[filter.sortBy] - a[filter.sortBy];
-        })
+        foodRecommends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType)
+            .sort((a, b) => {
+                if (filter.sortBy === "name") {
+                    return a.name.localeCompare(b.name);
+                } else if (b[filter.sortBy] === a[filter.sortBy]) {
+                    return 0;
+                } else if (filter.sortBy === "fat") {
+                    return Number.parseFloat(a[filter.sortBy]) - Number.parseFloat(b[filter.sortBy]);
+                }
+                return Number.parseFloat(b[filter.sortBy]) - Number.parseFloat(a[filter.sortBy]);
+            })
         :
         foodRecommends.filter(food => (filter.foodType === "All") ? true : food["Food Type"] === filter.foodType)
 
@@ -166,47 +163,57 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
             </section>
             <section>
                 <h2>Recommended Foods</h2>
-                <FormControl sx={{ minWidth: 100 }}>
-                    <InputLabel id="food-type">Food Type</InputLabel>
-                    <Select
-                        labelId="food-type"
-                        id="demo-simple-select"
-                        value={filter.foodType}
-                        label="Food Type"
-                        defaultValue='All'
-                        onChange={(e) => {
-                            setFilter(prev => ({
-                                ...prev,
-                                foodType: e.target.value
-                            }))
-                        }}
-                    >
-                        <MenuItem value="All">All ({getCount("")})</MenuItem>
-                        {
-                            foodTypes.map(eachType => <MenuItem value={eachType}>{eachType} ({getCount(eachType)})</MenuItem>)
-                        }
-                    </Select>
-                </FormControl>
-                <FormControl sx={{ minWidth: 100, ml: 2 }}>
-                    <InputLabel id="sort-by">Sort By</InputLabel>
-                    <Select
-                        labelId="sort-by"
-                        id="demo-simple-select"
-                        value={filter.sortBy}
-                        label="Sort By"
-                        onChange={(e) => {
-                            setFilter(prev => ({
-                                ...prev,
-                                sortBy: e.target.value
-                            }))
-                        }}
-                    >
-                        <MenuItem value={""}>Clear</MenuItem>
-                        <MenuItem value="calories">Calories</MenuItem>
-                        <MenuItem value="protien">Protien</MenuItem>
-                        <MenuItem value="fat">Fat</MenuItem>
-                    </Select>
-                </FormControl>
+                {/* <Typography variant="h6" component="span">
+                    h1. Heading
+                </Typography> */}
+                <br />
+                <Box sx={{ display: "flex", placeItems: "center" }}>
+                    <FormControl sx={{ minWidth: 100 }}>
+                        <InputLabel id="food-type">Food Type</InputLabel>
+                        <Select
+                            labelId="food-type"
+                            id="demo-simple-select"
+                            value={filter.foodType}
+                            label="Food Type"
+                            defaultValue='All'
+                            onChange={(e) => {
+                                setFilter(prev => ({
+                                    ...prev,
+                                    foodType: e.target.value
+                                }))
+                            }}
+                        >
+                            <MenuItem value="All">All ({getCount("")})</MenuItem>
+                            {
+                                foodTypes.map((eachType, index) => <MenuItem value={eachType} key={index}>{eachType} ({getCount(eachType)})</MenuItem>)
+                            }
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ minWidth: 100, ml: 2 }}>
+                        <InputLabel id="sort-by">Sort By</InputLabel>
+                        <Select
+                            labelId="sort-by"
+                            id="demo-simple-select"
+                            value={filter.sortBy}
+                            label="Sort By"
+                            onChange={(e) => {
+                                setFilter(prev => ({
+                                    ...prev,
+                                    sortBy: e.target.value
+                                }))
+                            }}
+                        >
+                            <MenuItem value={""}>Clear</MenuItem>
+                            <MenuItem value="name">Name</MenuItem>
+                            <MenuItem value="calories">Calories</MenuItem>
+                            <MenuItem value="protien">Protien</MenuItem>
+                            <MenuItem value="fat">Fat</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ minWidth: 100, display: "grid", placeItems: "center" }}>
+                        <Button variant="outlined" color="error" onClick={() => setFilter({ foodType: "All", sortBy: "" })}>Reset</Button>
+                    </FormControl>
+                </Box>
                 <section className="exercises-cards">
                     {foodRecommends.length &&
                         filteredSortedFoods.map((food, index) => <div className="each-card" key={index}>
@@ -257,7 +264,7 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                     </React.Fragment>
                 )}
                     <Link to="/app/diet/add">
-                        <Button variant='contained'>Add to Diet &nbsp;<SendIcon /></Button>
+                        <Button variant='contained'>Add Food &nbsp;<SendIcon /></Button>
                     </Link>
                 </> : null}
             </Box>

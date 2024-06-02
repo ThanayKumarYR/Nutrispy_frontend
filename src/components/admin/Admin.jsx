@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
 import Dashboard from './Dashboard'
 import Login from './Login'
@@ -67,8 +67,8 @@ export default function Admin() {
                 <Route path="/info" element={<Info {...infoDetails} setInfoDetails={setInfoDetails} adminLogin={adminLogin} />} />
                 <Route path="/contacts" element={< Contacts adminLogin={adminLogin} setInfoDetails={setInfoDetails} setAdminLogin={setAdminLogin} getCookie={getCookie} />} />
                 <Route path="/" element={< Dashboard adminLogin={adminLogin} setInfoDetails={setInfoDetails} setAdminLogin={setAdminLogin} getCookie={getCookie} />} />
+                <Route path="/*" element={<Navigate to="/admin" replace={true} />} />
             </Routes>
-            {/* {(!adminLogin) && <Navigate to="/admin/login" />} */}
         </section>
     )
 }

@@ -1,26 +1,11 @@
-import axios from "axios"
+import customAxios from "./axios";
 
-
-axios.get("https://google.com/search/q=Hey+there")
+// axios.get("https://google.com/search/q=Hey+there")
+customAxios.getting("/", undefined)
     .then(res => console.log(res))
     .catch(err => console.error(err))
 
 export const foods = [
-    {
-        "name": "Biryani",
-        "calories": 202.0,
-        "protien": "14 gm",
-        "carbohydrates": "27 gm",
-        "fat": "4.6 gm",
-        "sodium": "318 mg",
-        "fiber": "2.2 g",
-        "sugars": "3.7 g",
-        "calcium": "66.64 mg",
-        "iron": "1.65 mg",
-        "potassium": "502 mg",
-        "cholestrol": "100mg",
-        "Food Type": "Indian"
-    },
     {
         "name": "Chole Bhature",
         "calories": 500.0,
@@ -34,36 +19,6 @@ export const foods = [
         "iron": "3.6mg",
         "potassium": "526.3mg",
         "cholestrol": "5.7mg",
-        "Food Type": "Indian"
-    },
-    {
-        "name": "Jalebi",
-        "calories": 150.0,
-        "protien": "1.3g",
-        "carbohydrates": "29g",
-        "fat": "3.5g",
-        "sodium": "0g",
-        "fiber": "0g",
-        "sugars": "19g",
-        "calcium": "33mg",
-        "iron": "0.2g",
-        "potassium": "81.3mg",
-        "cholestrol": "29g",
-        "Food Type": "Indian"
-    },
-    {
-        "name": "Naan",
-        "calories": 262.0,
-        "protien": "8.7g",
-        "carbohydrates": "45g",
-        "fat": "5.1g",
-        "sodium": "1g",
-        "fiber": "1.5g",
-        "sugars": "3.2g",
-        "calcium": "76mg",
-        "iron": "2.9mg",
-        "potassium": "112.5mg",
-        "cholestrol": "45g",
         "Food Type": "Indian"
     },
     {
@@ -262,7 +217,7 @@ export const foods = [
         "Food Type": "Fruit"
     },
     {
-        "name": "Water Melon",
+        "name": "Watermelon",
         "calories": 86.0,
         "protien": "1.7g",
         "carbohydrates": "22g",
@@ -574,21 +529,6 @@ export const foods = [
         "iron": "0.7mg",
         "potassium": "189.1mg",
         "cholestrol": "27mg",
-        "Food Type": "Indian"
-    },
-    {
-        "name": "Dosa",
-        "calories": 168.0,
-        "protien": "3.9g",
-        "carbohydrates": "29g",
-        "fat": "3.7g",
-        "sodium": "94mg",
-        "fiber": "0.9g",
-        "sugars": "0.2g",
-        "calcium": "5.7mg",
-        "iron": "0.8mg",
-        "potassium": "75.6mg",
-        "cholestrol": "0mg",
         "Food Type": "Indian"
     },
     {
@@ -1774,21 +1714,6 @@ export const foods = [
         "iron": 2.5,
         "potassium": 250,
         "cholestrol": 0,
-        "Food Type": "Indian"
-    },
-    {
-        "name": "Daal Baati Churma",
-        "calories": 400.0,
-        "protien": 50,
-        "carbohydrates": 12,
-        "fat": 18,
-        "sodium": 600,
-        "fiber": 4,
-        "sugars": 10,
-        "calcium": 60,
-        "iron": 2.5,
-        "potassium": 400,
-        "cholestrol": 15,
         "Food Type": "Indian"
     }
 ]

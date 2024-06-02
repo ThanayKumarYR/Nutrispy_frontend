@@ -14,11 +14,11 @@ nav.app-nav section {
     gap: 5px;
     max-width: 600px;
     margin: 0 auto;
-    box-shadow: 0 0  #000, 0 0 #000, 0 0 #000, 0 10px 15px -3px rgb(0 0 0 / .03),
+    box-shadow: 0 0 #000, 0 0 #000, 0 0 #000, 0 10px 15px -3px rgb(0 0 0 / .03),
         0 4px 6px -4px rgb(0 0 0 / .03);
 }
 
-nav.app-nav section a {
+nav.app-nav section>* {
     -webkit-tap-highlight-color: transparent;
     display: grid;
     gap: 5px;
@@ -53,4 +53,17 @@ nav.app-nav section a span {
     font-family: "Anek Tamil", sans-serif;
     border-radius: 30px;
     font-size: 1rem;
+}
+
+nav.app-nav .nav-link {
+    width: 100%;
+    font-weight: 500;
+    display: flex;
+    place-items: center;
+    gap: 10px;
+}
+
+nav.app-nav .MuiMenuItem-root ,
+nav.app-nav .MuiMenuItem-gutters{
+    color: red !important;
 }

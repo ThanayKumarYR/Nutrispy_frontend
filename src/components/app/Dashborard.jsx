@@ -246,7 +246,7 @@ const charts = [
         // slotProps={{ legend: { hidden: true } }}
         series={[
             {
-                arcLabel: (item) => `${item.label} (${item.value})`,
+                // arcLabel: (item) => `${item.label} (${item.value})`,
                 arcLabelMinAngle: 35,
                 data: [{ value: 30, label: 'Carbohydrates' },
                 { value: 15, label: 'Protiens' },
@@ -259,8 +259,8 @@ const charts = [
                 fill: 'white'
             },
         }}
-        height={300}
-        width={540}
+        height={200}
+        width={380}
     />,
 
     <PieChart
@@ -269,7 +269,7 @@ const charts = [
         // slotProps={{ legend: { hidden: true } }}
         series={[
             {
-                arcLabel: (item) => `${item.label} (${item.value})`,
+                // arcLabel: (item) => `${item.label} (${item.value})`,
                 arcLabelMinAngle: 45,
                 data: [{ value: 6, label: 'Others' },
                 { value: 8, label: 'Weight Lifting' },
@@ -283,8 +283,8 @@ const charts = [
                 // fontWeight: 'bold',
             },
         }}
-        height={300}
-        width={540}
+        height={200}
+        width={380}
     />,
 
 
@@ -300,7 +300,7 @@ const charts = [
             }
             return context.bar.height < 60 ? null : item.value?.toString();
         }}
-        width={700}
+        width={380}
         height={350}
     />,
 
@@ -316,14 +316,14 @@ const charts = [
             }
             return context.bar.height < 60 ? null : item.value?.toString();
         }}
-        width={600}
+        width={380}
         height={350}
     />,
 
     <BarChart
         xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
         series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-        width={500}
+        width={380}
         height={300}
         barLabel="value"
     />

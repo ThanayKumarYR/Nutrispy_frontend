@@ -20,9 +20,9 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CommentDialog from './CommentDialog';
 import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import axios from 'axios';
 
-import recomFoods from '../../utilities/nutrition'
+import recomFoods, { foods } from '../../utilities/nutrition'
+import axios from 'axios';
 
 export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
 
@@ -154,9 +154,7 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                             "name": response.data.data.name,
                             "quantity": 1,
                             "measurement": "bowl",
-                            "calories": 100,
-                            "fat": 100,
-                            "protiens": 200
+                            ...foods.filter(e => e.name.toLowerCase() === response.data.data.name.toLowerCase())[0]
                         }
                     };
                 }
@@ -212,30 +210,41 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                 "calories": f.details.nutrients.calories,
             }
         })
+        console.log(toBeSentData)
 
-        axios.get("https://cat-fact.herokuapp.com/facts", undefined)
+        // axios.get("https://cat-fact.herokuapp.com/facts", undefined)
+        // customAxios.posting("/detect/data", toBeSentData)
+        customAxios.getting("/detect/data", undefined)
             .then(response => {
-                console.log(response)
-                const res = {
-                    "data": "here is the data from assistant",
-                    "response": "Success",
-                    "statusCode": 200
+                console.log(response.data.data[0])
+                if (response.data.response.toLowerCase().includes("success")) {
+                    const res = {
+                        "data": response.data.data[0].answer,
+                        "response": response.data.response,
+                        "statusCode": response.data.responeCode
+                    }
+                    setComment({
+                        "loading": false,
+                        "message": response.data.data[0].answer,
+                        "show": true
+                    })
                 }
-                setComment({
-                    "loading": false,
-                    "message": res.response,
-                    "show": true
-                })
             })
             .catch(err => {
                 console.log(err)
                 setComment({
                     "loading": false,
                     "message": null,
-                    "show": true
+                    "show": false
                 })
             })
-        console.table(toBeSentData)
+            .finally(() => {
+                setComment(oldComment => ({
+                    ...oldComment,
+                    "loading": false,
+                }))
+            })
+        // console.table(toBeSentData)
     }
 
     return (
@@ -360,7 +369,7 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                                 (food.details && food.details.food === "yes") ?
                                     <div className={`each-food ${food.index === currentPreview.index ? "active" : ""}`} key={food.index}>
                                         <div>
-                                            <h3>{food.details.name}
+                                            <h3>{food.details.name[0].toUpperCase() + food.details.name.slice(1, food.details.name.length)}
                                                 <InfoIcon
                                                     className='info-icon'
                                                     onClick={
