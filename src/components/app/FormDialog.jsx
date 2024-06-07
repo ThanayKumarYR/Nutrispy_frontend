@@ -7,14 +7,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
-import nutrition from '../../utilities/nutrition'
+import { foods } from '../../utilities/nutrition'
 
 export default function FormDialog(props) {
 
     function setFood(foodName) {
         console.log("set food")
         let found = false;
-        nutrition.forEach(eachFood => {
+        foods.forEach(eachFood => {
             if (eachFood.name === foodName) {
                 found = true;
                 const defaultValues = {};
@@ -28,16 +28,17 @@ export default function FormDialog(props) {
                     "name": eachFood.name,
                     "quantity": 1,
                     "measurement": "pieces",
-                    "calories": eachFood.Calories ?? null,
+                    "calories": eachFood.calories ?? null,
                     ...defaultValues
                 });
+                console.log(defaultValues)
             }
         });
         if (!found) {
             props.setData({
                 "name": foodName,
                 "quantity": 1,
-                "measurement": "pieces",
+                // "measurement": "pieces",
                 "calories": null,
             });
         }
@@ -69,7 +70,6 @@ export default function FormDialog(props) {
                                         ...props.data
                                     }
                                 },
-                                ...props.data
                             });
                             props.setCurrentPreview({
                                 "index": tempList.length - 1,
@@ -108,12 +108,12 @@ export default function FormDialog(props) {
                         required
                         freeSolo
                         selectOnFocus
-                        autoFocus 
+                        autoFocus
                         name="name"
                         sx={{ mt: 1 }}
                         value={props.data.name || ""}
-                        options={nutrition.map((option) => option.name)}
-                        getOptionLabel={(option) => option}
+                        options={foods.map((option) => option.name)}
+                        // getOptionLabel={(option) => option}
                         renderInput={(params) => <TextField {...params} label="Food Name" value={props.data.name || ""} />}
                         onChange={(e, newValue) => {
                             setFood(newValue)
@@ -175,7 +175,7 @@ export default function FormDialog(props) {
                                 <MenuItem sx={{ mx: 1 }} value={"gm"}>gm</MenuItem>
                                 <MenuItem sx={{ mx: 1 }} value={"spoon"}>spoon</MenuItem>
                                 <MenuItem sx={{ mx: 1 }} value={"plate"}>plate</MenuItem>
-                                <MenuItem sx={{ mx: 1 }} value={"pieces"}>pieces</MenuItem>
+                                <MenuItem sx={{ mx: 1 }} value={"piece"}>piece</MenuItem>
                                 <MenuItem sx={{ mx: 1 }} value={"glass"}>glass</MenuItem>
                             </Select>
                         </FormControl>
@@ -210,12 +210,12 @@ export default function FormDialog(props) {
                             Object.entries(props.data).map(([key, value], index) => (
                                 ["name", "index", "food", "quantity", "measurement", "calories"].includes(key.toLocaleLowerCase()) ? null :
                                     <span key={index}>
-                                        
+
                                         {key === "nutrients" ?
                                             <span>
                                                 {key.toLocaleLowerCase() === "nutrients" ? 'quantity' : null}: {value.quantity} {value.measurement}<br />
                                                 {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
-                                                    nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" ? null :
+                                                    nutrientKey in ["name", "quantity", "measurement", "Food Type",] ? null :
                                                         <span key={nutrientIndex + index}>{nutrientKey} : {nutrientValue}<br /></span>
                                                 ))}
                                             </span>

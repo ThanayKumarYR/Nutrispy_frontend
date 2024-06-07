@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { LoadingButton } from '@mui/lab';
 
 import './css/Dashboard.css'
-import { Box, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Box, Divider, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
 import { MdFoodBank } from "react-icons/md";
 import { CgGym } from "react-icons/cg";
-import { BarChart } from '@mui/x-charts';
+import { BarChart, ChartsLegend } from '@mui/x-charts';
+
+import customAxios from '../../utilities/axios';
 
 export default function Dashborard({ logout, userPoints }) {
 
@@ -17,20 +19,83 @@ export default function Dashborard({ logout, userPoints }) {
     const [loading, setLoading] = useState(false)
     const [chartType, setChartType] = useState(0)
 
-    const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
+    const [foodHistory, setFoodHistory] = useState([])
 
-    // const foodData = [
-    //     { value: 30, label: 'Carbohydrates' },
-    //     { value: 15, label: 'Protiens' },
-    //     { value: 10, label: 'Fat' },
-    //     { value: 10, label: 'Others' },
-    // ];
-    // const exerciseData = [
-    //     { value: 6, label: 'Others' },
-    //     { value: 8, label: 'Weight Lifting' },
-    //     { value: 12, label: 'Jogging' },
-    //     { value: 20, label: 'Push Ups' },
-    // ];
+    const foodScore = 100 * foodHistory['calories'] / userPoints[0].goalScore;
+    const exerciseScore = 100 * userPoints[1].currentScore / userPoints[1].goalScore;
+
+    function calculateTotals(dataArray) {
+        let totals = {
+            calories: 0,
+            protein: 0,
+            carbohydrates: 0,
+            fat: 0,
+            fiber: 0,
+            iron: 0,
+            calcium: 0,
+            potassium: 0,
+            sodium: 0,
+            cholesterol: 0,
+            sugars: 0
+        };
+
+        // Iterate through each item in dataArray
+        dataArray.forEach(item => {
+            // Check if the item has nutrient information
+            if (item.hasOwnProperty('calories')) {
+                totals.calories += parseInt(item.calories) || 0;
+            }
+            if (item.hasOwnProperty('protien')) {
+                totals.protein += parseFloat(item.protien) || 0;
+            }
+            if (item.hasOwnProperty('carbohydrates')) {
+                totals.carbohydrates += parseFloat(item.carbohydrates) || 0;
+            }
+            if (item.hasOwnProperty('fat')) {
+                totals.fat += parseFloat(item.fat) || 0;
+            }
+            if (item.hasOwnProperty('fiber')) {
+                totals.fiber += parseFloat(item.fiber) || 0;
+            }
+            if (item.hasOwnProperty('iron')) {
+                totals.iron += parseFloat(item.iron) || 0;
+            }
+            if (item.hasOwnProperty('calcium')) {
+                totals.calcium += parseFloat(item.calcium) || 0;
+            }
+            if (item.hasOwnProperty('potassium')) {
+                totals.potassium += parseFloat(item.potassium) || 0;
+            }
+            if (item.hasOwnProperty('sodium')) {
+                totals.sodium += parseFloat(item.sodium) || 0;
+            }
+            if (item.hasOwnProperty('cholestrol')) {
+                totals.cholesterol += parseFloat(item.cholestrol) || 0;
+            }
+            if (item.hasOwnProperty('sugars')) {
+                totals.sugars += parseFloat(item.sugars) || 0;
+            }
+        });
+
+        return totals;
+    }
+
+    useEffect(() => {
+        customAxios.getting("/detect/data", undefined)
+            .then(res => {
+                const data = res.data.data;
+                setFoodHistory(data);
+
+                let dataArray = [];
+                data.forEach(item => {
+                    dataArray = dataArray.concat(item.dataArray);
+                });
+
+                const totals = calculateTotals(dataArray);
+                setFoodHistory(totals); // Update state with the total object
+            })
+            .catch(err => setFoodHistory(err));
+    }, []);
 
     return (
         <main className='dashboard'>
@@ -39,6 +104,7 @@ export default function Dashborard({ logout, userPoints }) {
                     Dashboard
                 </Typography>
             </Box>
+            <center>(Weekly record)</center>
             <Box display="flex" flexWrap="wrap" gap={2} alignItems="center" justifyContent="center" margin={1}>
                 <section className='food-div'>
                     <PieChart
@@ -67,7 +133,7 @@ export default function Dashborard({ logout, userPoints }) {
                     <MdFoodBank className='dash-icon' />
                     <div className='dash-text'>
                         <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            {userPoints.currentScore} / {userPoints.goalScore} <span>K Cal</span>
+                            {foodHistory['calories']} / {userPoints[0].goalScore} <span>K Cal</span>
                         </Typography>
                         <Typography className='message' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
                             Good
@@ -76,7 +142,7 @@ export default function Dashborard({ logout, userPoints }) {
                 </section>
                 <section className='exercise-div'>
                     <PieChart
-                        colors={['green', 'blue', 'green']}
+                        colors={['red', 'blue', 'green']}
                         className='chart'
                         height={70}
                         width={70}
@@ -85,14 +151,14 @@ export default function Dashborard({ logout, userPoints }) {
                         series={[
                             {
                                 data: [
-                                    { id: 0, value: foodScore, label: 'Calories Burnt' }
+                                    { id: 0, value: exerciseScore, label: 'Calories Burnt' }
                                 ],
                                 innerRadius: 25,
                                 outerRadius: 30,
                                 paddingAngle: 2,
                                 cornerRadius: 5,
                                 startAngle: 0,
-                                endAngle: (360 * foodScore) / 100,
+                                endAngle: (360 * exerciseScore) / 100,
                                 cx: 30,
                                 cy: 30,
                             }
@@ -101,15 +167,15 @@ export default function Dashborard({ logout, userPoints }) {
                     <CgGym className='dash-icon' />
                     <div className='dash-text'>
                         <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            {userPoints.currentScore} / {userPoints.goalScore} <span>K Cal</span>
+                            {userPoints[1].currentScore} / {userPoints[1].goalScore} <span>K Cal</span>
                         </Typography>
                         <Typography className='message' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            Good
+                            Bad
                         </Typography>
                     </div>
                 </section>
             </Box>
-            <Box sx={{ width: 100 }}>
+            {/* <Box sx={{ width: 120, margin: "0 auto", py: 1.5 }}>
                 <InputLabel id="chart-type">Chart Type</InputLabel>
                 <Select
                     fullWidth
@@ -121,120 +187,110 @@ export default function Dashborard({ logout, userPoints }) {
                         setChartType(e.target.value)
                     }}
                 >
-                    <MenuItem value="0">0</MenuItem>
-                    <MenuItem value="1">1</MenuItem>
-                    <MenuItem value="2">2</MenuItem>
-                    <MenuItem value="3">3</MenuItem>
-                    <MenuItem value="4">4</MenuItem>
+                    <MenuItem value="0">Pie Chart</MenuItem>
+                    <MenuItem value="1">Bar Chart</MenuItem>
+                    <MenuItem value="2">Bar Chart</MenuItem>
+                    <MenuItem value="3">Bar Chart</MenuItem>
+                    <MenuItem value="4">Bar Chart</MenuItem>
                 </Select>
-            </Box>
-
-            {/* <Box className="pie-chart" display="flex" flexWrap="wrap" alignItems="center" justifyContent="center"  >
-                <PieChart
-                    className='chart'
-                    hideTooltip
-                    slotProps={{ legend: { hidden: true } }}
-                    series={[
-                        {
-                            arcLabel: (item) => `${item.label} (${item.value})`,
-                            arcLabelMinAngle: 45,
-                            data: foodData,
-                            innerRadius: 0,
-                            outerRadius: 120,
-                            paddingAngle: 0,
-                            cornerRadius: 4,
-                            startAngle: 0,
-                            cx: 60,
-                            cy: 140,
-                        },
-                    ]}
-                    sx={{
-                        [`& .${pieArcLabelClasses.root}`]: {
-                            fill: 'white',
-                            fontWeight: 'bold',
-                        },
-                    }}
-                    height={300}
-                    width={140}
-                />
-                <PieChart
-                    className='chart'
-                    hideTooltip
-                    slotProps={{ legend: { hidden: true } }}
-                    series={[
-                        {
-                            arcLabel: (item) => `${item.label} (${item.value})`,
-                            arcLabelMinAngle: 45,
-                            data: exerciseData,
-                            innerRadius: 0,
-                            outerRadius: 120,
-                            paddingAngle: 0,
-                            cornerRadius: 4,
-                            startAngle: 0,
-                            cx: 60,
-                            cy: 140,
-                        },
-                    ]}
-                    sx={{
-                        [`& .${pieArcLabelClasses.root}`]: {
-                            fill: 'white',
-                            fontWeight: 'bold',
-                        },
-                    }}
-                    height={300}
-                    width={140}
-                />
-            </Box>
-            <Box>
-                <BarChart
-                    series={[
-                        { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
-                        { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
-                        { data: [14, 6, 5, 8, 9], label: 'Series B1' },
-                    ]}
-                    barLabel={(item, context) => {
-                        if ((item.value ?? 0) > 10) {
-                            return 'High';
-                        }
-                        return context.bar.height < 60 ? null : item.value?.toString();
-                    }}
-                    width={700}
-                    height={350}
-                />
-                <BarChart
-                    series={[
-                        { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
-                        { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
-                        { data: [14, 6, 5, 8, 9], label: 'Series B1' },
-                    ]}
-                    barLabel={(item, context) => {
-                        if ((item.value ?? 0) > 10) {
-                            return 'High';
-                        }
-                        return context.bar.height < 60 ? null : item.value?.toString();
-                    }}
-                    width={600}
-                    height={350}
-                />
-                <BarChart
-                    xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
-                    series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-                    width={500}
-                    height={300}
-                    barLabel="value"
-                />
             </Box> */}
-            <Box>
-                {charts[chartType]}
+            {/* <pre>{JSON.stringify(foodHistory, null, 2)}</pre> */}
+            <Box className="chart-container" >
+                <Box sx={{ display: "grid", placeItems: "center", maxHeight: "420px", overflow: "hidden" }}>
+                    <h3>Food:</h3>
+                    <PieChart
+                        className='chart'
+                        colors={[
+                            "#ffd700",
+                            "#ff00ff",
+                            "#ff4500",
+                            "#32cd32",
+                            "#b800d8",
+                            "#ff1493",
+                            "#ffa500",
+                            "#ff7f50",
+                            "#00ff00",
+                            "#2e96ff",
+                            "#60009b",
+                            "#2731c8"
+                        ]}
+                        hideTooltip
+                        cx={80}
+                        cy={20}
+                        series={[
+                            {
+                                arcLabel: (item) => `${item.label} (${item.value})`,
+                                arcLabelMinAngle: 30,
+                                data:
+                                    Object.entries(foodHistory).map(([key, value]) => {
+                                        return { name: key, value: value }
+                                    }).sort((a, b) => b['value'] - a['value']).map((key, value) => ({ value: key.name === "potassium" || key.name === "sodium" ? (key.value/10).toFixed(2) : key.value.toFixed(2), label: key.name[0].toUpperCase() + key.name.slice(1, key.name.length) })),
+                                innerRadius: 0,
+                                outerRadius: 130,
+                                paddingAngle: 1,
+                                cornerRadius: 5,
+                                cx: 150,
+                                startAngle: 0,
+                                endAngle: 360,
+                            },
+                        ]}
+                        sx={{
+                            [`& .${pieArcLabelClasses.root}`]: {
+                                // fill: 'white'
+                                fontSize: "14px",
+                                fontWeight: 600
+                            },
+                        }}
+                        slotProps={{ legend: { position: { horizontal: "middle", vertical: "top" }, direction: "row" } }}
+                        height={500}
+                        width={350}
+                    />
+                </Box>
+                <hr style={{ width: "100%", height: "2px", background: "#000" }} />
+                <Box sx={{ display: "grid", placeItems: "center", maxHeight: "420px", overflow: "hidden" }}>
+                    <h3>Exercise:</h3>
+                    <PieChart
+                        className='chart'
+                        hideTooltip
+                        cx={80}
+                        cy={20}
+                        series={[
+                            {
+                                arcLabel: (item) => `${item.label} (${item.value})`,
+                                arcLabelMinAngle: 30,
+                                data:
+                                    Object.entries(foodHistory).map(([key, value]) => {
+                                        return { name: key, value: value }
+                                    }).sort((a, b) => a['value'] - b['value']).map((key, value) => ({ value: key.value.toFixed(2), label: key.name[0].toUpperCase() + key.name.slice(1, key.name.length) })),
+                                innerRadius: 0,
+                                outerRadius: 130,
+                                paddingAngle: 1,
+                                cornerRadius: 5,
+                                cx: 150,
+                                startAngle: 0,
+                                endAngle: 360,
+                            },
+                        ]}
+                        sx={{
+                            [`& .${pieArcLabelClasses.root}`]: {
+                                fill: 'white'
+                            },
+                        }}
+                        slotProps={{ legend: { position: { horizontal: "middle", vertical: "top" }, direction: "row" } }}
+                        height={500}
+                        width={350}
+
+                    />
+                </Box>
             </Box>
-            <LoadingButton
+            {/* <LoadingButton
                 loading={loading}
                 variant="contained"
                 type="submit"
                 onClick={() => logout(setLoading)}
             >
                 Log Out
-            </LoadingButton>
+            </LoadingButton> */}
         </main>
     )
 }
@@ -260,7 +316,7 @@ const charts = [
             },
         }}
         height={200}
-        width={380}
+        width={400}
     />,
 
     <PieChart
@@ -290,7 +346,7 @@ const charts = [
 
     <BarChart
         series={[
-            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
+            { data: [4, 2, 5, 4, 1], stack: 'A', label: ' A1' },
             { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
             { data: [14, 6, 5, 8, 9], label: 'Series B1' },
         ]}
@@ -306,8 +362,8 @@ const charts = [
 
     <BarChart
         series={[
-            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Series A1' },
-            { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Series A2' },
+            { data: [4, 2, 5, 4, 1], stack: 'A', label: 'Carbohydrates' },
+            { data: [2, 8, 1, 3, 1], stack: 'A', label: 'Protiens' },
             { data: [14, 6, 5, 8, 9], label: 'Series B1' },
         ]}
         barLabel={(item, context) => {

@@ -10,6 +10,8 @@ import IsUserLoggedIn from './IsUserLoggedIn'
 import Logo from "../../images/logo.png"
 import { customAxios } from '../../utilities'
 import Profile from './Profile'
+import Exercise from './Exercise'
+import SignUp from './SignUp'
 
 export default function Appli() {
 
@@ -20,10 +22,14 @@ export default function Appli() {
     const navigate = useNavigate()
 
     // eslint-disable-next-line
-    const [userPoints, setUserPoints] = useState({
-        "goalScore": 4000,
-        "currentScore": 3400
-    })
+    const [userPoints, setUserPoints] = useState([{
+        "goalScore": 6300,
+        "currentScore": 1800
+    },
+    {
+        "goalScore": 1200,
+        "currentScore": 200
+    }])
 
     // const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
@@ -110,15 +116,17 @@ export default function Appli() {
             }
             <Routes>
                 <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet userPoints={userPoints} /></IsUserLoggedIn>} />
+                <Route path="/exercise/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Exercise userPoints={userPoints} /></IsUserLoggedIn>} />
                 <Route path="/chat/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Chat /></IsUserLoggedIn>} />
                 <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
                 <Route path="/profile" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Profile userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
                 <Route path="/" exact element={<Navigate to="/app/dashboard" />} />
                 <Route path="/*" exact element={<>Uh oh! Not found page. Head to {userLoggedIn ? <Link to="/app/dashboard"><b>Dashboard page</b></Link> : <Link to="/app/login"><b>Login page</b></Link>} page</>} />
                 <Route path="/login" element={<Login userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />
+                <Route path="/signup" element={<SignUp userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />
             </Routes>
             {userLoggedIn &&
-                <Navbar logout={logout}/>
+                <Navbar logout={logout} />
             }
         </main>
     )

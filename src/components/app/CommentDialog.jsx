@@ -90,7 +90,7 @@ export default function CommentDialog(props) {
                 <DialogTitle sx={{ display: "flex", placeItems: "center" }}>Food added to your diet <CheckCircleIcon color='success' /></DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description" sx={{pl: 2}}>
-                        Comment: <p dangerouslySetInnerHTML={{ __html: convertToHTML(props.open.message) }}></p>
+                        Comment: <span dangerouslySetInnerHTML={{ __html: convertToHTML(props.open.message) }}></span>
                         {/* Comment: {JSON.stringify(props.open.message)} */}
                         
                     </DialogContentText>

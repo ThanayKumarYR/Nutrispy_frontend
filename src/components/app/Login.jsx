@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { customAxios } from '../../utilities'
 
@@ -53,10 +53,10 @@ export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
                         console.log('Succesfully logged in as user, going to dashboard in 5 sec');
                         setCookie("userLoggedIn=true")
                         console.log(getCookie("userLoggedIn"))
-                        setTimeout(() => {
-                            setUserLoggedIn(true)
-                            navigate("/app/dashboard")
-                        }, 2000)
+                        // setTimeout(() => {
+                        setUserLoggedIn(true)
+                        navigate("/app/dashboard")
+                        // }, 2000)
                     }
                 }
             })
@@ -66,7 +66,7 @@ export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
                     data: error.message,
                     response: "error"
                 })
-                setTimeout(()=> {
+                setTimeout(() => {
                     setFormResponse({})
                 }, 5000)
                 setLoading(false)
@@ -126,6 +126,7 @@ export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
                         }
                     />
                 </FormControl>
+                <p className='signup'> Don't have an account? <Link to="/app/signup" className='link'>Sign Up</Link> </p>
                 <LoadingButton
                     className='login-sbt-btn'
                     sx={{ p: 1.4, mt: 2 }}

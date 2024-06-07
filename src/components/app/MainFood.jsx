@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 
 import recomFoods from '../../utilities/nutrition'
+import { MdFoodBank } from 'react-icons/md';
 
 export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomFoods }) {
 
@@ -26,7 +27,7 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
     const [infoOpen, setInfoOpen] = useState(false)
     const [foodInfo, setFoodInfo] = useState({})
 
-    const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
+    const foodScore = 100 * userPoints[0].currentScore / userPoints[0].goalScore;
 
     // eslint-disable-next-line
     const [foodRecommends, setFoodRecommends] = useState(recomFoods.map((e, index) => (
@@ -39,7 +40,7 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
 
     async function getFoodImages(foodName) {
         return axios.get(
-            `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=HXGD1C04FfGYVQMM6Z9029JOPtjSqYIAuYeeaeFaczU`
+            `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=G8DWfztsmYBwru-OuZGeAEFFq-k588R3KTo6g4hUQzs`
         );
     }
 
@@ -125,6 +126,7 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
         <main className='main-food'>
             <h2>Food</h2>
             <section className='food-dashboard'>
+                <p className='weekly'>WEEKLY</p>
                 <PieChart
                     colors={['green', 'blue', 'green']}
                     className='chart'
@@ -148,8 +150,9 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                         }
                     ]}
                 />
+                <MdFoodBank className='dash-icon' />
                 <div className='dash-text'>
-                    <p className='score'>{userPoints.currentScore} / {userPoints.goalScore} K Cal</p>
+                    <p className='score'>{userPoints[0].currentScore} / {userPoints[0].goalScore} K Cal</p>
                     <p className='message'>Good</p>
                 </div>
             </section>
@@ -162,10 +165,7 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                 </Link>
             </section>
             <section>
-                <h2>Recommended Foods</h2>
-                {/* <Typography variant="h6" component="span">
-                    h1. Heading
-                </Typography> */}
+                <h2>Foods</h2>
                 <br />
                 <Box sx={{ display: "flex", placeItems: "center" }}>
                     <FormControl sx={{ minWidth: 100 }}>
@@ -204,8 +204,8 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                             }}
                         >
                             <MenuItem value={""}>Clear</MenuItem>
-                            <MenuItem value="name">Name</MenuItem>
-                            <MenuItem value="calories">Calories</MenuItem>
+                            <MenuItem value="Exercise_Name">Name</MenuItem>
+                            <MenuItem value="Rating">Rating</MenuItem>
                             <MenuItem value="protien">Protien</MenuItem>
                             <MenuItem value="fat">Fat</MenuItem>
                         </Select>

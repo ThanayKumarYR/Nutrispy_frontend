@@ -11,7 +11,7 @@ import customAxios from "../../utilities/axios"
 import SendIcon from '@mui/icons-material/Send';
 import InfoIcon from '@mui/icons-material/Info';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, Stack } from '@mui/material';
+import { Alert, Backdrop, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, Stack } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles';
@@ -34,6 +34,18 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
     const [isNew, setIsNew] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState({});
+
+    const [backdropOpen, setBackdropOpen] = React.useState(false);
+    const handleBackdropClose = () => {
+        console.log("close");
+        setBackdropOpen(false);
+    };
+    const handleBackdropOpen = () => {
+        console.log("open");
+        setBackdropOpen(true);
+    };
+
+    // const [testing, setTesting] = React.useState([])
 
     const [comment, setComment] = useState({
         "loading": false,
@@ -151,9 +163,9 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                     prev[prev.length - 1].details = {
                         ...response.data.data,
                         "nutrients": {
-                            "name": response.data.data.name,
+                            "name": response.data.data.name.replace(/_/g, ' '),
                             "quantity": 1,
-                            "measurement": "bowl",
+                            "measurement": "piece",
                             ...foods.filter(e => e.name.toLowerCase() === response.data.data.name.toLowerCase())[0]
                         }
                     };
@@ -201,31 +213,25 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
             return
         }
         setComment({ "loading": true, "message": null, "show": false })
-        const toBeSentData = imagesAndDetails.filter(e => e.details.food === "yes").filter(e => e.details.food === "yes").map(f => {
-            return {
-                "name": f.details.name,
-                "type": f.details.type || f.details.nutrients["Food Type"] || null,
-                "quantity": f.details.nutrients.quantity,
-                "measurement": f.details.nutrients.measurement,
-                "calories": f.details.nutrients.calories,
-            }
-        })
-        console.log(toBeSentData)
+        const toBeSentData = {
+            "dataArray": imagesAndDetails.filter(e => e.details.food === "yes").filter(e => e.details.food === "yes").map(f => {
+                return {
+                    "name": f.details.name,
+                    "type": f.details.type || f.details.nutrients["Food Type"] || null,
+                    "quantity": f.details.nutrients.quantity,
+                    "measurement": f.details.nutrients.measurement,
+                    "calories": f.details.nutrients.calories,
+                    ...f.details.nutrients
+                }
+            })
+        }
 
-        // axios.get("https://cat-fact.herokuapp.com/facts", undefined)
-        // customAxios.posting("/detect/data", toBeSentData)
-        customAxios.getting("/detect/data", undefined)
+        customAxios.posting("/detect/data", toBeSentData)
             .then(response => {
-                console.log(response.data.data[0])
                 if (response.data.response.toLowerCase().includes("success")) {
-                    const res = {
-                        "data": response.data.data[0].answer,
-                        "response": response.data.response,
-                        "statusCode": response.data.responeCode
-                    }
                     setComment({
                         "loading": false,
-                        "message": response.data.data[0].answer,
+                        "message": response.data.data,
                         "show": true
                     })
                 }
@@ -234,8 +240,8 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                 console.log(err)
                 setComment({
                     "loading": false,
-                    "message": null,
-                    "show": false
+                    "message": "Got into some error! Please try again",
+                    "show": true
                 })
             })
             .finally(() => {
@@ -243,8 +249,8 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                     ...oldComment,
                     "loading": false,
                 }))
+                handleBackdropClose();
             })
-        // console.table(toBeSentData)
     }
 
     return (
@@ -299,7 +305,7 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                                                     {value["Food Type"] ? <>Food Type: {value["Food Type"]}<br /></> : null}
                                                     {key === "nutrients" ? 'Quantity' : null}: {value.quantity} {value.measurement[0].toUpperCase() + value.measurement.slice(1, value.measurement.length)}<br />
                                                     {Object.entries(value).map(([nutrientKey, nutrientValue], nutrientIndex) => (
-                                                        nutrientKey === "name" || nutrientKey === "quantity" || nutrientKey === "measurement" || nutrientKey === "Food Type" ? null :
+                                                        nutrientKey in ["name", "quantity", "measurement", "Food Type", "measure"] ? null :
                                                             <span key={nutrientIndex}>{nutrientKey[0].toUpperCase() + nutrientKey.slice(1, nutrientKey.length)}: {nutrientValue}<br /></span>
                                                     ))}
                                                 </span>
@@ -313,7 +319,6 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                     </DialogContent>
                 </Dialog>
             }
-
             <h2 className="heading">Add Food</h2>
             {error.message?.length > 0 && <Alert variant="filled" severity={error.severity} sx={{ m: 1, minWidth: "200px", mx: "auto", position: "absolute", top: "50px", left: "50%", transform: "translateX(-50%)", zIndex: 10 }} >
                 {error.message}
@@ -369,7 +374,7 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                                 (food.details && food.details.food === "yes") ?
                                     <div className={`each-food ${food.index === currentPreview.index ? "active" : ""}`} key={food.index}>
                                         <div>
-                                            <h3>{food.details.name[0].toUpperCase() + food.details.name.slice(1, food.details.name.length)}
+                                            <h3>{food.details?.name[0]?.toUpperCase() + food.details.name.slice(1, food.details.name.length)}
                                                 <InfoIcon
                                                     className='info-icon'
                                                     onClick={
@@ -416,7 +421,7 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                         loading={comment.loading}
                         className='submit-btn'
                         variant="contained"
-                        onClick={(e) => { submitFood(e); setSelectRecomFoods([]); }}
+                        onClick={(e) => { submitFood(e); setSelectRecomFoods([]); handleBackdropOpen(); }}
                         startIcon={<SendIcon />}
                     >
                     </LoadingButton>
@@ -451,6 +456,13 @@ export default function AddFood({ selectRecomFoods, setSelectRecomFoods }) {
                     </Button>
                 </Stack>
             </section>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={backdropOpen}
+            // onClick={handleBackdropClose}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </main >
     )
 }

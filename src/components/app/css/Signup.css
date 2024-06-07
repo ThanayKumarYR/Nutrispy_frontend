@@ -1,4 +1,4 @@
-.login-page {
+.signup-page {
     max-width: 400px;
     width: 90%;
     padding: 20px 20px 30px 20px;
@@ -13,30 +13,16 @@
     box-shadow: 0 0 800px 0px rgba(74, 29, 29, 0.39);
 }
 
-.login-page .login-title {
+.signup-page .signup-title {
     font-size: 28px;
     text-align: center;
     font-family: "Anek Tamil", sans-serif;
     margin-bottom: 10px;
 }
 
-.login-page .login-sbt-btn {
+.signup-page .signup-sbt-btn {
     background: var(--pri);
     color: var(--sec);
     font-weight: 700;
     font-size: 16px;
-}
-
-.login-page .signup {
-    text-align: right;
-    font-family: "Anek Tamil", sans-serif;
-}
-
-.login-page .link:hover {
-    text-decoration: underline;
-}
-
-.login-page .link {
-    color: var(--sec-main);
-    text-underline-offset: 2px;
 }

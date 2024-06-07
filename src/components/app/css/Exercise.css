@@ -1,4 +1,4 @@
-.food-app {
+.exercise-main {
     max-width: 600px;
     margin: 0 auto;
     padding: 0 20px 75px 20px;
@@ -9,16 +9,21 @@
     font-family: "Anek Tamil", sans-serif;
 }
 
-.food-app .main-food {
+.exercise-main .heading {
+    text-align: center;
+    margin: 10px;
+}
+
+.exercise-main .main-food {
     padding: 10px;
 }
 
-.food-app .main-food h2 {
+.exercise-main .main-food h2 {
     text-align: center;
     font-size: 22px;
 }
 
-.food-app .main-food .food-dashboard {
+.exercise-main .main-food .food-dashboard {
     background: var(--tri);
     padding: 10px;
     border-radius: 10px;
@@ -31,63 +36,34 @@
     align-items: center;
 }
 
-.food-app .main-food .add-link {
+.exercise-main .main-food .add-link {
     text-align: center;
     font-size: 20px;
     margin-bottom: 20px;
 }
 
-.food-app .main-food .add-link svg {
+.exercise-main .main-food .add-link svg {
     margin-left: 10px;
 }
 
-.food-app .main-food .weekly {
-    position: absolute;
-    font-size: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    left: -10px;
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    line-height: 0px;
-    letter-spacing: -8px;
-}
-
-.food-app .main-food .dash-icon,
-.food-app .main-food .dash-icon {
-    position: absolute;
-    font-size: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 25px;
-}
-
-.food-app .main-food .dash-icon {
-    color: orange;
-}
-
-.food-app .main-food .dash-icon {
-    color: #FF9800;
-}
-
-.food-app .main-food .food-dashboard .dash-text {
+.exercise-main .main-food .food-dashboard .dash-text {
     margin-left: 0px;
     font-weight: 600;
 }
 
-.food-app .main-food .food-dashboard .dash-text p.score {
+.exercise-main .main-food .food-dashboard .dash-text p.score {
     font-size: 22px;
     line-height: 22px;
 }
 
-.food-app .main-food .food-dashboard .dash-text .message {
+.exercise-main .main-food .food-dashboard .dash-text .message {
     line-height: 22px;
     font-size: 18px;
     color: green;
 }
 
-.food-app section.exercises-cards {
-    height: 285px;
+.exercise-main section.exercises-cards {
+    height: 300px;
     /* background: #000; */
     display: grid;
     grid-auto-flow: column;
@@ -100,27 +76,27 @@
     scroll-padding-inline: 0px;
 }
 
-.food-app section.exercises-cards::-webkit-scrollbar {
+.exercise-main section.exercises-cards::-webkit-scrollbar {
     height: 4px;
 }
 
-.food-app section.exercises-cards::-webkit-scrollbar-track {
+.exercise-main section.exercises-cards::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
 /* Handle */
-.food-app section.exercises-cards::-webkit-scrollbar-thumb {
+.exercise-main section.exercises-cards::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
 }
 
 /* Handle on hover */
-.food-app section.exercises-cards::-webkit-scrollbar-thumb:hover {
+.exercise-main section.exercises-cards::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
-.food-app section.exercises-cards div.each-card {
+.exercise-main section.exercises-cards div.each-card {
     filter: grayscale(0.1);
     border-radius: 10px;
     width: 200px;
@@ -136,17 +112,17 @@
     animation-timeline: view(inline);
 }
 
-.food-app section.exercises-cards div.each-card:hover,
-.food-app section.exercises-cards div.each-card:has(input[ name="exercise"]:checked) {
+.exercise-main section.exercises-cards div.each-card:hover,
+.exercise-main section.exercises-cards div.each-card:has(input[ name="exercise"]:checked) {
     filter: grayscale(0);
     transform: scale(1.03);
 }
 
-.food-app section.exercises-cards div.each-card button.info:hover {
+.exercise-main section.exercises-cards div.each-card button.info:hover {
     color: black;
 }
 
-.food-app section.exercises-cards div.each-card button.info {
+.exercise-main section.exercises-cards div.each-card button.info {
     background: transparent;
     outline: none;
     border: none;
@@ -159,7 +135,7 @@
     cursor: pointer;
 }
 
-.food-app section.exercises-cards div.each-card span.checkmark {
+.exercise-main section.exercises-cards div.each-card span.checkmark {
     border-radius: 3.5px;
     border: 1px solid rgb(212, 212, 212);
     background: #fff;
@@ -172,21 +148,21 @@
     border: 1px solid #000;
 }
 
-.food-app section.exercises-cards div.each-card span.checkmark svg {
+.exercise-main section.exercises-cards div.each-card span.checkmark svg {
     width: 100%;
     height: 100%;
     transform: scale(1.1);
 }
 
-.food-app section.exercises-cards div.each-card:has(input[ name="exercise"]:not(:checked)) span.checkmark svg {
+.exercise-main section.exercises-cards div.each-card:has(input[ name="exercise"]:not(:checked)) span.checkmark svg {
     display: none;
 }
 
-.food-app section.exercises-cards div.each-card:has(input[ name="exercise"]:checked) span.checkmark svg {
+.exercise-main section.exercises-cards div.each-card:has(input[ name="exercise"]:checked) span.checkmark svg {
     display: block;
 }
 
-.food-app section.exercises-cards div.each-card input[ name="exercise"] {
+.exercise-main section.exercises-cards div.each-card input[ name="exercise"] {
     -webkit-tap-highlight-color: transparent;
     width: 100%;
     height: 100%;
@@ -197,7 +173,7 @@
     border: 10px solid #000;
 }
 
-.food-app section.exercises-cards div.each-card img {
+.exercise-main section.exercises-cards div.each-card img {
     position: absolute;
     top: 0;
     left: 0;
@@ -208,7 +184,7 @@
     object-fit: cover;
 }
 
-.food-app section.exercises-cards div.each-card div.content {
+.exercise-main section.exercises-cards div.each-card div.content {
     position: absolute;
     width: 100%;
     bottom: 0px;
@@ -219,16 +195,16 @@
     background: linear-gradient(18deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 1) 31%, rgba(255, 255, 255, 0.3562675070028011) 59%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0) 100%, rgba(255, 255, 255, 0) 100%);
 }
 
-.food-app section.exercises-cards div.each-card div.content p.name {
+.exercise-main section.exercises-cards div.each-card div.content p.name {
     font-weight: 700;
 }
 
-.food-app .selected-food button.delete-btn:focus,
-.food-app .selected-food button.delete-btn:focus-visible {
+.exercise-main .selected-food button.delete-btn:focus,
+.exercise-main .selected-food button.delete-btn:focus-visible {
     outline: 1px solid black;
 }
 
-.food-app .selected-food button.delete-btn {
+.exercise-main .selected-food button.delete-btn {
     outline: 1px solid transparent;
     border: none;
     padding: 0px;
@@ -237,17 +213,19 @@
     cursor: pointer;
 }
 
-.food-app .selected-food button.delete-btn:hover {
+.exercise-main .selected-food button.delete-btn:hover {
     /* filter: contrast(0.9); */
     transform: scale(1.1);
 }
 
 
 @keyframes highlight {
+
     entry 0%,
     exit 100% {
         opacity: 0.2;
     }
+
     entry 100%,
     exit 0% {
         opacity: 1;

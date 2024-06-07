@@ -8,6 +8,7 @@ import { RiRobot2Fill } from "react-icons/ri";
 import { Avatar, Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { FaRunning } from "react-icons/fa";
 
 export default function Navbar({ logout }) {
 
@@ -34,22 +35,16 @@ export default function Navbar({ logout }) {
         }
     }
 
-    // // return focus to the button when we transitioned from !open -> open
-    // const prevOpen = React.useRef(open);
-    // React.useEffect(() => {
-    //     if (prevOpen.current === true && open === false) {
-    //         anchorRef.current.focus();
-    //     }
-
-    //     prevOpen.current = open;
-    // }, [open]);
-
     return (
         <nav className='app-nav'>
             <section>
                 <NavLink to="/app/diet" className={({ isActive }) => (isActive ? "active-nav" : "")}>
                     <IoFastFood />
                     <span>Diet</span>
+                </NavLink>
+                <NavLink to="/app/exercise" className={({ isActive }) => (isActive ? "active-nav" : "")}>
+                    <FaRunning />
+                    <span>Exercise</span>
                 </NavLink>
                 <NavLink to="/app/chat" className={({ isActive }) => (isActive ? "active-nav" : "")}>
                     <RiRobot2Fill />
