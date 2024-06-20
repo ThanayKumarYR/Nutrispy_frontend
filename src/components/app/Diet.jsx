@@ -5,7 +5,7 @@ import './css/Food.css'
 
 import MainFood from './MainFood'
 
-export default function Diet({ userPoints }) {
+export default function Diet({ userPoints, foodHistory }) {
 
     const [selectRecomFoods, setSelectRecomFoods] = useState([])
 
@@ -13,7 +13,7 @@ export default function Diet({ userPoints }) {
         <main className="food-app">
             <Routes>
                 <Route path="/add" element={<AddFood selectRecomFoods={selectRecomFoods} setSelectRecomFoods={setSelectRecomFoods} />} />
-                <Route path="/" element={<MainFood selectRecomFoods={selectRecomFoods} setSelectRecomFoods={setSelectRecomFoods} userPoints={userPoints} />} />
+                <Route path="/" element={<MainFood selectRecomFoods={selectRecomFoods} setSelectRecomFoods={setSelectRecomFoods} userPoints={userPoints} foodHistory={foodHistory}/>} />
                 <Route path="/*" element={<Navigate to="/app/diet" replace={true} />} />
             </Routes>
         </main>

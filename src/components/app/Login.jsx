@@ -11,10 +11,10 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import './css/Login.css'
 import { setSession } from '../../utilities/session'
 
-export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
+export default function Login({ setUserLoggedIn, setCookie, getCookie, setUserDetails }) {
 
     const navigate = useNavigate()
-
+    
     const [email, setEmail] = useState("")
     const [userPass, setUserPass] = useState("")
     const [loading, setLoading] = useState(false)
@@ -37,6 +37,7 @@ export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
         })
             .then((response) => {
                 setFormResponse(response.data)
+                setUserDetails(response.data.data)
                 setLoading(false)
                 if (response.data.response.toLowerCase().includes("success")) {
                     if (response.data.data.userType === 'admin') {
@@ -75,13 +76,15 @@ export default function Login({ setUserLoggedIn, setCookie, getCookie }) {
 
     useEffect(() => {
         setUserLoggedIn(getCookie("userLoggedIn") ? true : false)
-        if (getCookie("userLoggedIn"))
+        if (getCookie("userLoggedIn")) {
             navigate("/app/dashboard")
+        }
         // eslint-disable-next-line
     }, [])
 
     return (
         <section className='login-page'>
+            {JSON.stringify(formResponse, null, 2)}
             <Box className='login-form' component="form" onSubmit={handleLogin}>
                 <h1 className='login-title'>User Login</h1>
                 {!loading && formResponse.response &&

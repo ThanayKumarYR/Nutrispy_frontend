@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
-import { LoadingButton } from '@mui/lab';
 
 import './css/Dashboard.css'
-import { Box, Divider, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { MdFoodBank } from "react-icons/md";
 import { CgGym } from "react-icons/cg";
-import { BarChart, ChartsLegend } from '@mui/x-charts';
+import { BarChart } from '@mui/x-charts';
 
 import customAxios from '../../utilities/axios';
 
-export default function Dashborard({ logout, userPoints }) {
+export default function Dashborard({ logout, userPoints, foodHistory, setFoodHistory }) {
 
     document.title = "NutriSpy - Dashboard"
-
-    const [loading, setLoading] = useState(false)
-    const [chartType, setChartType] = useState(0)
-
-    const [foodHistory, setFoodHistory] = useState([])
 
     const foodScore = 100 * foodHistory['calories'] / userPoints[0].goalScore;
     const exerciseScore = 100 * userPoints[1].currentScore / userPoints[1].goalScore;
@@ -39,9 +33,7 @@ export default function Dashborard({ logout, userPoints }) {
             sugars: 0
         };
 
-        // Iterate through each item in dataArray
         dataArray.forEach(item => {
-            // Check if the item has nutrient information
             if (item.hasOwnProperty('calories')) {
                 totals.calories += parseInt(item.calories) || 0;
             }
@@ -86,15 +78,17 @@ export default function Dashborard({ logout, userPoints }) {
                 const data = res.data.data;
                 setFoodHistory(data);
 
-                let dataArray = [];
-                data.forEach(item => {
-                    dataArray = dataArray.concat(item.dataArray);
-                });
-
-                const totals = calculateTotals(dataArray);
-                setFoodHistory(totals); // Update state with the total object
+                if (data.length !== 0) {
+                    let dataArray = [];
+                    data.forEach(item => {
+                        dataArray = dataArray.concat(item.dataArray);
+                    });
+                    const totals = calculateTotals(dataArray);
+                    setFoodHistory(totals);
+                }
             })
             .catch(err => setFoodHistory(err));
+        // eslint-disable-next-line
     }, []);
 
     return (
@@ -133,10 +127,10 @@ export default function Dashborard({ logout, userPoints }) {
                     <MdFoodBank className='dash-icon' />
                     <div className='dash-text'>
                         <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            {foodHistory['calories']} / {userPoints[0].goalScore} <span>K Cal</span>
+                            {foodHistory['calories'] ?? 0} / {userPoints[0].goalScore} <span>K Cal</span>
                         </Typography>
                         <Typography className='message' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            Good
+                            {/* {foodHistory['calories'] ?? 0 / userPoints[0].goalScore > }Good */}
                         </Typography>
                     </div>
                 </section>
@@ -167,38 +161,19 @@ export default function Dashborard({ logout, userPoints }) {
                     <CgGym className='dash-icon' />
                     <div className='dash-text'>
                         <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            {userPoints[1].currentScore} / {userPoints[1].goalScore} <span>K Cal</span>
+                            {userPoints[1].currentScore ?? 0} / {userPoints[1].goalScore} <span>K Cal</span>
                         </Typography>
                         <Typography className='message' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
-                            Bad
+                            {/* Bad */}
                         </Typography>
                     </div>
                 </section>
             </Box>
-            {/* <Box sx={{ width: 120, margin: "0 auto", py: 1.5 }}>
-                <InputLabel id="chart-type">Chart Type</InputLabel>
-                <Select
-                    fullWidth
-                    labelId="chart-type"
-                    value={chartType}
-                    label="Chart Type"
-                    defaultValue='All'
-                    onChange={(e) => {
-                        setChartType(e.target.value)
-                    }}
-                >
-                    <MenuItem value="0">Pie Chart</MenuItem>
-                    <MenuItem value="1">Bar Chart</MenuItem>
-                    <MenuItem value="2">Bar Chart</MenuItem>
-                    <MenuItem value="3">Bar Chart</MenuItem>
-                    <MenuItem value="4">Bar Chart</MenuItem>
-                </Select>
-            </Box> */}
             {/* <pre>{JSON.stringify(foodHistory, null, 2)}</pre> */}
             <Box className="chart-container" >
                 <Box sx={{ display: "grid", placeItems: "center", maxHeight: "420px", overflow: "hidden" }}>
                     <h3>Food:</h3>
-                    <PieChart
+                    {!foodHistory.length ? "No Data to display" : <PieChart
                         className='chart'
                         colors={[
                             "#ffd700",
@@ -224,7 +199,7 @@ export default function Dashborard({ logout, userPoints }) {
                                 data:
                                     Object.entries(foodHistory).map(([key, value]) => {
                                         return { name: key, value: value }
-                                    }).sort((a, b) => b['value'] - a['value']).map((key, value) => ({ value: key.name === "potassium" || key.name === "sodium" ? (key.value/10).toFixed(2) : key.value.toFixed(2), label: key.name[0].toUpperCase() + key.name.slice(1, key.name.length) })),
+                                    }).sort((a, b) => b['value'] - a['value']).map((key, value) => ({ value: key.name === "potassium" || key.name === "sodium" ? (key.value / 10).toFixed(2) : key.value.toFixed(2), label: key.name[0].toUpperCase() + key.name.slice(1, key.name.length) })),
                                 innerRadius: 0,
                                 outerRadius: 130,
                                 paddingAngle: 1,
@@ -244,12 +219,12 @@ export default function Dashborard({ logout, userPoints }) {
                         slotProps={{ legend: { position: { horizontal: "middle", vertical: "top" }, direction: "row" } }}
                         height={500}
                         width={350}
-                    />
+                    />}
                 </Box>
                 <hr style={{ width: "100%", height: "2px", background: "#000" }} />
                 <Box sx={{ display: "grid", placeItems: "center", maxHeight: "420px", overflow: "hidden" }}>
                     <h3>Exercise:</h3>
-                    <PieChart
+                    {!foodHistory.length ? "No Data to display" : <PieChart
                         className='chart'
                         hideTooltip
                         cx={80}
@@ -281,6 +256,7 @@ export default function Dashborard({ logout, userPoints }) {
                         width={350}
 
                     />
+                    }
                 </Box>
             </Box>
             {/* <LoadingButton
@@ -295,6 +271,7 @@ export default function Dashborard({ logout, userPoints }) {
     )
 }
 
+// eslint-disable-next-line
 const charts = [
     <PieChart
         className='chart'

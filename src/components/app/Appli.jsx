@@ -17,6 +17,11 @@ export default function Appli() {
 
     const [userLoggedIn, setUserLoggedIn] = useState(false)
 
+    const [userDetails, setUserDetails] = useState(null)
+
+    const [foodHistory, setFoodHistory] = useState([])
+
+
     // eslint-disable-next-line
     const [data, setData] = useState([])
     const navigate = useNavigate()
@@ -28,9 +33,10 @@ export default function Appli() {
     },
     {
         "goalScore": 1200,
-        "currentScore": 200
+        "currentScore": 0
     }])
 
+    const exerciseScore = 100 * userPoints[1].currentScore / userPoints[1].goalScore;
     // const foodScore = 100 * userPoints.currentScore / userPoints.goalScore;
 
     useEffect(() => {
@@ -115,14 +121,14 @@ export default function Appli() {
                 </nav>
             }
             <Routes>
-                <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet userPoints={userPoints} /></IsUserLoggedIn>} />
-                <Route path="/exercise/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Exercise userPoints={userPoints} /></IsUserLoggedIn>} />
+                <Route path="/diet/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Diet userPoints={userPoints} foodHistory={foodHistory} /></IsUserLoggedIn>} />
+                <Route path="/exercise/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Exercise userPoints={userPoints} exerciseScore={exerciseScore} /></IsUserLoggedIn>} />
                 <Route path="/chat/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Chat /></IsUserLoggedIn>} />
-                <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
-                <Route path="/profile" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Profile userPoints={userPoints} logout={logout} /></IsUserLoggedIn>} />
+                <Route path="/dashboard/*" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Dashborard userPoints={userPoints} logout={logout} foodHistory={foodHistory} setFoodHistory={setFoodHistory} /></IsUserLoggedIn>} />
+                <Route path="/profile" element={<IsUserLoggedIn userLoggedIn={userLoggedIn}><Profile userPoints={userPoints} logout={logout} userDetails={userDetails} setUserDetails={setUserDetails} /></IsUserLoggedIn>} />
                 <Route path="/" exact element={<Navigate to="/app/dashboard" />} />
                 <Route path="/*" exact element={<>Uh oh! Not found page. Head to {userLoggedIn ? <Link to="/app/dashboard"><b>Dashboard page</b></Link> : <Link to="/app/login"><b>Login page</b></Link>} page</>} />
-                <Route path="/login" element={<Login userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />
+                <Route path="/login" element={<Login userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} userDetails={userDetails} setUserDetails={setUserDetails} />} />
                 <Route path="/signup" element={<SignUp userLoogedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setCookie={setCookie} getCookie={getCookie} />} />
             </Routes>
             {userLoggedIn &&

@@ -23,6 +23,52 @@
     font-size: 22px;
 }
 
+.exercise-main .exercise-div {
+    margin: 10px auto;
+    background: var(--tri);
+    padding: 10px;
+    border-radius: 10px;
+    width: 270px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    justify-content: center;
+    align-items: center;
+}
+
+.exercise-main .exercise-div .dash-text {
+    margin-left: 0px;
+    font-weight: 600;
+}
+
+.exercise-main .exercise-div .dash-text .message {
+    color: red;
+}
+
+.exercise-main .exercise-div .dash-icon {
+    position: absolute;
+    font-size: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 25px;
+}
+
+.exercise-main .exercise-div .dash-icon {
+    color: #FF9800;
+}
+
+.exercise-main .pie-chart>* {
+    max-width: 300px;
+    min-width: 300px;
+    position: relative;
+}
+
+@media (width<300px) {
+    .exercise-main .exercise-div .dash-text p.score span {
+        display: none;
+    }
+}
+
 .exercise-main .main-food .food-dashboard {
     background: var(--tri);
     padding: 10px;

@@ -6,7 +6,7 @@ import { PieChart } from '@mui/x-charts'
 import LoginIcon from '@mui/icons-material/Login';
 
 import Banner from '../../images/food-bg.png'
-import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send';
 
 import { useTheme } from '@mui/material/styles';
@@ -20,14 +20,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import recomFoods from '../../utilities/nutrition'
 import { MdFoodBank } from 'react-icons/md';
 
-export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomFoods }) {
+export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomFoods, foodHistory }) {
 
     const theme = useTheme();
 
     const [infoOpen, setInfoOpen] = useState(false)
     const [foodInfo, setFoodInfo] = useState({})
 
-    const foodScore = 100 * userPoints[0].currentScore / userPoints[0].goalScore;
+    const foodScore = 100 * foodHistory['calories'] / userPoints[0].goalScore;
 
     // eslint-disable-next-line
     const [foodRecommends, setFoodRecommends] = useState(recomFoods.map((e, index) => (
@@ -46,12 +46,10 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
 
     useEffect(() => {
         setSelectRecomFoods([])
-    }, [])
-
-    useEffect(() => {
         foodRecommends.forEach((food, index) => {
             getFoodImages(food.name)
                 .then(res => {
+                    // eslint-disable-next-line
                     const imageUrl = res.data.results[0].urls.raw;
                     setFoodRecommends(prevFoodRecommends => {
                         const updatedFoodRecommends = [...prevFoodRecommends];
@@ -152,8 +150,12 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                 />
                 <MdFoodBank className='dash-icon' />
                 <div className='dash-text'>
-                    <p className='score'>{userPoints[0].currentScore} / {userPoints[0].goalScore} K Cal</p>
-                    <p className='message'>Good</p>
+                    <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
+                        {foodHistory['calories'] ?? 0} / {userPoints[0].goalScore} <span>K Cal</span>
+                    </Typography>
+                    <Typography className='message' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
+                        {/* {foodHistory['calories'] ?? 0 / userPoints[0].goalScore > }Good */}
+                    </Typography>
                 </div>
             </section>
             <section className='add-link'>
@@ -204,8 +206,8 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                             }}
                         >
                             <MenuItem value={""}>Clear</MenuItem>
-                            <MenuItem value="Exercise_Name">Name</MenuItem>
-                            <MenuItem value="Rating">Rating</MenuItem>
+                            <MenuItem value="name">Name</MenuItem>
+                            <MenuItem value="calories">Calories</MenuItem>
                             <MenuItem value="protien">Protien</MenuItem>
                             <MenuItem value="fat">Fat</MenuItem>
                         </Select>
@@ -214,6 +216,7 @@ export default function MainFood({ userPoints, selectRecomFoods, setSelectRecomF
                         <Button variant="outlined" color="error" onClick={() => setFilter({ foodType: "All", sortBy: "" })}>Reset</Button>
                     </FormControl>
                 </Box>
+                {/* <pre>{JSON.stringify(filteredSortedFoods, null, 2)}</pre> */}
                 <section className="exercises-cards">
                     {foodRecommends.length &&
                         filteredSortedFoods.map((food, index) => <div className="each-card" key={index}>

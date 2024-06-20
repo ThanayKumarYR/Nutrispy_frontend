@@ -7,16 +7,21 @@ import InfoIcon from '@mui/icons-material/Info';
 import ExerciseBanner from '../../images/exercise.jpg'
 
 import './css/Exercise.css'
-import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
-import LinkIcon from '@mui/icons-material/Link';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import recomFoods from '../../utilities/nutrition';
 
-export default function Exercise() {
+import { PieChart } from '@mui/x-charts';
+import { CgGym } from 'react-icons/cg';
+import { useTheme } from '@mui/material/styles';
+
+export default function Exercise({ exerciseScore, userPoints }) {
+
+    const theme = useTheme();
 
     const [exercisesWithIndex, setExercisesWithIndex] = useState(exercises.map((e, index) => (
         {
@@ -56,7 +61,7 @@ export default function Exercise() {
     }
 
     const filteredSortedExercises = filter.sortBy ?
-        exercisesWithIndex.filter(food => (filter.exerciseType === "All") ? true : food["Food Type"] === filter.exerciseType)
+        exercisesWithIndex.filter(food => (filter.exerciseType === "All") ? true : food["Benefited Body Part"] === filter.exerciseType)
             .sort((a, b) => {
                 if (filter.sortBy === "Name") {
                     return a.Name.localeCompare(b.Name);
@@ -68,7 +73,7 @@ export default function Exercise() {
                 return Number.parseFloat(b[filter.sortBy]) - Number.parseFloat(a[filter.sortBy]);
             })
         :
-        exercisesWithIndex.filter(food => (filter.exerciseType === "All") ? true : food["Food Type"] === filter.exerciseType)
+        exercisesWithIndex.filter(food => (filter.exerciseType === "All") ? true : food["Benefited Body Part"] === filter.exerciseType)
 
 
     function getCount(filt) {
@@ -92,7 +97,7 @@ export default function Exercise() {
 
     async function getFoodImages(foodName) {
         return axios.get(
-            `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=Gv5TXOSqs2C866bGU_Ii48g2zd_lVf_jFcVz7_147mA`
+            `https://api.unsplash.com/search/photos?query=${foodName}&per_page=1&client_id=G8DWfztsmYBwru-OuZGeAEFFq-k588R3KTo6g4hUQzs`
         );
     }
 
@@ -100,8 +105,9 @@ export default function Exercise() {
         exercises.forEach((food, index) => {
             getFoodImages(food.Name)
                 .then(res => {
+                    // eslint-disable-next-line
                     const imageUrl = res.data.results[0].urls.raw;
-                    exercisesWithIndex(prevFoodRecommends => {
+                    setExercisesWithIndex(prevFoodRecommends => {
                         const updatedFoodRecommends = [...prevFoodRecommends];
                         // updatedFoodRecommends[index] = { ...food, imageUrl };
                         return updatedFoodRecommends;
@@ -114,6 +120,41 @@ export default function Exercise() {
 
     return (
         <main className='exercise-main'>
+            {/* <pre>{JSON.stringify(exercisesWithIndex, null, 2)}</pre> */}
+            <section className='exercise-div'>
+                <PieChart
+                    colors={['red', 'blue', 'green']}
+                    className='chart'
+                    height={70}
+                    width={70}
+                    slotProps={{ legend: { hidden: true } }}
+                    hideTooltip
+                    series={[
+                        {
+                            data: [
+                                { id: 0, value: exerciseScore, label: 'Calories Burnt' }
+                            ],
+                            innerRadius: 25,
+                            outerRadius: 30,
+                            paddingAngle: 2,
+                            cornerRadius: 5,
+                            startAngle: 0,
+                            endAngle: (360 * exerciseScore) / 100,
+                            cx: 30,
+                            cy: 30,
+                        }
+                    ]}
+                />
+                <CgGym className='dash-icon' />
+                <div className='dash-text'>
+                    <Typography className='score' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
+                        {userPoints[1].currentScore ?? 0} / {userPoints[1].goalScore} <span>K Cal</span>
+                    </Typography>
+                    <Typography className='message' component="p" variant="subtitle1" sx={{ fontWeight: 600, fontSize: 20 }}>
+                        {/* Bad */}
+                    </Typography>
+                </div>
+            </section>
             <h2 className="heading">Add Exercise</h2>
             <Box sx={{ display: "flex", placeItems: "center" }}>
                 <FormControl sx={{ minWidth: 100 }}>
@@ -154,34 +195,13 @@ export default function Exercise() {
                         <MenuItem value={""}>Clear</MenuItem>
                         <MenuItem value="Name">Name</MenuItem>
                         <MenuItem value="Duration">Duration</MenuItem>
+                        <MenuItem value="Calories Burnt">Calories</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl sx={{ minWidth: 100, display: "grid", placeItems: "center" }}>
                     <Button variant="outlined" color="error" onClick={() => setFilter({ exerciseType: "All", sortBy: "" })}>Reset</Button>
                 </FormControl>
             </Box>
-            {/* {JSON.stringify(selectRecomFoods.length > 0 ?
-                exercises
-                    .filter(food => selectRecomFoods.includes(recomFoods.indexOf(food)))
-                    .map((food, index) => {
-                        const details = {
-                            food: "yes",
-                            name: food.name,
-                            nutrients: {
-                                name: food.name,
-                                quantity: 1,
-                                measurement: "bowl",
-                                ...food
-                            }
-                        };
-                        return {
-                            index,
-                            img: "",
-                            details
-                        };
-                    })
-                : [])} */}
-            {/* {JSON.stringify(selectRecomFoods.length > 0 ? exercises[] : [])} */}
             <section className="exercises-cards">
                 {exercisesWithIndex.length &&
                     filteredSortedExercises.map((food, index) => <div className="each-card" key={index}>
@@ -205,6 +225,41 @@ export default function Exercise() {
                         </span>
                     </div>)}
             </section>
+            <section>
+                {!selectRecomFoods.length ? <></> : <h3>Caloies Burnt: {exercisesWithIndex.filter(e => selectRecomFoods.includes(e.index)).reduce((acc, currentValue) =>
+                    acc + (Number(currentValue['Calories Burnt'] ?? 0)), 0
+                )} calories</h3>}
+            </section>
+            <Box display="flex" flexWrap="wrap" gap="10px 20px" alignItems="center" className="selected-food">
+                {selectRecomFoods.length > 0 ? <>{exercisesWithIndex.filter(e => selectRecomFoods.includes(e.index)).map(eachFood =>
+                    <React.Fragment key={eachFood.index}>
+                        <Box
+                            bgcolor={theme => theme.palette.primary.light}
+                            sx={{ px: 1, py: 1, borderRadius: 2, textAlign: "center", fontSize: 18, display: "flex", placeItems: "center" }}
+                        >
+                            {(eachFood.Name)}
+                            <button
+                                className='delete-btn'
+                                onClick={e => {
+                                    setSelectRecomFoods(prevFoods => {
+                                        const prev = [...prevFoods];
+                                        const ind = prev.indexOf(eachFood.index)
+                                        prev.splice(ind, 1)
+                                        return prev;
+                                    })
+                                }}
+                            >
+                                <DeleteIcon style={{ color: theme.palette.warning.sec }} />
+                            </button>
+                        </Box>
+                    </React.Fragment>
+                )}
+                    <Link to="/app/diet/add">
+                        <Button variant='contained'>Add Exercises &nbsp;<SendIcon /></Button>
+                    </Link>
+                </> : null}
+            </Box>
+
             <InfoDialog
                 infoOpen={infoOpen}
                 setInfoOpen={setInfoOpen}
@@ -238,7 +293,7 @@ function InfoDialog({ infoOpen, setInfoOpen, exerciseInfo }) {
             </IconButton>
             <DialogContent>
                 <DialogContentText >
-                    <p >Calories Burnt: {exerciseInfo["Calories Burnt"]} cal</p>
+                    <p >Calories Burn: {exerciseInfo["Calories Burnt"]} cal</p>
                     <p >Description: {exerciseInfo["Description"]}</p>
                     <p >Timings: {exerciseInfo["Timings"]}</p>
                     <p >Duration: {exerciseInfo.Duration}</p>
